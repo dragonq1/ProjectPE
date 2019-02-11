@@ -46,8 +46,6 @@
 
 .input__login:focus {
   outline: none;
-
-
 }
 
 /*Gele achtergrond van autofill weghalen*/
@@ -68,19 +66,22 @@ input:-webkit-autofill:active  {
   font-size: 16px;
 }
 
-.btn__login{
 
+.btn__form--primary{
   border-radius: 0px;
   text-align: center;
   width: 100%
+}
+
+.btn__form--primary:hover{
+  background-color: #c1c1c1;
+  transition-delay: 0,5s;
 
 }
+
 
 .btn__register{
 
   margin-top: 5px;
-  border-radius: 0px;
-  text-align: center;
-  width: 100%
 
 }

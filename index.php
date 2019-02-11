@@ -18,9 +18,9 @@
                   <!-- <label for="password">Wachtwoord</label> -->
                   <input type="password" name="password" class="input__login" placeholder="wachtwoord" required>
                 </div>
-                <input type="submit" name="btnLogin" value="Inloggen" class="btn btn__login">
+                <input type="submit" name="btnLogin" value="Inloggen" class="btn__form--primary btn btn__login">
             </form>
-            <button value="Registreren" class="btn btn__register"><a href="register.php"></a>Registeren</button>
+            <button value="Registreren" class="btn__form--primary btn btn__register"><a href="register.php"></a>Registeren</button>
 
 
             <?php
