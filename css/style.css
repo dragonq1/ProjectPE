@@ -1,3 +1,11 @@
+body{
+font-family: 'Montserrat', sans-serif;
+}
+
+h1{
+  font-size: 30px;
+}
+
 .body_loginpage{
   display: flex;
   position: absolute;
@@ -7,7 +15,6 @@
   bottom: 0;
   background-image: url("../images/background_login.jpeg");
   background-size: cover;
-  font-family: "segoe ui";
 }
 .body__loginbox{
   margin: auto;
@@ -98,22 +105,19 @@ input:-webkit-autofill:active  {
 
 .navbar__side{
   background-color: #efefef;
-  padding-left: 2%;
-  padding-right: 1%;
-  padding-top: 3%;
+  padding-top: 2%;
   padding-bottom: 3%;
-  box-shadow: 3px 3px 2px black;
+  box-shadow: 1px 3px 2px #a7a7a7;
   height: 100%;
-  width: 12%;
-  min-width: 12%;
+  min-width: 11%;
   margin-right: 1%;
+  padding-left: 7px;
 
 }
 
 .navbar__side a, button {
 
   display: block;
-  border: 1px solid black;
   font-size: 18px;
   background-color: inherit;
   width: 100%;
@@ -121,13 +125,14 @@ input:-webkit-autofill:active  {
   text-align: center;
   padding: 3px 5px 3px 5px;
   margin-bottom: 3px;
+  border: none;
 
 }
 
 .navbar__side a:hover, button:hover {
 
   text-decoration: none;
-  background-color: #c1c1c1;
+  background-color: #d7d7d7;
   transition-delay: 0,5s;
 
 }
@@ -140,11 +145,18 @@ input:-webkit-autofill:active  {
 }
 
 .navbar__text--groups{
-  font-size: 18px;
+  font-size: 22px;
   margin-top: 15px;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .navbar__group{
   margin-bottom: 30px;
+}
+
+.div__line{
+  background-color: black;
+  height: 1px;
+  margin: 0px 3px 0px 3px
 }

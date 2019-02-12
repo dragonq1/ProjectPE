@@ -56,6 +56,7 @@
               <a href="#">Home</a>
               <a href="#">Account</a>
             </div>
+            <div class="div__line"></div>
             <div class="navbar__group">
               <p class="navbar__text--groups">Mijn groepen</p>
               <?php
@@ -64,15 +65,14 @@
                 }
               ?>
             </div>
+            <div class="div__line"></div>
             <p class="navbar__text--groups">Overige</p>
             <a href="index.php">Uitloggen</a>
       </div>
       <div class="body__home--interactive">
-        <p>
           <?php
-            echo "Welkom $firstName!";
+            echo "<h1>Welkom $firstName!</h1>";
           ?>
-        </p>
       </div>
     </div>
 
