@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
 <head>
 
@@ -24,8 +25,8 @@
 
 
             <?php
-
-
+              session_start();
+              session_destroy();
 
               if((isset($_POST["password"])) && (isset($_POST["email"])) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
 
@@ -39,7 +40,7 @@
                     throw new Exception ('Could not connect: ' . mysqli_error());
                   }else{
 
-                      $statement = mysqli_prepare($con, "SELECT Password FROM dragv_dev.users where Email = ?");
+                      $statement = mysqli_prepare($con, "SELECT Password, UserID FROM dragv_dev.users where Email = ?");
                       mysqli_stmt_bind_param($statement, "s", $email);
                       mysqli_stmt_execute($statement);
                       $result = $statement->get_result();
@@ -47,11 +48,13 @@
                       if(mysqli_num_rows($result) == 1) {
                           while($row = mysqli_fetch_assoc($result)) {
                               $checkHash = $row["Password"];
+                              $userID = $row["UserID"];
                           }
 
                           if(password_verify($_POST["password"], $checkHash)){
-
-                              header("Location: succes.php");
+                              session_start();
+                              $_SESSION["UserID"]=$userID;
+                              header("Location: home.php");
                           }
                       }
                         echo '<p class="text__error">Foutieve inloggegevens</p>';
