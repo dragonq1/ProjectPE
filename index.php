@@ -25,8 +25,6 @@
 
 
             <?php
-              session_start();
-              session_destroy();
 
               if((isset($_POST["password"])) && (isset($_POST["email"])) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
 

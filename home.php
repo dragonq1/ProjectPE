@@ -4,6 +4,7 @@
     <?php include_once("php/header.php") ?>
   </head>
   <body>
+  <script src="js/main.js"></script>
   <!-- Gegevens ophalen van gebruiker en groepen -->
   <?php
   session_start();
@@ -61,7 +62,7 @@
               <p class="navbar__text--groups">Mijn groepen</p>
               <?php
                 foreach ($groups as $group) {
-                  echo "<button type=\"button\" name=\"button\">$group->GrName</button>";
+                  echo "<button type=\"button\" name=\"button\" onclick=\"courses();\">$group->GrName</button>";
                 }
               ?>
             </div>
@@ -73,6 +74,9 @@
           <?php
             echo "<h1>Welkom $firstName!</h1>";
           ?>
+      </div>
+      <div class="" id="dom__interactive">
+          
       </div>
     </div>
 
