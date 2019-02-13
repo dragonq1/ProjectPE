@@ -25,8 +25,6 @@
 
 
             <?php
-              session_start();
-              session_destroy();
 
               if((isset($_POST["password"])) && (isset($_POST["email"])) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
 
@@ -52,7 +50,6 @@
                           }
 
                           if(password_verify($_POST["password"], $checkHash)){
-                              session_start();
                               $_SESSION["UserID"]=$userID;
                               header("Location: home.php");
                           }
