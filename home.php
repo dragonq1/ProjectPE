@@ -53,7 +53,7 @@
       <div class="navbar__side">
             <div class="navbar__group">
               <p class="navbar__text--groups">Start</p>
-              <button onclick="home(<?php echo $userID ?>);">Home</button>
+              <button onclick="home();">Home</button>
               <a href="#">Account</a>
             </div>
             <div class="div__line"></div>
@@ -77,7 +77,7 @@
         </div>
         <div class="body__home--interactive" id="dom__interactive">
 
-
+            
 
         </div>
       </div>
@@ -85,7 +85,7 @@
 
   <script type="text/javascript">
     window.onload=function() {
-      home(<?php echo $userID ?>);
+      home();
     };
   </script>
   </body>

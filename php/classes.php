@@ -13,6 +13,20 @@
       $this->GrOwn = $GrOwn;
     }
   }
+  /**
+   * Class voor invites
+   */
+  class Invite
+  {
+
+    function __construct($InvID, $SenderID, $ReceiverID, $GroupID)
+    {
+      $this->InvID = $InvID;
+      $this->SenderID = $SenderID;
+      $this->ReceiverID = $ReceiverID;
+      $this->GroupID = $GroupID;
+    }
+  }
 
 
  ?>
