@@ -1,5 +1,5 @@
 <?php
 
-  echo "<p>Hallo Reinoud</p>";
+  echo "<p>Hier komen alle vakken!</p>";
 
  ?>

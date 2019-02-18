@@ -2,9 +2,20 @@ body{
 font-family: 'Montserrat', sans-serif;
 }
 
-h1{
+/* Algemene titels */
+h1 {
   font-size: 30px;
 }
+
+/* Subtitels  */
+h2 {
+  font-size: 24px;
+}
+/* Titels voor items */
+h3 {
+  font-size: 20px;
+}
+
 
 .body_loginpage{
   display: flex;
@@ -37,9 +48,9 @@ h1{
 
 .body__home{
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
   height: 100vh;
+  width: 100%
 }
 
 
@@ -115,7 +126,7 @@ input:-webkit-autofill:active  {
 
 }
 
-.navbar__side a, button {
+.navbar__side a, .navbar__side button {
 
   display: block;
   font-size: 18px;
@@ -126,10 +137,11 @@ input:-webkit-autofill:active  {
   padding: 3px 5px 3px 5px;
   margin-bottom: 3px;
   border: none;
+  transition: 0.5s;
 
 }
 
-.navbar__side a:hover, button:hover {
+.navbar__side a:hover, .navbar__side button:hover {
 
   text-decoration: none;
   background-color: #d7d7d7;
@@ -161,6 +173,25 @@ input:-webkit-autofill:active  {
   margin: 0px 3px 0px 3px
 }
 
+.body__home--containers{
+  padding-left: 1%;
+}
+
+.body__home--interactive{
+  display: flex;
+  flex-wrap: reverse;
+
+}
+
+.home__title h1{
+
+
+  padding-top: 2%;
+  display: block;
+  margin-bottom: 3%;
+
+}
+
 /*Registratie pagina deel */
 
 .registratie_pagina {
@@ -180,4 +211,59 @@ input:-webkit-autofill:active  {
   margin: 5px 0 22px 0px;
   display: inline-block;
   border: none;
+}
+
+.body__home--70 {
+
+  background-color: #efefef;
+  box-shadow: 3px 3px 3px #a7a7a7;
+  width: 65%;
+  padding-left: 1%;
+  padding-bottom: 3%;
+  margin-bottom: 1%;
+}
+
+.body__home--items{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+}
+
+.body__home--title {
+  width: 100%;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
+.item__group--link {
+  margin-right: 2%;
+  width: 25%;
+  margin-bottom: 2%;
+}
+
+.item__group--link div {
+  outline: none;
+  color: black;
+  transition: 0.3s;
+  padding: 1px 30px 1px 30px;
+  background-color: #efefef;
+  text-align: left;
+  border: 1px solid black;
+}
+
+.item__group--link div:hover{
+  text-decoration: none;
+  background-color: #d7d7d7;
+  outline: none;
+  cursor: pointer;
+}
+
+.item__group--link:hover{
+  text-decoration: none;
+}
+
+.item__group--link p {
+  font-size: 16px;
+
 }
