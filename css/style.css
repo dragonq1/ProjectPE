@@ -181,3 +181,16 @@ input:-webkit-autofill:active  {
   display: inline-block;
   border: none;
 }
+
+.body__black__line {
+border-top: 1px solid black;
+
+
+}
+ /* Terms of service css */
+
+ .termsos__pagina {
+   padding: 16px;
+   width: 100%;
+   background-color: #efefef;
+ }
