@@ -5,7 +5,6 @@
   </head>
   <body>
   <script src="js/main.js"></script>
-  <!-- Gegevens ophalen van gebruiker en groepen -->
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
@@ -54,7 +53,7 @@
       <div class="navbar__side">
             <div class="navbar__group">
               <p class="navbar__text--groups">Start</p>
-              <a href="#">Home</a>
+              <button onclick="home();">Home</button>
               <a href="#">Account</a>
             </div>
             <div class="div__line"></div>
@@ -70,16 +69,24 @@
             <p class="navbar__text--groups">Overige</p>
             <a href="index.php">Uitloggen</a>
       </div>
-      <div class="body__home--interactive">
+      <div class="body__home--containers">
+        <div class="home__title">
           <?php
             echo "<h1>Welkom $firstName!</h1>";
           ?>
-      </div>
-      <div class="" id="dom__interactive">
-          
+        </div>
+        <div class="body__home--interactive" id="dom__interactive">
+
+            
+
+        </div>
       </div>
     </div>
 
-
+  <script type="text/javascript">
+    window.onload=function() {
+      home();
+    };
+  </script>
   </body>
 </html>

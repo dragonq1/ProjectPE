@@ -2,9 +2,20 @@ body{
 font-family: 'Montserrat', sans-serif;
 }
 
-h1{
+/* Algemene titels */
+h1 {
   font-size: 30px;
 }
+
+/* Subtitels  */
+h2 {
+  font-size: 24px;
+}
+/* Titels voor items */
+h3 {
+  font-size: 20px;
+}
+
 
 .body_loginpage{
   display: flex;
@@ -37,9 +48,9 @@ h1{
 
 .body__home{
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
   height: 100vh;
+  width: 100%
 }
 
 
@@ -115,7 +126,7 @@ input:-webkit-autofill:active  {
 
 }
 
-.navbar__side a, button {
+.navbar__side a, .navbar__side button {
 
   display: block;
   font-size: 18px;
@@ -126,10 +137,11 @@ input:-webkit-autofill:active  {
   padding: 3px 5px 3px 5px;
   margin-bottom: 3px;
   border: none;
+  transition: 0.5s;
 
 }
 
-.navbar__side a:hover, button:hover {
+.navbar__side a:hover, .navbar__side button:hover {
 
   text-decoration: none;
   background-color: #d7d7d7;
@@ -161,6 +173,18 @@ input:-webkit-autofill:active  {
   margin: 0px 3px 0px 3px
 }
 
+.body__home--containers{
+  padding-left: 1%;
+  width: 100%;
+}
+
+.home__title h1 {
+  padding-top: 2%;
+  display: block;
+  margin-bottom: 3%;
+
+}
+
 /*Registratie pagina deel */
 
 .registratie_pagina {
@@ -182,6 +206,110 @@ input:-webkit-autofill:active  {
   border: none;
 }
 
+.body__home--home {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.body__home--groups {
+
+  background-color: #efefef;
+  box-shadow: 3px 3px 3px #a7a7a7;
+  padding-left: 1%;
+  padding-bottom: 3%;
+  margin-bottom: 1%;
+  width: 65%;
+  min-width: 500px;
+  overflow: auto;
+
+}
+
+.body__home--invites {
+  background-color: #efefef;
+  box-shadow: 3px 3px 3px #a7a7a7;
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-bottom: 3%;
+  margin-bottom: 1%;
+  margin-left: 5%;
+  margin-right: 2%;
+  overflow: auto;
+  max-height: 500px;
+  width: 23%;
+}
+
+.item__group--coloum {
+  display: flex;
+  flex-direction: column;
+}
+
+.item__group--row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+}
+
+.body__home--title {
+  width: 100%;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
+.item__group--link {
+  margin-right: 2%;
+  margin-bottom: 2%;
+  flex: 0 1 auto;
+  min-width: 50px;
+  max-width: 170px;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+.item__group--link div {
+  outline: none;
+  color: black;
+
+  padding: 1px 30px 1px 30px;
+  text-align: left;
+
+}
+
+.item__group--link:hover{
+  text-decoration: none;
+  background-color: #d7d7d7;
+  outline: none;
+  cursor: pointer;
+}
+
+.item__group--link:hover{
+  text-decoration: none;
+}
+
+.item__group--link p {
+  font-size: 16px;
+
+}
+
+.item__group--invite {
+  display: block;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 3px;
+  margin-top: 3px;
+  padding: 1px 1px 1px 1px;
+  color: black;
+  text-decoration: none;
+  transition: 0.3s
+}
+
+.item__group--invite:hover {
+  text-decoration: none;
+  background-color: #d7d7d7;
+  color: black;
+}
 .body__black__line {
 border-top: 1px solid black;
 

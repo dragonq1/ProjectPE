@@ -28,7 +28,7 @@
 
               if((isset($_POST["password"])) && (isset($_POST["email"])) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
 
-
+                  session_start();
                   require 'php/db.php';
                   $con = mysqli_connect($host, $user, $pass, $db);
 
