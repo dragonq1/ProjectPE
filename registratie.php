@@ -95,63 +95,54 @@
      <div class="body__registratie">
         <form action="registratie.php" method="post" id="DOM__regform">
 
-        <h1>Registratie</h1>
-        <p>Vul deze lijst in om een account aan te maken.</p>
-        <div class="body__black__line">
-          <hr>
-        </div>
+                <h1>Registratie</h1>
+                <p>Vul deze lijst in om een account aan te maken.</p>
+                <div class="body__black__line">
+                  <hr>
+                </div>
 
-      <label for="nickname"><b>Nickname</b></label>
-      <input type="text" placeholder="nickname" name="nickname" id ="nickname" required>
-   <?php
-      if(isset($errormessage)){
-        echo "<p> $errormessage_nickname </p>";
-      }
+                      <label for="nickname"><b>Nickname</b></label>
+                      <input type="text" placeholder="nickname" name="nickname" id ="nickname" required>
 
-     ?>
+                      <label for="email"><b>Email</b></label>
+                      <input type="email" placeholder="Email" name="email" id="email" required>
 
-      <label for="email"><b>Email</b></label>
-      <input type="email" placeholder="Email" name="email" id="email" required>
+                      <label for="voornaam"><b>Voornaam</b></label>
+                      <input type="text" placeholder="Quinten" name="voornaam" id="voornaam" required>
 
-      <?php
-         if(isset($errormessage)){
-           echo "<p> $errormessage_email </p>";
-         }
+                      <label for="achternaam"><b>Achternaam</b></label>
+                      <input type="text" placeholder="Euh" name="achternaam" id="achternaam" required>
 
-        ?>
+                      <label for="psw"><b>password</b></label>
+                      <input type="password" placeholder="paswoord" name="psw" id="psw" required>
 
-      <label for="voornaam"><b>Voornaam</b></label>
-      <input type="text" placeholder="Quinten" name="voornaam" id="voornaam" required>
+                      <meter min="0" max="4" id="password_strength_meter"></meter>
+                      <p id="password_strength_text"> </p>
 
 
-      <label for="achternaam"><b>Achternaam</b></label>
-      <input type="text" placeholder="Euh" name="achternaam" id="achternaam" required>
 
+                      <label for="psw_repeat"><b>Repeat Password</b></label>
+                      <input type="password" placeholder="herhaal paswoord" name="psw_repeat" id="psw_repeat" required>
 
-      <label for="psw"><b>password</b></label>
-      <input type="password" placeholder="paswoord" name="psw" id="psw" required>
+                      <p>Door een account te maken gaat u akkoord met de Terms Of Service.</p>
 
-      <label for="psw_repeat"><b>Repeat Password</b></label>
-      <input type="password" placeholder="herhaal paswoord" name="psw_repeat" id="psw_repeat" required>
+                      <div class="registratie__btn">
+                        <input type="submit" value="Registreren" name="registratie__btn">
+                    </div>
 
-      <p>Door een account te maken gaat u akkoord met de Terms Of Service.</p>
+                    <div class="">
+                        <p>Heeft u al een account? <a href="index.php">Log in</a></p>
+                         <div class="body__black__line">
+                          <hr>
+                         </div>
+                   </div>
 
-     <div class="registratie__btn">
-      <input type="submit" value="Registreren" name="registratie__btn">
-    </div>
-
-    <div class="">
-
-     <p>Heeft u al een account? <a href="index.php">Log in</a></p>
-     <div class="body__black__line">
-       <hr>
-     </div>
-    </div>
-
-    </form>
-    </div>
+          </form>
+       </div>
 
     </div>
+
+<script src="js/RegistratiePaginaFuncties.js"></script>
 
   </body>
 </html>
