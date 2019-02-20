@@ -25,19 +25,27 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
   }else{
     header("index.php");
   }
+  $result->close();
 
-  $statement = mysqli_prepare($con, "SELECT g.GroupID, g.GrName, g.GrDescription, g.GrOwner FROM groups g INNER JOIN UserGroups ug ON g.GroupID = ug.GroupID WHERE ug.UserID = ?");
+  $invites = array();
+  $statement = mysqli_prepare($con, "SELECT i.InviteID, i.SenderID, i.ReceiverID, concat(us.FirstName, ' ',us.LastName) 'sName', concat(ur.FirstName,' ', ur.LastName) 'rName', i.GroupID, g.GrName FROM invites AS i
+    INNER JOIN users AS us ON i.SenderID = us.userID
+    INNER JOIN users AS ur ON i.ReceiverID = ur.UserID
+    INNER JOIN groups g ON i.GroupID = g.GroupID
+    WHERE ur.UserID = ?");
   mysqli_stmt_bind_param($statement, "i", $userID);
   mysqli_stmt_execute($statement);
   $result = $statement->get_result();
 
   if(mysqli_num_rows($result) >= 1) {
       while($row = mysqli_fetch_assoc($result)) {
-          $group = new Group($row["GroupID"], $row["GrName"], $row["GrDescription"], $row["GrOwner"]);
+          $invite = new Invite($row["InviteID"], $row["SenderID"], $row["ReceiverID"], $row["sName"], $row["rName"], $row["GroupID"], $row["GrName"]);
+          array_push($invites, $invite);
       }
   }else{
     header("index.php");
   }
+  $result->close();
 
 
   // Body voor groepen
@@ -72,12 +80,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
         <h2>Meldingen</h2>
     </div>
     <div class=\"item__group--coloum\">");
-      foreach ($groups as $group) {
+      foreach ($invites as $invite) {
         echo ("
         <a onclick=\"invite()\" class=\"item__group--invite\">
           <div>
-            <h3>$group->GrName</h3>
-            <p>$group->GrDescr</p>
+            <h3>Uitnoding voor $invite->GroupName</h3>
+            <p>Je hebt een uitnoding ontvangen van $invite->SenderName voor de groep $invite->GroupName</p>
           </div>
         </a>
 ");
