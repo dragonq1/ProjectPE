@@ -7,44 +7,85 @@
     <?php
      session_start();
      $_SESSION['msg'] = '';
-     echo "test";
      require 'php/db.php';
      $con = mysqli_connect($host, $user, $pass, $db);
      if(!$con) {
        throw new Exception ('Could not connect: ' . mysqli_error());
-     }else{
-     if ($_SERVER['REQUEST_METHOD']=='POST') {
-echo "test2";
-     if ($_POST['psw'] == $_POST['psw_repeat']){
-      $nickname = $con->real_escape_string($_POST['nickname']);
-      $email = $con->real_escape_string($_POST['email']);
-      $voornaam = $con->real_escape_string($_POST['voornaam']);
-      $achternaam = $con->real_escape_string($_POST['achternaam']);
-      $pswhashed = password_hash(($con->real_escape_string($_POST['psw'])),PASSWORD_DEFAULT);
+       }else
+      {
 
-echo "test3";
+       if ($_SERVER['REQUEST_METHOD']=='POST')
+       {
+
+           if ($_POST['psw'] != $_POST['psw_repeat'])
+           {
+             $_SESSION['message'] = 'The two passwords do not match!';
+             echo $_SESSION['message'];
+
+           }else
+               {
+//variabelen inladen.
+                 $nickname = $con->real_escape_string($_POST['nickname']);
+                 $email = $con->real_escape_string($_POST['email']);
+                 $voornaam = $con->real_escape_string($_POST['voornaam']);
+                 $achternaam = $con->real_escape_string($_POST['achternaam']);
+                 $pswhashed = password_hash(($con->real_escape_string($_POST['psw'])),PASSWORD_DEFAULT);
+//email checken
+
+                 $statement_email = mysqli_prepare ($con,("SELECT Email FROM users where Email LIKE ?"));
+                 mysqli_stmt_bind_param($statement_email,"s",$email);
+
+                 if(mysqli_stmt_execute($statement_email)==false)
+                 {
+                  echo "Emailerror";
+                }else
+                   {
+                    $resultaat =$statement_email->get_result();
+                    if(mysqli_num_rows($resultaat) > 0)
+                     {
+                      echo "De email $email bestaat al.";
+                     }else
+                         {
+//Nickname checken
+                           $statement_nickname = mysqli_prepare($con,("SELECT Nickname FROM users where Nickname LIKE ?"));
+                           mysqli_stmt_bind_param($statement_nickname,"s",$nickname);
+
+                           if(mysqli_stmt_execute($statement_nickname)==false)
+                             {
+                               echo "Nickname error.";
+                            }else
+                               {
+                                 $resultaat2 = $statement_nickname->get_result();
+                                 if(mysqli_num_rows($resultaat2)>0)
+                                    {
+                                      echo "De nickname $nickname bestaat al.";
+                                    }else
+                                      {
 
 
-      $statement = mysqli_prepare ($con, ("INSERT INTO users (Email ,Password,LastName,FirstName,Nickname) VALUES (?,?,?,?,?)"));
-      mysqli_stmt_bind_param($statement, "sssss", $email,$pswhashed,$achternaam,$voornaam,$nickname);
 
+//In database zetten.
+                                        $statement = mysqli_prepare ($con, ("INSERT INTO users (Email ,Password,LastName,FirstName,Nickname) VALUES (?,?,?,?,?)"));
+                                        mysqli_stmt_bind_param($statement, "sssss", $email,$pswhashed,$achternaam,$voornaam,$nickname);
 
-     if(mysqli_stmt_execute($statement) == true) {
-       $_SESSION['message'] = "Registration is succesfull. Added $nickname to the database.";
-       echo $_SESSION['message'];
-          }
-     else {
-       $_SESSION['message'] = 'User could not be added to the database.';
-       echo $_SESSION['message'];
+                                        if(mysqli_stmt_execute($statement) == true)
+                                         {
+                                           $_SESSION['message'] = "Registration is succesfull. Added $nickname to the database.";
+                                           echo $_SESSION['message'];
+                                           header("Location: index.php");
+                                         } else
+                                             {
+                                               $_SESSION['message'] = 'User could not be added to the database.';
+                                               echo $_SESSION['message'];
+                                               echo $statement->error;
+                                             }
+                                     }
+                             }
+                   }
+                 }
+               }
+       }
      }
-
-     }
-     else {
-       $_SESSION['message'] = 'The two passwords do not match!';
-     }
-     }
-     }
-
      ?>
 
 <!-- <script src = "js/RegistratiePaginaFuncties.js"></script>
@@ -62,9 +103,22 @@ echo "test3";
 
       <label for="nickname"><b>Nickname</b></label>
       <input type="text" placeholder="nickname" name="nickname" id ="nickname" required>
+   <?php
+      if(isset($errormessage)){
+        echo "<p> $errormessage_nickname </p>";
+      }
+
+     ?>
 
       <label for="email"><b>Email</b></label>
       <input type="email" placeholder="Email" name="email" id="email" required>
+
+      <?php
+         if(isset($errormessage)){
+           echo "<p> $errormessage_email </p>";
+         }
+
+        ?>
 
       <label for="voornaam"><b>Voornaam</b></label>
       <input type="text" placeholder="Quinten" name="voornaam" id="voornaam" required>
