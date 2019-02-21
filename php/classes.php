@@ -19,12 +19,15 @@
   class Invite
   {
 
-    function __construct($InvID, $SenderID, $ReceiverID, $GroupID)
+    function __construct($InvID, $SenderID, $ReceiverID, $SenderName, $ReceiverName, $GroupID, $GroupName)
     {
       $this->InvID = $InvID;
       $this->SenderID = $SenderID;
       $this->ReceiverID = $ReceiverID;
+      $this->SenderName = $SenderName;
+      $this->ReceiverName = $ReceiverName;
       $this->GroupID = $GroupID;
+      $this->GroupName = $GroupName;
     }
   }
 
