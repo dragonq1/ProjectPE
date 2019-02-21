@@ -190,12 +190,14 @@ input:-webkit-autofill:active  {
 .registratie_pagina {
   padding: 16px;
   width: 100%;
-  background-color: #efefef;
+  background-color: #000032;
+  color: #ffffff;
 }
 
 .body__registratie{
   width: 80%;
   padding-left: 15%;
+
 }
 
 .body__registratie input {
@@ -324,10 +326,10 @@ border-top: 1px solid black;
    background-color: #efefef;
  }
 
-
+/* Registratie pagina*/
 
  meter {
-     -webkit-appearance: none;
+     /*-webkit-appearance: none;*/
      -moz-appearance: none;
      appearance: none;
 
@@ -352,3 +354,6 @@ meter[value="1"]::-moz-meter-bar { background: red; }
 meter[value="2"]::-moz-meter-bar { background: yellow; }
 meter[value="3"]::-moz-meter-bar { background: orange; }
 meter[value="4"]::-moz-meter-bar { background: green; }
+
+
+/*Registratie pagina */

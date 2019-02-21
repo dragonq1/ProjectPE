@@ -3,12 +3,12 @@ var canvasDots = function() {
     var canvas = document.getElementById('dots-canvas'),
         ctx = canvas.getContext('2d'),
         colorDot = '#c2d3f0',
-        color = '#244b8f';
+        color = '#3877fa';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     canvas.style.display = 'block';
     ctx.fillStyle = colorDot;
-    ctx.lineWidth = .1;
+    ctx.lineWidth = .25;
     ctx.strokeStyle = color;
 
     var mousePosition = {

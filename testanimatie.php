@@ -17,7 +17,6 @@
     </div>
         <div class="body_loginpage">
          <div class="body__loginbox">
-            <p class="text__title--center">Inloggen</p>
             <form class="" action="index.php" method="post">
                   <div class="form-group body__loginbox--groups">
                     <!-- <label for="email">E-mail</label> -->

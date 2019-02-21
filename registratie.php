@@ -102,33 +102,33 @@
                 </div>
 
                       <label for="nickname"><b>Nickname</b></label>
-                      <input type="text" placeholder="nickname" name="nickname" id ="nickname" required>
+                      <input type="text" placeholder="oops" name="nickname" id ="nickname" required>
 
                       <label for="email"><b>Email</b></label>
-                      <input type="email" placeholder="Email" name="email" id="email" required>
+                      <input type="email" placeholder="oops@oopsie" name="email" id="email" required>
 
                       <label for="voornaam"><b>Voornaam</b></label>
-                      <input type="text" placeholder="Quinten" name="voornaam" id="voornaam" required>
+                      <input type="text" placeholder="oopsiedoops" name="voornaam" id="voornaam" required>
 
                       <label for="achternaam"><b>Achternaam</b></label>
                       <input type="text" placeholder="Euh" name="achternaam" id="achternaam" required>
 
                       <label for="psw"><b>password</b></label>
-                      <input type="password" placeholder="paswoord" name="psw" id="psw" required>
+                      <input type="password" placeholder="whoops" name="psw" id="psw" required>
 
                       <meter min="0" max="4" id="password_strength_meter"></meter>
                       <p id="password_strength_text"> </p>
-
+                      <p id="password_cracktime"></p>
 
 
                       <label for="psw_repeat"><b>Repeat Password</b></label>
-                      <input type="password" placeholder="herhaal paswoord" name="psw_repeat" id="psw_repeat" required>
+                      <input type="password" placeholder="whoops" name="psw_repeat" id="psw_repeat" required>
 
                       <p>Door een account te maken gaat u akkoord met de Terms Of Service.</p>
 
                       <div class="registratie__btn">
-                        <input type="submit" value="Registreren" name="registratie__btn">
-                    </div>
+                        <input class="registratie__btn" type="submit" value="Registreren" name="registratie__btn" id="registratie__button" disabled>
+                      </div>
 
                     <div class="">
                         <p>Heeft u al een account? <a href="index.php">Log in</a></p>
