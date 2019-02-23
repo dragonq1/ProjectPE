@@ -1,4 +1,3 @@
-
 var canvasDots = function() {
     var canvas = document.getElementById('dots-canvas'),
         ctx = canvas.getContext('2d'),

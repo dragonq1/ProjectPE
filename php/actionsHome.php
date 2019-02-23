@@ -32,7 +32,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
     INNER JOIN users AS us ON i.SenderID = us.userID
     INNER JOIN users AS ur ON i.ReceiverID = ur.UserID
     INNER JOIN groups g ON i.GroupID = g.GroupID
-    WHERE ur.UserID = ?");
+    WHERE ur.UserID = ? AND i.Answer IS NULL");
   mysqli_stmt_bind_param($statement, "i", $userID);
   mysqli_stmt_execute($statement);
   $result = $statement->get_result();
@@ -82,16 +82,114 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
     <div class=\"item__group--coloum\">");
       foreach ($invites as $invite) {
         echo ("
-        <a onclick=\"invite()\" class=\"item__group--invite\">
-          <div>
-            <h3>Uitnoding voor $invite->GroupName</h3>
-            <p>Je hebt een uitnoding ontvangen van $invite->SenderName voor de groep $invite->GroupName</p>
+          <div class=\"item__group--invite\">
+            <div>
+              <h3>Uitnoding voor $invite->GroupName</h3>
+              <p>Je hebt een uitnoding ontvangen van $invite->SenderName voor de groep $invite->GroupName</p>
+            </div>
+            <div class=\"invites__btn--response\">
+              <button class=\"btn__border--green\" onclick=\"acceptInvite($invite->InvID)\">&radic;</button>
+              <button class=\"btn__border--red\" onclick=\"declineInvite($invite->InvID)\">x</button>
+            </div>
           </div>
-        </a>
 ");
       }
 
 echo("</div></div>");
+
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && isset($_POST["inviteID"])) {
+    //Invite gegevens ophalen
+
+
+    // Nakijken of invite van juiste gebruiker is en nog niet beantwoord
+    session_start();
+    if (!isset($_SESSION["UserID"])) {
+      header("Location: index.php");
+    }
+    $userID = $_SESSION["UserID"];
+    $con = mysqli_connect($host, $user, $pass, $db);
+
+    $statement = mysqli_prepare($con, "SELECT GroupID FROM invites i WHERE i.ReceiverID = ? AND i.InviteID = ?;");
+    mysqli_stmt_bind_param($statement, "ii", $userID, $_POST["inviteID"]);
+    mysqli_stmt_execute($statement);
+    $result = $statement->get_result();
+    if(mysqli_num_rows($result) == 1) {
+        while($row = mysqli_fetch_assoc($result)) {
+            $groupID = $row["GroupID"];
+        }
+
+
+        $statement = mysqli_prepare($con, "UPDATE invites i SET i.Answer = 1 WHERE i.InviteID = ? AND i.ReceiverID = ? AND i.Answer IS NULL;");
+        mysqli_stmt_bind_param($statement, "ii", $_POST["inviteID"], $userID);
+        mysqli_stmt_execute($statement);
+        if($statement->affected_rows == 1) {
+
+          $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID) VALUES (?, ?);");
+          mysqli_stmt_bind_param($statement, "ii", $groupID , $userID);
+          mysqli_stmt_execute($statement);
+
+          if($statement->affected_rows == 1) {
+              echo "Succes!";
+          }
+
+        }else{
+          echo "Something went wrong!";
+          exit;
+        }
+
+    }else{
+      echo "Something went wrong!";
+      exit;
+    }
+
+
+
+
+
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && isset($_POST["inviteID"])) {
+    //Invite gegevens ophalen
+
+
+    // Nakijken of invite van juiste gebruiker is en nog niet beantwoord
+    session_start();
+    if (!isset($_SESSION["UserID"])) {
+      header("Location: index.php");
+    }
+    $userID = $_SESSION["UserID"];
+    $con = mysqli_connect($host, $user, $pass, $db);
+
+    $statement = mysqli_prepare($con, "SELECT GroupID FROM invites i WHERE i.ReceiverID = ? AND i.InviteID = ?;");
+    mysqli_stmt_bind_param($statement, "ii", $userID, $_POST["inviteID"]);
+    mysqli_stmt_execute($statement);
+    $result = $statement->get_result();
+    if(mysqli_num_rows($result) == 1) {
+        while($row = mysqli_fetch_assoc($result)) {
+            $groupID = $row["GroupID"];
+        }
+
+
+        $statement = mysqli_prepare($con, "UPDATE invites i SET i.Answer = 0 WHERE i.InviteID = ? AND i.ReceiverID = ? AND i.Answer IS NULL;");
+        mysqli_stmt_bind_param($statement, "ii", $_POST["inviteID"], $userID);
+        mysqli_stmt_execute($statement);
+        if($statement->affected_rows == 1) {
+
+        }else{
+          echo "Something went wrong!";
+          exit;
+        }
+
+    }else{
+      echo "Something went wrong!";
+      exit;
+    }
+
+
+
+
 
 }
 

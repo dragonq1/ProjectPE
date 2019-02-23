@@ -25,3 +25,29 @@
 function newGroup() {
   alert("Script voor nieuwe groep");
 }
+
+function acceptInvite(inviteID){
+  $.ajax({
+  url:"../php/actionsHome.php",
+  type:"POST",
+  datatype:"text",
+  data: {acceptInvite:1,inviteID:inviteID},
+  success: function(data){
+    alert(data);
+    home();
+    }
+  })
+}
+
+function declineInvite(inviteID){
+  $.ajax({
+  url:"../php/actionsHome.php",
+  type:"POST",
+  datatype:"text",
+  data: {declineInvite:1,inviteID:inviteID},
+  success: function(data){
+    alert(data);
+    home();
+    }
+  })
+}
