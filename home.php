@@ -54,7 +54,7 @@
             <div class="navbar__group">
               <p class="navbar__text--groups">Start</p>
               <button onclick="home();">Home</button>
-              <a href="#">Account</a>
+              <button type="button" id="Accountbutton" onclick="account();">Account</button>
             </div>
             <div class="div__line"></div>
             <div class="navbar__group">
@@ -77,7 +77,7 @@
         </div>
         <div class="body__home--interactive" id="dom__interactive">
 
-            
+
 
         </div>
       </div>
