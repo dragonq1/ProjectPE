@@ -1,6 +1,6 @@
 <?php
 require "db.php";
-if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu:2"])) {
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
 
   session_start();
   if (!isset($_SESSION["UserID"])) {

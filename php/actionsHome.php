@@ -37,13 +37,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
   mysqli_stmt_execute($statement);
   $result = $statement->get_result();
 
-  if(mysqli_num_rows($result) >= 1) {
+  if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
           $invite = new Invite($row["InviteID"], $row["SenderID"], $row["ReceiverID"], $row["sName"], $row["rName"], $row["GroupID"], $row["GrName"]);
           array_push($invites, $invite);
       }
-  }else{
-    header("index.php");
   }
   $result->close();
 
@@ -92,8 +90,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
               <button class=\"btn__border--red\" onclick=\"declineInvite($invite->InvID)\">x</button>
             </div>
           </div>
-");
-      }
+        ");
+}
 
 echo("</div></div>");
 

@@ -1,27 +1,26 @@
-  function courses(groupID){
-    $.ajax({
-        url:"../php/actionsHome.php",
-        type:"POST",
-        datatype:"text",
-        data: {group:1,groupID:groupID},
-        success: function(data){
-          $("#dom__interactive").html(data);
-        }
-    })
-  }
+function home(){
+  $.ajax({
+  url:"../php/actionsHome.php",
+  type:"POST",
+  datatype:"text",
+  data: {homeMenu:1},
+  success: function(data){
+    $("#dom__interactive").html(data);
+    }
+  })
+}
 
-
-  function home(){
-    $.ajax({
-    url:"../php/actionsHome.php",
-    type:"POST",
-    datatype:"text",
-    data: {homeMenu:1},
-    success: function(data){
+function courses(groupID){
+  $.ajax({
+      url:"../php/actionsHome.php",
+      type:"POST",
+      datatype:"text",
+      data: {group:1,groupID:groupID},
+      success: function(data){
       $("#dom__interactive").html(data);
       }
-    })
-  }
+  })
+}
 
 function newGroup() {
   alert("Script voor nieuwe groep");
@@ -32,8 +31,8 @@ function account() {
     url:"../php/Account.php",
     type:"POST",
     datatype:"text",
-    data: {homeMenu:2},
-    succes: function(data){
+    data: {homeMenu:1},
+    success: function(data){
       $("#dom__interactive").html(data);
     }
   })
