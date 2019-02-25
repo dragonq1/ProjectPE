@@ -182,29 +182,6 @@ input:-webkit-autofill:active  {
 
 }
 
-/*Registratie pagina deel */
-
-.registratie_pagina {
-  padding: 16px;
-  width: 100%;
-  background-color: #000032;
-  color: #ffffff;
-}
-
-.body__registratie{
-  width: 80%;
-  padding-left: 15%;
-
-}
-
-.body__registratie input {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0px;
-  display: inline-block;
-  border: none;
-}
-
 .body__home--home {
   display: flex;
   flex-wrap: wrap;
@@ -356,8 +333,6 @@ input:-webkit-autofill:active  {
 
 .body__black__line {
 border-top: 1px solid black;
-
-
 }
  /* Terms of service css */
 
@@ -366,35 +341,3 @@ border-top: 1px solid black;
    width: 100%;
    background-color: #efefef;
  }
-
-/* Registratie pagina*/
-
- meter {
-     /*-webkit-appearance: none;*/
-     -moz-appearance: none;
-     appearance: none;
-
-     margin: O auto 1em;
-     width: 100%;
-     height: 0.5em;
-
-     background: none;
-     background-color: rgba(0,0,0,0.1);
- }
-
-meter::-webkit-meter-bar {
-     background:none;
-     background-color: rgba(0,0,0,0.1);
-}
-meter[value="1"]::-webkit-meter-optimum-value { background: red; }
-meter[value="2"]::-webkit-meter-optimum-value { background: yellow; }
-meter[value="3"]::-webkit-meter-optimum-value { background: orange; }
-meter[value="4"]::-webkit-meter-optimum-value { background: green; }
-
-meter[value="1"]::-moz-meter-bar { background: red; }
-meter[value="2"]::-moz-meter-bar { background: yellow; }
-meter[value="3"]::-moz-meter-bar { background: orange; }
-meter[value="4"]::-moz-meter-bar { background: green; }
-
-
-/*Registratie pagina */
