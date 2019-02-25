@@ -51,14 +51,14 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
   // Body voor groepen
   echo ("
       <div class=\"body__home--home\">
-      <div class=\"body__home--groups\">
+      <div class=\"body__home--groups body__home--boxes\">
       <div class=\"body__home--title\">
           <h2>Mijn groepen</h2>
       </div>
       <div class=\"item__group--row\">");
         foreach ($groups as $group) {
           echo ("
-          <a onclick=\"courses()\" class=\"item__group--link\">
+          <a onclick=\"courses($group->GrID)\" class=\"item__group--link\">
             <div>
               <h3>$group->GrName</h3>
               <p>$group->GrDescr</p>
@@ -75,7 +75,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
     </div>
     </div>
 
-<div class=\"body__home--invites\">
+<div class=\"body__home--invites body__home--boxes\">
     <div class=\"body__home--title\">
         <h2>Meldingen</h2>
     </div>
@@ -190,6 +190,66 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && i
 
 
 
+
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_POST["groupID"])) {
+
+  session_start();
+  if (!isset($_SESSION["UserID"])) {
+    header("Location: index.php");
+  }
+  $userID = $_SESSION["UserID"];
+
+  $con = mysqli_connect($host, $user, $pass, $db);
+  $courses = array();
+
+  $statement = mysqli_prepare($con, "SELECT c.CourseID, c.CrName, c.CrDescription, g.GrName, c.GroupID FROM courses c INNER JOIN groups g on g.GroupID = c.GroupID INNER JOIN UserGroups us ON us.GroupID = g.GroupID WHERE c.GroupID = ? AND us.UserID = ?;");
+  mysqli_stmt_bind_param($statement, "ii", $_POST["groupID"], $userID);
+  mysqli_stmt_execute($statement);
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result) > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+          $course = new Course($row["CourseID"], $row["CrName"], $row["CrDescription"], $row["GrName"], $row["GroupID"]);
+          array_push($courses, $course);
+      }
+  }else{
+    echo ("
+    <div class=\"body__home--home\">
+    <div class=\"body__home--courses body__home--boxes\">
+    <div class=\"body__home--title\">
+        <h2>Kon geen vakken vinden voor deze groep </h2>
+    </div>
+    </div>
+    </div>
+    ");
+    exit;
+  }
+  $result->close();
+  $GroupName = $courses[0]->crGroupName;
+
+    echo ("
+    <div class=\"body__home--home\">
+    <div class=\"body__home--courses body__home--boxes\">
+    <div class=\"body__home--title\">
+        <h2>$GroupName</h2>
+    </div>
+    <div class=\"item__group--row\">");
+    foreach ($courses as $course) {
+      echo ("
+      <a onclick=\"course($course->crID)\" class=\"item__group--link\">
+        <div>
+          <h3>$course->crName</h3>
+          <p>$course->crDescr</p>
+        </div>
+      </a>");
+    }
+
+    echo("</div>
+    </div>
+    </div>
+
+    ");
 
 }
 

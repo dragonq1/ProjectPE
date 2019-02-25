@@ -61,7 +61,7 @@
               <p class="navbar__text--groups">Mijn groepen</p>
               <?php
                 foreach ($groups as $group) {
-                  echo "<button type=\"button\" name=\"button\" onclick=\"courses();\">$group->GrName</button>";
+                  echo "<button type=\"button\" name=\"button\" onclick=\"courses($group->GrID);\">$group->GrName</button>";
                 }
               ?>
             </div>

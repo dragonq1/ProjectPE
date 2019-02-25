@@ -31,5 +31,21 @@
     }
   }
 
+  /**
+   * Class voor vakken
+   */
+  class Course
+  {
+
+    function __construct($crID, $crName, $crDescr, $crGroupName, $crGroupID)
+    {
+      $this->crID = $crID;
+      $this->crName = $crName;
+      $this->crDescr = $crDescr;
+      $this->crGroupName = $crGroupName;
+      $this->crGroupID = $crGroupID;
+    }
+  }
+
 
  ?>

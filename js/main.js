@@ -1,8 +1,9 @@
-  function courses(){
+  function courses(groupID){
     $.ajax({
-        url:"../php/courses.php",
+        url:"../php/actionsHome.php",
         type:"POST",
         datatype:"text",
+        data: {group:1,groupID:groupID},
         success: function(data){
           $("#dom__interactive").html(data);
         }
