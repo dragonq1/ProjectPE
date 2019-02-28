@@ -76,7 +76,7 @@
 <html lang="en" dir="ltr">
   <head>
     <?php include_once("php/header.php") ?>
-    <link rel="stylesheet" href="/css/Registratiepg.css">
+    <link rel="stylesheet" type="text/css" href="css/registratiepg.css">
   </head>
   <body>
 
@@ -93,19 +93,19 @@
 
                              <div class="Registraite__allinput">
                                       <label for="nickname"><b>Nickname</b></label>
-                                      <input type="text" placeholder="oops" class="registratie__input" name="nickname" id ="nickname" required>
+                                      <input type="text" placeholder="nickname" class="registratie__input" name="nickname" id ="nickname" required>
 
                                       <label for="email"><b>Email</b></label>
-                                      <input type="email" placeholder="oops@oopsie" class="registratie__input" name="email" id="email" required>
+                                      <input type="email" placeholder="123@email.be" class="registratie__input" name="email" id="email" required>
 
                                       <label for="voornaam"><b>Voornaam</b></label>
-                                      <input type="text" placeholder="oopsiedoops" class="registratie__input" name="voornaam" id="voornaam" required>
+                                      <input type="text" placeholder="Voornaam" class="registratie__input" name="voornaam" id="voornaam" required>
 
                                       <label for="achternaam"><b>Achternaam</b></label>
-                                      <input type="text" placeholder="Euh" class="registratie__input" name="achternaam" id="achternaam" required>
+                                      <input type="text" placeholder="Achternaam" class="registratie__input" name="achternaam" id="achternaam" required>
 
                                       <label for="psw"><b>password</b></label>
-                                      <input type="password" placeholder="whoops" class="registratie__input" name="psw" id="psw" required>
+                                      <input type="password" placeholder="wachtwoord" class="registratie__input" name="psw" id="psw" required>
 
                                       <meter min="0" max="4" id="password_strength_meter"></meter>
                                       <p id="password_strength_text"> </p>
@@ -113,7 +113,7 @@
 
 
                                       <label for="psw_repeat"><b>Repeat Password</b></label>
-                                      <input type="password" placeholder="whoops" class="registratie__input" name="psw_repeat" id="psw_repeat" required>
+                                      <input type="password" placeholder="wachtwoord herhalen" class="registratie__input" name="psw_repeat" id="psw_repeat" required>
 
                                       <p>Door een account te maken gaat u akkoord met de Terms Of Service.</p>
 
@@ -131,7 +131,7 @@
 
     </div>
 
-<script src="js/RegistratiePaginaFuncties.js"></script>
+<script src="js/regFuncties.js"></script>
 
   </body>
 </html>

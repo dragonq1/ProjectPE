@@ -17,13 +17,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
   mysqli_stmt_execute($statement);
   $result = $statement->get_result();
 
-  if(mysqli_num_rows($result) >= 1) {
+  if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
           $group = new Group($row["GroupID"], $row["GrName"], $row["GrDescription"], $row["GrOwner"]);
           array_push($groups, $group);
       }
-  }else{
-    header("index.php");
   }
   $result->close();
 
@@ -216,7 +214,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
     <div class=\"body__home--home\">
     <div class=\"body__home--courses body__home--boxes\">
     <div class=\"body__home--title\">
-        <h2>Kon geen vakken vinden voor deze groep </h2>
+        <h2>Kon geen vakken vinden voor deze groep</h2>
     </div>
     </div>
     </div>
@@ -248,7 +246,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
     </div>
 
     ");
-
+  exit;
 }
 
 

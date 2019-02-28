@@ -8,7 +8,7 @@
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
-    header("Location: index.php");
+    header("Location: index.php");	die;
   }
   $userID = $_SESSION["UserID"];
 
@@ -37,14 +37,11 @@
   mysqli_stmt_bind_param($statement, "i", $userID);
   mysqli_stmt_execute($statement);
   $result = $statement->get_result();
-
-  if(mysqli_num_rows($result) > 1) {
+  if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
           $group = new Group($row["GroupID"], $row["GrName"], $row["GrDescription"], $row["GrOwner"]);
           array_push($groups, $group);
       }
-  }else{
-    header("index.php");
   }
 
   ?>
@@ -53,17 +50,21 @@
       <div class="navbar__side">
             <div class="navbar__group">
               <p class="navbar__text--groups">Start</p>
-              <button onclick="home();">Home</button>
-              <button type="button" id="Accountbutton" onclick="account();">Account</button>
+              <ol>
+                <li><a onclick="home();">Home</a></li>
+                <li><a type="button" id="Accountbutton" onclick="account();">Account</a></li>
+              </ol>
             </div>
             <div class="div__line"></div>
             <div class="navbar__group">
               <p class="navbar__text--groups">Mijn groepen</p>
-              <?php
-                foreach ($groups as $group) {
-                  echo "<button type=\"button\" name=\"button\" onclick=\"courses($group->GrID);\">$group->GrName</button>";
-                }
-              ?>
+              <ol>
+                <?php
+                  foreach ($groups as $group) {
+                    echo "<li><a onclick=\"courses($group->GrID);\">$group->GrName</a></li>";
+                  }
+                ?>
+              </ol>
             </div>
             <div class="div__line"></div>
             <p class="navbar__text--groups">Overige</p>
