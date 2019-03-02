@@ -22,10 +22,6 @@ function courses(groupID){
   })
 }
 
-function newGroup() {
-  alert("Script voor nieuwe groep");
-}
-
 function account() {
   $.ajax({
     url:"../php/Account.php",

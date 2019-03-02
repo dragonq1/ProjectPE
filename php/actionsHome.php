@@ -62,7 +62,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
           </a>");
         }
 
-  echo("<a onclick=\"newGroup()\" class=\"item__group--link\">
+  echo("
+      <a onclick=\"newGroup()\" class=\"item__group--link\">
         <div>
           <h3>+Groep</h3>
           <p>Klik hier om een nieuwe groep aan te maken</p>
@@ -91,7 +92,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
         ");
 }
 
-echo("</div></div>");
+echo("</div></div></div>");
 
 }
 
