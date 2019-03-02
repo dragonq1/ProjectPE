@@ -371,12 +371,14 @@ border-top: 1px solid black;
   padding-left: 2px;
   padding-right: 2px;
   min-width: 40%;
+  background-color: #1f2c47;
 }
 
 .modal__title {
   text-align: center;
   margin-bottom: 3%;
   margin-top: 2%;
+  color: white;
 }
 
 .modal__content {
@@ -389,19 +391,19 @@ border-top: 1px solid black;
   text-align: center;
 }
 
-.modal__controls input{
+.modal__controls input, button {
   border: 1px solid #2a69c9;
   border-radius: 2px;
   text-align: center;
-  width: 25%;
   background-color: transparent;
-  color: black;
+  color: white;
   transition: 0.3s;
-  height: 35px;
-  font-size: 18px;
+  height: 40px;
+  width: 25%;
+  font-size: 20px;
 }
 
-.modal__controls input:hover{
+.modal__controls input:hover, .modal__controls button:hover{
   background-color: #2a69c9;
   cursor: pointer;
   color: white;
@@ -415,11 +417,15 @@ border-top: 1px solid black;
   margin: auto;
 }
 
-.input__group input {
+.input__group input{
   width: 60%;
-  font-size: 100%;
-  border: 1px solid #c1c1c1;
-  border-spacing: 3px;
+  font-size: 16px;
+  border: 1px solid white;
+  border-radius: 2px;
+  border-style: none;
+  background-color: white;
+  height: 100%;
+  padding: 1px 2px 1px 1px;
 }
 
 .input__group input:focus {

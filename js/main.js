@@ -11,6 +11,7 @@ function home(){
 }
 
 function courses(groupID){
+  destroyModals();
   $.ajax({
       url:"../php/actionsHome.php",
       type:"POST",
@@ -23,6 +24,7 @@ function courses(groupID){
 }
 
 function account() {
+  destroyModals();
   $.ajax({
     url:"../php/Account.php",
     type:"POST",

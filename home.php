@@ -4,8 +4,6 @@
     <?php include_once("php/header.php") ?>
   </head>
   <body>
-  <script src="js/main.js"></script>
-  <script src="js/modal.js"></script>
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
@@ -85,7 +83,7 @@
   <!-- Nieuwe group modal -->
   <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--newgroup">
     <div class="item__group--coloum width-100">
-      <form class="" action="index.html" method="post">
+      <form action="php/actionsHome.php" method="post">
         <div class="modal__title">
           <h3>Nieuwe groep aanmaken</h3>
         </div>
@@ -96,18 +94,17 @@
           </div>
           <div class="item__group--row input__group">
             <!-- <label for="GrDescription">Beschrijving groep</label> -->
-            <input type="text" name="GrDescription" id="GrDescription" placeholder="Groep beschrijving">
+            <input type="text" name="grDescription" id="GrDescription" placeholder="Groep beschrijving">
           </div>
         </div>
-        <div class="div__line--grey"></div>
         <div class="modal__controls">
           <input type="submit" value="Aanmaken">
-          <input value="Annuleren">
+          <button type="button" id="dom__btn--newGroupClose">Annuleren</button>
         </div>
       </form>
     </div>
   </div>
-
+  <script src="js/main.js"></script>
   <script type="text/javascript">
     window.onload=function() {
       home();
