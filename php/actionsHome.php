@@ -62,7 +62,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
           </a>");
         }
 
-  echo("<a onclick=\"newGroup()\" class=\"item__group--link\">
+  echo("
+      <a id=\"dom__btn--newgroup\" class=\"item__group--link\">
         <div>
           <h3>+Groep</h3>
           <p>Klik hier om een nieuwe groep aan te maken</p>
@@ -91,7 +92,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
         ");
 }
 
-echo("</div></div>");
+echo("</div></div></div><script src=\"js/modal.js\"></script>");
 
 }
 
@@ -247,6 +248,35 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
 
     ");
   exit;
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grNaam"]) && isset($_POST["grDescription"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  $userID = $_SESSION["UserID"];
+  $grName = $con->escape_string($_POST["grNaam"]);
+  $grDescription = $con->escape_string($_POST["grDescription"]);
+
+  if(!$con) {
+    header("Location: ../home.php");
+  }else{
+    $statement = mysqli_prepare($con, "INSERT INTO groups(`GrName`,`GrDescription`,`GrOwner`) VALUES(?,?,?);");
+    mysqli_stmt_bind_param($statement, "ssi", $grName, $grDescription, $userID);
+    if(mysqli_stmt_execute($statement)) {
+      $newGroupId = $con->insert_id;
+
+      $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID) VALUES (?, ?);");
+      mysqli_stmt_bind_param($statement, "ii", $newGroupId , $userID);
+      if(mysqli_stmt_execute($statement)) {
+        header("Location: ../home.php");
+      }
+
+    }else{
+    header("Location: ../home.php");
+    }
+  }
 }
 
 

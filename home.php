@@ -4,7 +4,6 @@
     <?php include_once("php/header.php") ?>
   </head>
   <body>
-  <script src="js/main.js"></script>
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
@@ -52,10 +51,10 @@
               <p class="navbar__text--groups">Start</p>
               <ol>
                 <li><a onclick="home();">Home</a></li>
-                <li><a type="button" id="Accountbutton" onclick="account();">Account</a></li>
+                <li><a onclick="account();">Account</a></li>
               </ol>
             </div>
-            <div class="div__line"></div>
+            <div class="div__line--white"></div>
             <div class="navbar__group">
               <p class="navbar__text--groups">Mijn groepen</p>
               <ol>
@@ -66,7 +65,7 @@
                 ?>
               </ol>
             </div>
-            <div class="div__line"></div>
+            <div class="div__line--white"></div>
             <p class="navbar__text--groups">Overige</p>
             <a href="index.php">Uitloggen</a>
       </div>
@@ -77,17 +76,40 @@
           ?>
         </div>
         <div class="body__home--interactive" id="dom__interactive">
-
-
-
+          <!-- Interactive, leeg laten! -->
         </div>
       </div>
     </div>
-
+  <!-- Nieuwe group modal -->
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--newgroup">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h3>Nieuwe groep aanmaken</h3>
+        </div>
+        <div class="modal__content">
+          <div class="item__group--row input__group">
+            <!-- <label for="grNaam">Naam groep</label> -->
+            <input type="text" name="grNaam" id="grNaam" placeholder="Groep naam">
+          </div>
+          <div class="item__group--row input__group">
+            <!-- <label for="GrDescription">Beschrijving groep</label> -->
+            <input type="text" name="grDescription" id="GrDescription" placeholder="Groep beschrijving">
+          </div>
+        </div>
+        <div class="modal__controls">
+          <input type="submit" value="Aanmaken">
+          <button type="button" id="dom__btn--newGroupClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="js/main.js"></script>
   <script type="text/javascript">
     window.onload=function() {
       home();
     };
   </script>
+  <?php include_once("php/footer.php") ?>
   </body>
 </html>

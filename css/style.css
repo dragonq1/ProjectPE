@@ -172,8 +172,14 @@ input:-webkit-autofill:active  {
   margin-bottom: 30px;
 }
 
-.div__line{
+.div__line--white{
   background-color: #ffffff;
+  height: 1px;
+  margin: 0px 3px 0px 3px
+}
+
+.div__line--grey{
+  background-color: #c1c1c1;
   height: 1px;
   margin: 0px 3px 0px 3px
 }
@@ -226,10 +232,8 @@ input:-webkit-autofill:active  {
 }
 
 .body__home--courses {
-  width: 90%;
-  min-width: 500px;
   overflow: auto;
-  margin: auto;
+  min-width: 500px;
 }
 
 .body__home--invites {
@@ -259,6 +263,7 @@ input:-webkit-autofill:active  {
 .body__home--title {
   width: 100%;
   margin-bottom: 5%;
+  margin-top: 2%;
   text-align: center;
   color: black;
 }
@@ -357,6 +362,88 @@ input:-webkit-autofill:active  {
 .body__black__line {
 border-top: 1px solid black;
 }
+
+.modal-box {
+  display: none;
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  padding-left: 2px;
+  padding-right: 2px;
+  min-width: 40%;
+  background-color: #1f2c47;
+}
+
+.modal__title {
+  text-align: center;
+  margin-bottom: 3%;
+  margin-top: 2%;
+  color: white;
+}
+
+.modal__content {
+  text-align: center;
+  margin-bottom: 3%;
+}
+
+.modal__controls {
+  margin-top: 2%;
+  text-align: center;
+}
+
+.modal__controls input, button {
+  border: 1px solid #2a69c9;
+  border-radius: 2px;
+  text-align: center;
+  background-color: transparent;
+  color: white;
+  transition: 0.3s;
+  height: 40px;
+  width: 25%;
+  font-size: 20px;
+}
+
+.modal__controls input:hover, .modal__controls button:hover{
+  background-color: #2a69c9;
+  cursor: pointer;
+  color: white;
+}
+
+.input__group {
+  width: 90%;
+  height: 40px;
+  padding-bottom: 5px;
+  display: block;
+  margin: auto;
+}
+
+.input__group input{
+  width: 60%;
+  font-size: 16px;
+  border: 1px solid white;
+  border-radius: 2px;
+  border-style: none;
+  background-color: white;
+  height: 100%;
+  padding: 1px 2px 1px 1px;
+}
+
+.input__group input:focus {
+  outline: none;
+}
+
+.input__group label {
+  width: 30%;
+  text-align: right;
+  font-weight: normal;
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.width-100 {
+  width: 100%;
+}
+
  /* Terms of service css */
 
  .termsos__pagina {
