@@ -364,3 +364,60 @@ border-top: 1px solid black;
    width: 100%;
    background-color: #efefef;
  }
+
+/*account pagina css */
+
+.account__input {
+  margin: auto;
+  background-color: #ffffff;
+  padding: 7px 5px 7px 5px;
+  font-size: 18px;
+  border-bottom: 1px;
+  border-color: white;
+  border-style: solid;
+  width: 100%;
+  box-shadow: 0px 0px 10px #201049;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+  color: black;
+}
+meter {
+    /*-webkit-appearance: none;*/
+    -moz-appearance: none;
+    appearance: none;
+
+    margin: O auto 1em;
+    width: 100%;
+    height: 0.5em;
+
+    background: none;
+    background-color: white;
+    /*background-color: rgba(0,0,0,0.1);*/
+}
+
+meter::-webkit-meter-bar {
+    background:none;
+    background-color: rgba(0,0,0,0.1);
+}
+meter[value="1"]::-webkit-meter-optimum-value { background: red; }
+meter[value="2"]::-webkit-meter-optimum-value { background: yellow; }
+meter[value="3"]::-webkit-meter-optimum-value { background: orange; }
+meter[value="4"]::-webkit-meter-optimum-value { background: green; }
+
+meter[value="1"]::-moz-meter-bar { background: red; }
+meter[value="2"]::-moz-meter-bar { background: yellow; }
+meter[value="3"]::-moz-meter-bar { background: orange; }
+meter[value="4"]::-moz-meter-bar { background: green; }
+
+.Account__paswreset {
+  width: 50%;
+}
+
+.account__btn{
+  margin: 2px 2px 2px 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+
+/* */
