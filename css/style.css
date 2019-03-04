@@ -226,17 +226,26 @@ input:-webkit-autofill:active  {
     margin-right: 0%;
   }
 
-  .body__home--invites {
+  .body__home--courses {
+    width: auto;
+    min-width: 60px;
+    overflow: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+  }
+
+  .body__home--sidebar {
     margin: 0 !important;
   }
 }
 
 .body__home--courses {
+  width: 800px;
+  min-width: 60px;
   overflow: auto;
-  min-width: 500px;
 }
 
-.body__home--invites {
+.body__home--sidebar {
   padding-left: 1%;
   padding-right: 1%;
   padding-bottom: 3%;
@@ -244,7 +253,6 @@ input:-webkit-autofill:active  {
   margin-left: 5%;
   margin-right: 2%;
   overflow: auto;
-  height: 300px;
   min-width: 300px;
 }
 
@@ -262,18 +270,19 @@ input:-webkit-autofill:active  {
 
 .body__home--title {
   width: 100%;
-  margin-bottom: 5%;
-  margin-top: 2%;
+  margin-top: 10px;
+  margin-bottom: 15px;
   text-align: center;
   color: black;
 }
 
-.item__group--link {
+.group__link {
+  flex: 0 1 auto;
+  min-width: 25%;
+  max-width: 180px;
+  min-height: 150px;
   margin-right: 2%;
   margin-bottom: 2%;
-  flex: 0 1 auto;
-  min-width: 60px;
-  max-width: 180px;
   background-color: white;
   box-shadow: 0px 0px 10px #d7d7d7;
   border: 1px solid #2a69c9;
@@ -281,29 +290,35 @@ input:-webkit-autofill:active  {
   transition: 0.3s;
 }
 
-.item__group--link div {
+.group__link:hover {
+  text-decoration: none;
+  /* background-color: #efefef; */
+  background-color: #2a69c9;
+  color: #ffffffff !important;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.group__link--title {
+  padding-top: 10px;
+}
+
+.group__link--content {
   outline: none;
   color: black;
-
   padding: 1px 30px 1px 30px;
   text-align: left;
-
 }
 
-.item__group--link:hover{
-  text-decoration: none;
-  background-color: #efefef;
-  outline: none;
-  cursor: pointer;
+.group__link--symbol {
+  text-align: center;
 }
 
-.item__group--link:hover{
-  text-decoration: none;
-}
-
-.item__group--link p {
-  font-size: 16px;
-
+.group__link--symbol p{
+  font-size: 100px;
+  transform: scale(1.6);
+  display: inline-block;
+  color: grey;
 }
 
 .item__group--invite {
@@ -317,6 +332,7 @@ input:-webkit-autofill:active  {
   box-shadow: 0px 0px 10px #d7d7d7;
   border: 1px solid #d7d7d7;
   border-radius: 3px;
+  width: 300px;
 }
 
 .invites__btn--response {
@@ -329,6 +345,7 @@ input:-webkit-autofill:active  {
   float: left;
   margin-left: 1%;
   font-size: 18px;
+  color: black;
 }
 
 .invites__btn--response button:hover {
@@ -399,7 +416,7 @@ border-top: 1px solid black;
   color: white;
   transition: 0.3s;
   height: 40px;
-  width: 25%;
+  width: 150px;
   font-size: 20px;
 }
 
@@ -438,6 +455,30 @@ border-top: 1px solid black;
   font-weight: normal;
   margin-right: 5px;
   font-size: 16px;
+}
+
+.groups__controls {
+  width: 100%;
+  text-align: center;
+}
+
+.groups__controls button{
+  border: 1px solid #2a69c9;
+  border-radius: 2px;
+  text-align: center;
+  background-color: transparent;
+  color: black;
+  transition: 0.3s;
+  height: 40px;
+  width: 90%;
+  font-size: 20px;
+}
+
+.groups__controls button:hover{
+  text-align: center;
+  background-color: #2a69c9;
+  color: white;
+  cursor: pointer;
 }
 
 .width-100 {
