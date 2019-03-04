@@ -229,8 +229,15 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
       <div class=\"body__home--title\">
         <h2>Acties</h2>
       </div>
+      <div class=\"item__group--coloum\">
+        <div class=\"groups__controls\">
+            <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
+            <button type=\"button\" onclick=\"leaveGroup();\">Groep verlaten</button>
+            <button type=\"button\" >Leden lijst</button>
+        </div>
+      </div>
       <div class=\"item__group--coloum\"></div>
-    </div>");
+    </div><script src=\"js/modalCourses.js\">");
     exit;
   }
   $result->close();
@@ -264,6 +271,8 @@ echo("</div></div><div class=\"body__home--sidebar body__home--boxes\">
         <div class=\"item__group--coloum\">
           <div class=\"groups__controls\">
               <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
+              <button type=\"button\" onclick=\"leaveGroup();\">Groep verlaten</button>
+              <button type=\"button\">Leden lijst</button>
           </div>
         </div>");
   echo("</div></div></div><script src=\"js/modalCourses.js\"></script>");
@@ -325,17 +334,18 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
 
           if($invitedUserID == $userID) {
             $_SESSION["errormsg"] = "Je kan geen uitnoding naar jezelf sturen!";
-            header("Location: ../home.php");
+            header("Location: redirect.php?home=1");
+            exit;
           }
           //Kijken of gebruiker niet al in groep zit
-          $statement = mysqli_prepare($con, "SELECT * FROM dragv_dev.UserGroups WHERE GroupID = 1 AND UserID = 4;");
-          mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
+          $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE GroupID = ? AND UserID = ?;");
+          mysqli_stmt_bind_param($statement, "ii", $groupID, $invitedUserID);
           mysqli_stmt_execute($statement);
           $result = $statement->get_result();
           if(mysqli_num_rows($result) > 0) {
-            $result->close();
-            $_SESSION["errormsg"] = "Deze gebruiker zit al in deze groep";
-            header("Location: ../home.php");
+            $_SESSION["errormsg"] = "Deze gebruiker zit al in deze groep!";
+            header("Location: redirect.php?home=1");
+            exit;
           }
 
           $result->close();
@@ -347,7 +357,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
           if(mysqli_num_rows($result) > 1) {
             $result->close();
             $_SESSION["errormsg"] = "Deze gebruiker heeft al een uitnoding voor deze groep!";
-            header("Location: ../home.php");
+            header("Location: redirect.php?home=1");
+            exit;
           }else{
             //Invite toevoegen
             $result->close();
@@ -356,16 +367,43 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
             if(mysqli_stmt_execute($statement)) {
               header("Location: ../home.php");
             }else{
-              $_SESSION["errormsg"] = "Er ging iets fout 2! $statement->error";
-              header("Location: ../home.php");
+              $_SESSION["errormsg"] = "Er ging iets fout !";
+              header("Location: redirect.php?home=1");
+              exit;
             }
           }
       }else{
         $_SESSION["errormsg"] = "Deze gebruiker bestaat niet!";
-        header("Location: ../home.php");
+        header("Location: redirect.php?home=1");
+        exit;
       }
   }
 
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if(!isset($_SESSION["GroupID"])) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+
+    $userID = $_SESSION["UserID"];
+    $groupID = $_SESSION["GroupID"];
+
+    $statement = mysqli_prepare($con, "DELETE FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
+    mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
+    if(mysqli_stmt_execute($statement)) {
+      echo "success!";
+    }else{
+      $_SESSION["errormsg"] = "Er ging iets fout!";
+      header("Location: redirect.php?home=1");
+      exit;
+    }
 }
 
 

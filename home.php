@@ -7,8 +7,9 @@
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
-    header("Location: index.php");	die;
+    header("Location: index.php");
   }
+
   $userID = $_SESSION["UserID"];
 
   require 'php/classes.php';
