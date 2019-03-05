@@ -7,7 +7,7 @@
        4: "Sterk"
     }
 
-  var password = document.getElementById('psw');
+  var password = document.getElementById('DOM__psw');
   var meter = document.getElementById('password_strength_meter');
   var text = document.getElementById('password_strength_text');
   var bt = document.getElementById('registratie__button');
@@ -22,10 +22,11 @@
     meter.value = result.score;
     //update text indicator
 
+
     if(val !== "")
       {
       text.innerHTML = "Sterkte:   " + strength[result.score];
-      text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + result.guesses;
+      text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + JSON.stringify(result.feedback);
    if(result.score < 3)
    {
      bt.disabled = true;

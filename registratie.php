@@ -106,7 +106,7 @@
                                       <input type="text" placeholder="Achternaam" class="registratie__input" name="achternaam" id="achternaam" required>
 
                                       <label for="psw"><b>Paswoord</b></label>
-                                      <input type="password" placeholder="wachtwoord" class="registratie__input" name="psw" id="psw" required>
+                                      <input type="password" placeholder="wachtwoord" class="registratie__input" name="psw" id="DOM__psw" required>
 
                                       <meter min="0" max="4" id="password_strength_meter"></meter>
                                       <p id="password_strength_text"> </p>
@@ -132,7 +132,7 @@
 
     </div>
 
+<?php include_once("php/footer.php") ?>
 <script src="js/regFuncties.js"></script>
-
   </body>
 </html>
