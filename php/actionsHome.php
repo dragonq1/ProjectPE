@@ -285,8 +285,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grNaam"]) && isset($_
   $con = mysqli_connect($host, $user, $pass, $db);
 
   $userID = $_SESSION["UserID"];
-  $grName = $con->escape_string($_POST["grNaam"]);
-  $grDescription = $con->escape_string($_POST["grDescription"]);
+  $grName = $con->reaL_escape_string($_POST["grNaam"]);
+  $grDescription = $con->real_escape_string($_POST["grDescription"]);
 
   if(!$con) {
     header("Location: ../home.php");
@@ -319,7 +319,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
   }else{
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
-      $userMail = $con->escape_string($_POST["userMail"]);
+      $userMail = $con->reaL_escape_string($_POST["userMail"]);
 
       // Kijken of gebruiker bestaat en id ophalen
       $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Email = ?;");

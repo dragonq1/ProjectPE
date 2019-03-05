@@ -32,7 +32,7 @@
                   require 'php/db.php';
                   $con = mysqli_connect($host, $user, $pass, $db);
 
-                  $email = $con->escape_string($_POST["email"]);
+                  $email = $con->real_escape_string($_POST["email"]);
 
                   if(!$con) {
                     throw new Exception ('Could not connect: ' . mysqli_error());
@@ -60,10 +60,7 @@
 
              ?>
         </div>
-
     </div>
-
-
 </body>
 
 </html>
