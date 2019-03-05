@@ -8,7 +8,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
   }
   $userID = $_SESSION["UserID"];
   $con = mysqli_connect($host, $user, $pass, $db);
-//statement maken en uitvoeren
+  //statement maken en uitvoeren
   $statement1 = mysqli_prepare($con,"SELECT LastName,FirstName,NickName,Email,Password FROM users where UserID = ?" );
   mysqli_stmt_bind_param($statement1,"i",$userID);
   mysqli_stmt_execute($statement1);
@@ -71,13 +71,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
 }
 
 //check als form gesubmit is
-if(isset($_POST["pswoud"])) {
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["pswoud"]) && isset($_POST["psw"]) && isset($_POST["psw_repeat"])) {
   $con = mysqli_connect($host, $user, $pass, $db);
   $pswoud  = $con->real_escape_string($_POST["pswoud"]);
 
   session_start();
   if (!isset($_SESSION["UserID"])) {
-    header("Location: index.php");
+    header("Location: ../index.php");
   }
   $userID = $_SESSION["UserID"];
   $statement1 = mysqli_prepare($con,"SELECT Password FROM users where UserID = ?;");
@@ -107,15 +107,15 @@ if(isset($_POST["pswoud"])) {
       echo $_SESSION['msg'];
       exit;
       }else{
-
             //paswoord in database
-            $statement4 = mysqli_prepare ($con, ("UPDATE users SET Password = ? WHERE users.UserID = ?"));
-            mysqli_stmt_bind_param($statement4, "ss", $psw,$_POST["UserID"]);
-            if(mysqli_stmt_execute($statement4) == true)
+            $pswHashed = password_hash(($con->real_escape_string($_POST['psw'])),PASSWORD_DEFAULT);
+            $statement4 = mysqli_prepare ($con, ("UPDATE users SET Password = ? WHERE UserID = ?;"));
+            mysqli_stmt_bind_param($statement4, "si", $pswHashed, $userID);
+            if(mysqli_stmt_execute($statement4))
             {
              $_SESSION['msg'] = "Het passwoord is succesvol veranderd.";
              echo $_SESSION['msg'];
-             header("Location: index.php");
+             header("Location: ../index.php");
             }else{
               $_SESSION['msg'] = 'Paswoord kon niet veranderd worden.';
               echo $_SESSION['msg'];
@@ -123,8 +123,5 @@ if(isset($_POST["pswoud"])) {
             }
         }
     }
-}else{
-echo 'test';
-
 }
  ?>
