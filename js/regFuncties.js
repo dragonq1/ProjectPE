@@ -26,7 +26,7 @@
       {
       text.innerHTML = "Sterkte:   " + strength[result.score];
       text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + result.guesses;
-   if(result.score < 4)
+   if(result.score < 3)
    {
      bt.disabled = true;
    }else

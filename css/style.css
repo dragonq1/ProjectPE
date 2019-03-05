@@ -498,6 +498,7 @@ meter[value="4"]::-moz-meter-bar { background: green; }
 
 .Account__paswreset {
   width: 50%;
+  /*display:none;*/
 }
 
 .account__btn{

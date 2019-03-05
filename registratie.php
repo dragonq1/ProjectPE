@@ -75,6 +75,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+
     <?php include_once("php/header.php") ?>
     <link rel="stylesheet" type="text/css" href="css/registratiepg.css">
   </head>
@@ -104,7 +105,7 @@
                                       <label for="achternaam"><b>Achternaam</b></label>
                                       <input type="text" placeholder="Achternaam" class="registratie__input" name="achternaam" id="achternaam" required>
 
-                                      <label for="psw"><b>password</b></label>
+                                      <label for="psw"><b>Paswoord</b></label>
                                       <input type="password" placeholder="wachtwoord" class="registratie__input" name="psw" id="psw" required>
 
                                       <meter min="0" max="4" id="password_strength_meter"></meter>
@@ -112,7 +113,7 @@
                                       <p id="password_cracktime"></p>
 
 
-                                      <label for="psw_repeat"><b>Repeat Password</b></label>
+                                      <label for="psw_repeat"><b>Herhaal paswoord</b></label>
                                       <input type="password" placeholder="wachtwoord herhalen" class="registratie__input" name="psw_repeat" id="psw_repeat" required>
 
                                       <p>Door een account te maken gaat u akkoord met de Terms Of Service.</p>

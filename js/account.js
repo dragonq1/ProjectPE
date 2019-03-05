@@ -6,7 +6,7 @@ var strength = {
    4: "Sterk"
 }
 
-var password = document.getElementById('psw');
+var password = document.getElementById('DOM__psw');
 var meter = document.getElementById('password_strength_meter');
 var text = document.getElementById('password_strength_text');
 var bt = document.getElementById('account__button');
@@ -25,7 +25,7 @@ if(val !== "")
   {
   text.innerHTML = "Sterkte:   " + strength[result.score];
   text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + result.guesses;
-if(result.score < 4)
+if(result.score < 3)
 {
  bt.disabled = true;
 }else
@@ -40,3 +40,15 @@ if(result.score < 4)
      text.innerHTML = "";
    }
 });
+
+
+
+//myunhide(){
+//var divreset = document.getElementById("DOM_Accountreset");
+//if(divreset.style.display ==="none"  ) {
+//divreset.style.display = "block";
+//}else{
+//  divreset.style.display ="none";
+//}
+
+//}

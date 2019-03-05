@@ -15,53 +15,57 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
   $result1 = $statement1->get_result();
 
 
-if(mysqli_num_rows($result1)>=1)
-{
-  while($row = mysqli_fetch_assoc($result1))
-   {
-    $firstname = $row["FirstName"];
-    $lastname = $row["LastName"];
-    $nickname = $row["NickName"];
-    $email = $row["Email"];
-    $pswori = $row["Password"];
-   }
-}
+          if(mysqli_num_rows($result1)>=1)
+          {
+            while($row = mysqli_fetch_assoc($result1))
+             {
+              $firstname = $row["FirstName"];
+              $lastname = $row["LastName"];
+              $nickname = $row["NickName"];
+              $email = $row["Email"];
+              $psw_ori = $row["Password"];
+             }
+          }
 
-//check als oud paswoord is ingegeven
-if(!isset($_POST["pswoud"]))
+//check als form gesubmit is
+if(isset($_POST["pswoud"]))
 {
-$_SESSION['msg'] ='Oud paswoord is niet ingegeven.';
-echo $_SESSION['msg'];
-}else{
-  $pswoud= $_POST["pswoud"];
-      if(!password_verify($pswoud,$pswori)){
+
+  $pswoud=real_escape($_POST["pswoud"]);
+      if(!password_verify($pswoud,$psw_ori))
+       {
         $_SESSION['msg'] ='Oud paswoord is niet correct.';
         echo $_SESSION['msg'];
-      }else
-      {
-        if($_POST["psw"] != $_POST["psw_repeat"])
-        {
-          $_SESSION['msg'] = 'De twee paswoorden zijn niet identiek.';
-          echo $_SESSION['msg'];
+       }else
+              {
+                if($_POST["psw"] != $_POST["psw_repeat"])
+                {
+                  $_SESSION['msg'] = 'De twee paswoorden zijn niet identiek.';
+                  echo $_SESSION['msg'];
+                }else{
 
-        }else{
-        $statement4 = mysqli_prepare ($con, ("UPDATE dragv_dev.users SET (Password) = (?) WHERE users.UserID = (?)"));
-        mysqli_stmt_bind_param($statement4, "ss", $pswhashed,$_POST["UserID"]);
-        if(mysqli_stmt_execute($statement4) == true)
-         {
-           $_SESSION['msg'] = "Het passwoord is succesvol veranderd.";
-           echo $_SESSION['msg'];
-           header("Location: index.php");
-         } else
-             {
-               $_SESSION['msg'] = 'Paswoord kon niet veranderd worden.';
-               echo $_SESSION['msg'];
-               echo $statement->error;
-             }
+                      //paswoord in database
+                          $statement4 = mysqli_prepare ($con, ("UPDATE users SET Password = ? WHERE users.UserID = ?"));
+                          mysqli_stmt_bind_param($statement4, "ss", $psw,$_POST["UserID"]);
+                                  if(mysqli_stmt_execute($statement4) == true)
+                                   {
+                                     $_SESSION['msg'] = "Het passwoord is succesvol veranderd.";
+                                     echo $_SESSION['msg'];
+                                     header("Location: index.php");
+                                   } else
+                                         {
+                                           $_SESSION['msg'] = 'Paswoord kon niet veranderd worden.';
+                                           echo $_SESSION['msg'];
+                                           echo $statement->error;
+                                         }
 
-      }
+                          }
 
-      }
+              }
+
+}else{
+echo 'test';
+
       }
 
 
@@ -85,8 +89,9 @@ echo("
             <h3>Email</h3>
             <p>$email </p>
            </div>
-           <div class=\"Account__paswreset\">
-                       <form name=\"psw_resetform\" class=\"psw__resetform\" method=\"post\">
+
+           <div id=\"DOM_paswreset\" class=\"Account__paswreset\">
+                       <form action=\"php\account.php\" name=\"psw_resetform\" class=\"psw__resetform\" method=\"post\">
                            <label for=\"pswoud\"><b>Oud paswoord</b></label>
                            <input type=\"password\" placeholder=\"wachtwoordoud\" class=\"account__input\" name=\"pswoud\" id=\"pswoud\" required>
 
@@ -94,7 +99,7 @@ echo("
 
 
                            <label for=\"psw\"><b>paswoord</b></label>
-                           <input type=\"password\" placeholder=\"wachtwoord\" class=\"account__input\" name=\"psw\" id=\"psw\" required>
+                           <input type=\"password\" placeholder=\"wachtwoord\" class=\"account__input\" name=\"psw\" id=\"DOM__psw\" required>
 
 
                            <meter min=\"0\" max=\"4\" id=\"password_strength_meter\"></meter>
@@ -111,7 +116,7 @@ echo("
 
                       </form>
                 </div>
-            <script src=\"js/account.js\"></script>
+                <script src=\"js/account.js\"></script>
 ");
 
 
