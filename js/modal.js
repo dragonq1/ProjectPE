@@ -1,6 +1,12 @@
+// Modals
 modalNewGroup = document.getElementById("dom__modal--newgroup");
+
 btnNewGroup = document.getElementById("dom__btn--newgroup");
 btnNewGroupClose = document.getElementById("dom__btn--newGroupClose");
+
+
+
+//New group modal
 
 btnNewGroup.onclick = function() {
   modalNewGroup.classList.remove("slideOutUp");
@@ -8,10 +14,13 @@ btnNewGroup.onclick = function() {
   modalNewGroup.style.display = "flex"
 }
 
-btnNewGroupClose.onclick = function() {
+  btnNewGroupClose.onclick = function() {
   modalNewGroup.classList.remove("slideInDown");
   modalNewGroup.classList.add("slideOutUp");
 }
+
+
+
 
 function destroyModals() {
   modalNewGroup.style.display = "none"

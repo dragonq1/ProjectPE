@@ -44,7 +44,6 @@ function acceptInvite(inviteID){
   datatype:"text",
   data: {acceptInvite:1,inviteID:inviteID},
   success: function(data){
-    alert(data);
     home();
     }
   })
@@ -57,7 +56,18 @@ function declineInvite(inviteID){
   datatype:"text",
   data: {declineInvite:1,inviteID:inviteID},
   success: function(data){
-    alert(data);
+    home();
+    }
+  })
+}
+
+function leaveGroup(){
+  $.ajax({
+  url:"../php/actionsHome.php",
+  type:"POST",
+  datatype:"text",
+  data: {leaveGroup:1},
+  success: function(){
     home();
     }
   })

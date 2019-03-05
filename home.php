@@ -7,8 +7,9 @@
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
-    header("Location: index.php");	die;
+    header("Location: index.php");
   }
+
   $userID = $_SESSION["UserID"];
 
   require 'php/classes.php';
@@ -43,6 +44,13 @@
       }
   }
 
+  ?>
+
+  <?php if(isset($_SESSION["errormsg"])) {
+          $error = $_SESSION["errormsg"];
+          unset($_SESSION["errormsg"]);
+          echo ("<p> $error </p>");
+        }
   ?>
 
     <div class="body__home">
@@ -85,21 +93,39 @@
     <div class="item__group--coloum width-100">
       <form action="php/actionsHome.php" method="post">
         <div class="modal__title">
-          <h3>Nieuwe groep aanmaken</h3>
+          <h2>Nieuwe groep aanmaken</h2>
         </div>
         <div class="modal__content">
           <div class="item__group--row input__group">
-            <!-- <label for="grNaam">Naam groep</label> -->
             <input type="text" name="grNaam" id="grNaam" placeholder="Groep naam">
           </div>
           <div class="item__group--row input__group">
-            <!-- <label for="GrDescription">Beschrijving groep</label> -->
             <input type="text" name="grDescription" id="GrDescription" placeholder="Groep beschrijving">
           </div>
         </div>
         <div class="modal__controls">
           <input type="submit" value="Aanmaken">
           <button type="button" id="dom__btn--newGroupClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Gebruiker toevoegen modal -->
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--inviteUser">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Gebruiker toevoegen</h2>
+        </div>
+        <div class="modal__content">
+          <div class="item__group--row input__group">
+            <input type="email" name="userMail" placeholder="E-mail gebruiker">
+          </div>
+        </div>
+        <div class="modal__controls">
+          <input type="submit" value="Aanmaken">
+          <button type="button" id="dom__btn--inviteUserClose">Annuleren</button>
         </div>
       </form>
     </div>
