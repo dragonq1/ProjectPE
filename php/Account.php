@@ -27,24 +27,28 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
              }
 
              echo("
-                 <div class=\"Body__account\">
-                     <div class=\"Account__info\">
+                 <div class=\"body__home--accountbox body__home--boxes\">
+                 <div class=\"container\">
                          <div class=\"Account__title\">
                          <h2>Mijn account</h2>
                          </div>
+                      <div class=\"row\">
+                      <div class=\"col-sm-6\">
+                            <div class=\"Account__data\">
+                             <h3>Nickname</h3>
+                             <p> $nickname </p>
+                             <h3>Voornaam</h3>
+                             <p> $firstname </p>
+                             <h3>Achternaam</h3>
+                             <p> $lastname </p>
+                             <h3>Email</h3>
+                             <p>$email </p>
+                            </div>
+                      </div>
 
-                        <div class=\"Account__data\">
-                         <h3>Nickname</h3>
-                         <p> $nickname </p>
-                         <h3>Voornaam</h3>
-                         <p> $firstname </p>
-                         <h3>Achternaam</h3>
-                         <p> $lastname </p>
-                         <h3>Email</h3>
-                         <p>$email </p>
-                        </div>
 
-                        <div id=\"DOM_paswreset\" class=\"Account__paswreset\">
+                        <div class=\"col-sm-6\">
+                          <div id=\"DOM_paswreset\" class=\"Account__paswreset\">
                                     <form action=\"php\account.php\" name=\"psw_resetform\" class=\"psw__resetform\" method=\"post\">
                                         <label for=\"pswoud\"><b>Oud paswoord</b></label>
                                         <input type=\"password\" placeholder=\"wachtwoordoud\" class=\"account__input\" name=\"pswoud\" id=\"pswoud\" required>
@@ -64,7 +68,10 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
                                         </div>
 
                                    </form>
-                             </div>
+                          </div>
+                     </div>
+                   </div>
+                </div>
                              <script src=\"js/account.js\"></script>
              ");
           }

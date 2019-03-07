@@ -24,7 +24,7 @@ meter.value = result.score;
 if(val !== "")
   {
   text.innerHTML = "Sterkte:   " + strength[result.score];
-  text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + result.guesses;
+  text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + JSON.stringify(result.feedback.suggestions);
 if(result.score < 3)
 {
  bt.disabled = true;

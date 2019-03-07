@@ -497,7 +497,7 @@ border-top: 1px solid black;
    background-color: #efefef;
  }
 
-/*account pagina css */
+/*CSS VAN DE ACCOUNT PAGINA */
 
 .account__input {
   margin: auto;
@@ -552,5 +552,19 @@ meter[value="4"]::-moz-meter-bar { background: green; }
   padding-bottom: 5px;
 }
 
+.Body__account {
+background-color: white;
 
-/* */
+}
+
+.Account__title{
+padding-top: 20px;
+padding-bottom: 15px;
+
+}
+
+.body__home--accountbox{
+  margin-right: 20px;
+}
+
+/*EINDE CSS ACCOUNT PAGINA */
