@@ -255,6 +255,7 @@ input:-webkit-autofill:active  {
   overflow: auto;
   min-width: 250px;
   float: right;
+  height: 300px;
 }
 
 .item__group--coloum {

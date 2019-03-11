@@ -1,5 +1,6 @@
 modalInviteUser = document.getElementById("dom__modal--inviteUser");
 btnInviteUser = document.getElementById("dom__btn--inviteUser");
+btnSubmitInviteUser = document.getElementById("dom__submit--inviteUser");
 btnInviteUserClose = document.getElementById("dom__btn--inviteUserClose");
 
 modalLeaveGroup = document.getElementById("dom__modal--leaveGroup");
@@ -12,6 +13,7 @@ btnMembersClose = document.getElementById("dom__btn--membersClose");
 
 modalNewCourse = document.getElementById("dom__modal--newCourse");
 btnNewCourse = document.getElementById("dom__btn--newCourse");
+btnsubmitCr = document.getElementById("dom__submit--newCourse");
 btnNewCourseClose = document.getElementById("dom__btn--newCourseClose");
 
 //Invite user modal
@@ -24,6 +26,25 @@ btnInviteUser.onclick = function() {
 btnInviteUserClose.onclick = function() {
   modalInviteUser.classList.remove("slideInDown");
   modalInviteUser.classList.add("slideOutUp");
+}
+
+btnSubmitInviteUser.onclick = function() {
+
+  var userMail = document.getElementById("dom__inviteUser--mail").value;
+
+  if(userMail != "") {
+    $.ajax({
+        url:"../php/actionsHome.php",
+        type:"POST",
+        datatype:"text",
+        data: {userMail:userMail},
+        success: function(){
+          destroyCourseModals();
+        }
+    })
+  }else{
+  alert("Voer alle velden in!")
+  }
 }
 
 //Leave group modal
@@ -66,14 +87,14 @@ btnNewCourseClose.onclick = function() {
   modalNewCourse.classList.add("slideOutUp");
 }
 
-btnsubmitCr = document.getElementById("dom__submit--newCourse");
+
 
 btnsubmitCr.onclick = function() {
 
   var crName = document.getElementById("crName").value;
   var crDescription = document.getElementById("crDescription").value;
 
-  if(crName != "" || crDescription != "") {
+  if(crName != "" && crDescription != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
@@ -87,9 +108,6 @@ btnsubmitCr.onclick = function() {
   }else{
   alert("Voer alle velden in!")
   }
-
-
-
 }
 
 

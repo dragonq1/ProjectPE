@@ -48,58 +48,63 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
 
 
   // Body voor groepen
-  echo ("
-      <div class=\"body__home--home\">
-      <div class=\"body__home--groups body__home--boxes\">
-      <div class=\"body__home--title\">
-          <h2>Mijn groepen</h2>
+  if(!isset($_POST["homeSidebar"])) {
+    echo ("
+        <div class=\"body__home--home\">
+        <div class=\"body__home--groups body__home--boxes\">
+        <div class=\"body__home--title\">
+            <h2>Mijn groepen</h2>
+        </div>
+        <div class=\"item__group--row\">");
+          foreach ($groups as $group) {
+            echo ("
+            <a onclick=\"courses($group->GrID)\" class=\"group__link\">
+              <div class=\"group__link--content\">
+                <div class=\"group__link--title\">
+                  <h3>$group->GrName</h3>
+                 </div>
+                <div>
+                  <p>$group->GrDescr</p>
+                </div>
+              </div>
+            </a>");
+          }
+
+    echo("
+        <a id=\"dom__btn--newgroup\" class=\"group__link\">
+          <div class=\"group__link--symbol\">
+            <p>&#43;</p>
+          </div>
+        </a>
       </div>
-      <div class=\"item__group--row\">");
-        foreach ($groups as $group) {
+      </div>
+
+  <div class=\"body__home--sidebar body__home--boxes\">
+      <div class=\"body__home--title\">
+          <h2>Meldingen</h2>
+      </div>
+      <div class=\"item__group--coloum\">");
+        foreach ($invites as $invite) {
           echo ("
-          <a onclick=\"courses($group->GrID)\" class=\"group__link\">
-            <div class=\"group__link--content\">
-              <div class=\"group__link--title\">
-                <h3>$group->GrName</h3>
-               </div>
+            <div class=\"item__group--invite\">
               <div>
-                <p>$group->GrDescr</p>
+                <h3>Uitnoding voor $invite->GroupName</h3>
+                <p>Je hebt een uitnoding ontvangen van $invite->SenderName voor de groep $invite->GroupName</p>
+              </div>
+              <div class=\"invites__btn--response\">
+                <button class=\"btn__border--green\" onclick=\"acceptInvite($invite->InvID)\">&radic;</button>
+                <button class=\"btn__border--red\" onclick=\"declineInvite($invite->InvID)\">x</button>
               </div>
             </div>
-          </a>");
+          ");
         }
 
-  echo("
-      <a id=\"dom__btn--newgroup\" class=\"group__link\">
-        <div class=\"group__link--symbol\">
-          <p>&#43;</p>
-        </div>
-      </a>
-    </div>
-    </div>
-
-<div class=\"body__home--sidebar body__home--boxes\">
-    <div class=\"body__home--title\">
-        <h2>Meldingen</h2>
-    </div>
-    <div class=\"item__group--coloum\">");
-      foreach ($invites as $invite) {
-        echo ("
-          <div class=\"item__group--invite\">
-            <div>
-              <h3>Uitnoding voor $invite->GroupName</h3>
-              <p>Je hebt een uitnoding ontvangen van $invite->SenderName voor de groep $invite->GroupName</p>
-            </div>
-            <div class=\"invites__btn--response\">
-              <button class=\"btn__border--green\" onclick=\"acceptInvite($invite->InvID)\">&radic;</button>
-              <button class=\"btn__border--red\" onclick=\"declineInvite($invite->InvID)\">x</button>
-            </div>
-          </div>
-        ");
-}
-
-echo("</div></div></div><script src=\"js/modal.js\"></script>");
-
+  echo("</div></div></div><script src=\"js/modalsHome.js\"></script>");
+  }else{
+    foreach ($groups as $group) {
+      echo("<li><a onclick=\"courses($group->GrID);\">$group->GrName</a></li>");
+    }
+  }
 }
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && isset($_POST["inviteID"])) {
@@ -292,13 +297,13 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
   exit;
 }
 
-if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grNaam"]) && isset($_POST["grDescription"])) {
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_POST["grDescription"])) {
 
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
 
   $userID = $_SESSION["UserID"];
-  $grName = $con->reaL_escape_string($_POST["grNaam"]);
+  $grName = $con->reaL_escape_string($_POST["grName"]);
   $grDescription = $con->real_escape_string($_POST["grDescription"]);
 
   if(!$con) {

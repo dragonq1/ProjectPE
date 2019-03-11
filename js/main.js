@@ -9,6 +9,15 @@ if(typeof destroyCourseModals === "function"){
   data: {homeMenu:1},
   success: function(data){
     $("#dom__interactive").html(data);
+    $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    datatype:"text",
+    data: {homeSidebar:1,homeMenu:1},
+    success: function(data){
+      $("#dom__sidebar--groups").html(data);
+      }
+    })
     }
   })
 }
