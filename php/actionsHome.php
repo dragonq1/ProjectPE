@@ -312,6 +312,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grNaam"]) && isset($_
       $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID, UserRank) VALUES (?, ?, 1);");
       mysqli_stmt_bind_param($statement, "ii", $newGroupId , $userID);
       if(mysqli_stmt_execute($statement)) {
+        if (!file_exists("../files/$newGroupId")) {
+            mkdir("../bestanden/$newGroupId", 0666, true);
+        }else{
+          $_SESSION["errormsg"] = "Er ging iets fout!";
+          header("Location: ../home.php");
+        }
         header("Location: ../home.php");
       }
 
@@ -485,7 +491,19 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: redirect.php?home=1");
     exit;
-  }else {
+  }else{
+    $newCrID = $con->insert_id;
+    if (!file_exists("../bestanden/$newGroupId")) {
+        mkdir("../files/$groupID", 0666, true);
+        mkdir("../files/$groupID/$newCrID", 0666, true);
+        header("Location: redirect.php?home=1");
+        exit;
+    }else{
+        mkdir("../files/$groupID/$newCrID", 0666, true);
+        header("Location: redirect.php?home=1");
+        exit;
+    }
+    $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: redirect.php?home=1");
     exit;
   }
