@@ -66,6 +66,32 @@ btnNewCourseClose.onclick = function() {
   modalNewCourse.classList.add("slideOutUp");
 }
 
+btnsubmitCr = document.getElementById("dom__submit--newCourse");
+
+btnsubmitCr.onclick = function() {
+
+  var crName = document.getElementById("crName").value;
+  var crDescription = document.getElementById("crDescription").value;
+
+  if(crName != "" || crDescription != "") {
+    $.ajax({
+        url:"../php/actionsHome.php",
+        type:"POST",
+        datatype:"text",
+        data: {crName:crName,crDescription:crDescription},
+        success: function(data){
+          destroyCourseModals();
+          courses(data);
+        }
+    })
+  }else{
+  alert("Voer alle velden in!")
+  }
+
+
+
+}
+
 
 
 function destroyCourseModals() {

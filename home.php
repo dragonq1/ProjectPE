@@ -156,14 +156,14 @@
         </div>
         <div class="modal__content">
           <div class="item__group--row input__group">
-            <input type="text" name="crName" id="grNaam" placeholder="Vak naam">
+            <input type="text" name="crName" id="crName" placeholder="Vak naam">
           </div>
           <div class="item__group--row input__group">
-            <input type="text" name="crDescription" id="GrDescription" placeholder="Vak beschrijving">
+            <input type="text" name="crDescription" id="crDescription" placeholder="Vak beschrijving">
           </div>
         </div>
         <div class="modal__controls">
-          <input type="submit" value="Aanmaken">
+          <button type="button" id="dom__submit--newCourse">Aanmaken</button>
           <button type="button" id="dom__btn--newCourseClose">Annuleren</button>
         </div>
       </form>

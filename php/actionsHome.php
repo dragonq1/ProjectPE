@@ -236,15 +236,15 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
       <div class=\"body__home--title\">
         <h2>Acties</h2>
       </div>
-      <div class=\"item__group--coloum\">
-        <div class=\"groups__controls\">
-        <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
-        <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
-        <button type=\"button\" id=\"dom__btn--members\">Leden lijst</button>
+        <div class=\"item__group--coloum\">
+          <div class=\"groups__controls\">
+          <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
+          <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
+          <button type=\"button\" id=\"dom__btn--members\">Leden lijst</button>
+          </div>
         </div>
-      </div>
       <div class=\"item__group--coloum\"></div>
-    </div><script src=\"js/modalCourses.js\">");
+    </div><script src=\"js/modalCourses.js\"></script>");
     exit;
   }
   $result->close();
@@ -493,14 +493,14 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($
     exit;
   }else{
     $newCrID = $con->insert_id;
-    if (!file_exists("../bestanden/$newGroupId")) {
+    if (!file_exists("../files/$groupID")) {
         mkdir("../files/$groupID", 0666, true);
         mkdir("../files/$groupID/$newCrID", 0666, true);
-        header("Location: redirect.php?home=1");
+        echo $groupID;
         exit;
     }else{
         mkdir("../files/$groupID/$newCrID", 0666, true);
-        header("Location: redirect.php?home=1");
+        echo $groupID;
         exit;
     }
     $_SESSION["errormsg"] = "Er ging iets fout!";
