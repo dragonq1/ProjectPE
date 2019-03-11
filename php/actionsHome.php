@@ -129,7 +129,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && is
         mysqli_stmt_execute($statement);
         if($statement->affected_rows == 1) {
 
-          $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID) VALUES (?, ?);");
+          $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID, UserRank) VALUES (?, ?, 3);");
           mysqli_stmt_bind_param($statement, "ii", $groupID , $userID);
           mysqli_stmt_execute($statement);
 
@@ -221,8 +221,15 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
     echo ("
     <div class=\"body__home--home\">
       <div class=\"body__home--courses body__home--boxes\">
-      <div class=\"body__home--title\">
-          <h2>Kon geen vakken vinden voor deze groep</h2>
+        <div class=\"body__home--title\">
+            <h2>Kon geen vakken vinden voor deze groep</h2>
+        </div>
+      <div class=\"item__group--row\">
+        <a id=\"dom__btn--newCourse\" class=\"group__link\">
+          <div class=\"group__link--symbol\">
+              <p>&#43;</p>
+          </div>
+        </a>
       </div>
     </div>
     <div class=\"body__home--sidebar body__home--boxes\">
@@ -231,9 +238,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
       </div>
       <div class=\"item__group--coloum\">
         <div class=\"groups__controls\">
-            <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
-            <button type=\"button\" onclick=\"leaveGroup();\">Groep verlaten</button>
-            <button type=\"button\" >Leden lijst</button>
+        <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
+        <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
+        <button type=\"button\" id=\"dom__btn--members\">Leden lijst</button>
         </div>
       </div>
       <div class=\"item__group--coloum\"></div>
@@ -245,10 +252,10 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
 
     echo ("
     <div class=\"body__home--home\">
-    <div class=\"body__home--courses body__home--boxes\">
-    <div class=\"body__home--title\">
-        <h2>$GroupName</h2>
-    </div>
+      <div class=\"body__home--courses body__home--boxes\">
+        <div class=\"body__home--title\">
+          <h2>$GroupName</h2>
+        </div>
     <div class=\"item__group--row\">");
     foreach ($courses as $course) {
       echo ("
@@ -264,15 +271,21 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
       </a>");
     };
 
-echo("</div></div><div class=\"body__home--sidebar body__home--boxes\">
+echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
+        <div class=\"group__link--symbol\">
+          <p>&#43;</p>
+        </div>
+      </a>
+
+</div></div><div class=\"body__home--sidebar body__home--boxes\">
         <div class=\"body__home--title\">
             <h2>Acties</h2>
         </div>
         <div class=\"item__group--coloum\">
           <div class=\"groups__controls\">
               <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
-              <button type=\"button\" onclick=\"leaveGroup();\">Groep verlaten</button>
-              <button type=\"button\">Leden lijst</button>
+              <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
+              <button type=\"button\" id=\"dom__btn--members\">Leden lijst</button>
           </div>
         </div>");
   echo("</div></div></div><script src=\"js/modalCourses.js\"></script>");
@@ -296,7 +309,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grNaam"]) && isset($_
     if(mysqli_stmt_execute($statement)) {
       $newGroupId = $con->insert_id;
 
-      $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID) VALUES (?, ?);");
+      $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID, UserRank) VALUES (?, ?, 1);");
       mysqli_stmt_bind_param($statement, "ii", $newGroupId , $userID);
       if(mysqli_stmt_execute($statement)) {
         header("Location: ../home.php");
@@ -404,6 +417,79 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
       header("Location: redirect.php?home=1");
       exit;
     }
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["getGroupMembers"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"]))) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+  $userID = $_SESSION["UserID"];
+  $groupID = $_SESSION["GroupID"];
+  $members = array();
+
+  $statement = mysqli_prepare($con, "SELECT u.UserID, u.FirstName, u.LastName, u.Nickname, ur.rankName FROM UserGroups ug INNER JOIN users u ON ug.UserID = u.UserID INNER JOIN userRanks ur ON ur.rankID = ug.UserRank WHERE GroupID = ?;");
+  mysqli_stmt_bind_param($statement, "i", $groupID);
+  if(!mysqli_stmt_execute($statement)) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result) > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+          $member = new Member($row["UserID"], $row["FirstName"], $row["LastName"], $row["Nickname"], $row["rankName"]);
+          array_push($members, $member);
+      }
+      foreach ($members as $member) {
+        echo ("<div class=\"item__member--items\">
+                <div class=\"item__member--name\"><p>$member->lastName $member->firstName</p></div>
+                <div class=\"item__member--nickname\"><p>$member->nickName</p></div>
+                <div class=\"item__member--rank\"><p>$member->userRank</p></div>
+              </div>");
+      }
+
+  }else{
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+
+
+
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($_POST["crDescription"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"]))) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+  $crName = $con->reaL_escape_string($_POST["crName"]);
+  $crDescription = $con->real_escape_string($_POST["crDescription"]);
+  $userID = $_SESSION["UserID"];
+  $groupID = $_SESSION["GroupID"];
+
+  $statement = mysqli_prepare($con, "INSERT INTO courses(`GroupID`,`CrName`,`CrDescription`) VALUES (?,?,?);");
+  mysqli_stmt_bind_param($statement, "iss", $groupID, $crName, $crDescription);
+  if(!mysqli_stmt_execute($statement)) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }else {
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+
 }
 
 

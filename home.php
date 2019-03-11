@@ -130,8 +130,67 @@
       </form>
     </div>
   </div>
+
+  <!-- modal group verlaten -->
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--leaveGroup">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Weet u zeker dat u de groep wilt verlaten?</h2>
+        </div>
+        <div class="modal__controls">
+          <button type="button" onclick="leaveGroup();">Ja</button>
+          <button type="button" id="dom__btn--leaveGroupClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- Modal nieuw vak -->
+
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--newCourse">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Nieuw vak aanmaken</h2>
+        </div>
+        <div class="modal__content">
+          <div class="item__group--row input__group">
+            <input type="text" name="crName" id="grNaam" placeholder="Vak naam">
+          </div>
+          <div class="item__group--row input__group">
+            <input type="text" name="crDescription" id="GrDescription" placeholder="Vak beschrijving">
+          </div>
+        </div>
+        <div class="modal__controls">
+          <input type="submit" value="Aanmaken">
+          <button type="button" id="dom__btn--newCourseClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- modal leden lijst -->
+
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--members">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Groeps leden</h2>
+        </div>
+        <div class="modal__content item__group--coloum item__member--box" id="dom__groupMembers">
+
+        </div>
+        <div class="modal__controls" >
+          <button type="button" id="dom__btn--membersClose">Sluiten</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <script src="js/main.js"></script>
-  <script type="text/javascript">
+  <script>
     window.onload=function() {
       home();
     };

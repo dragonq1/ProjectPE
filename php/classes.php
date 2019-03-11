@@ -47,5 +47,22 @@
     }
   }
 
+  /**
+   * Class voor group leden
+   */
+
+
+   class Member
+   {
+
+     function __construct($userID, $firstName, $lastName, $nickName, $userRank)
+     {
+       $this->userID = $userID;
+       $this->firstName = $firstName;
+       $this->lastName = $lastName;
+       $this->nickName = $nickName;
+       $this->userRank = $userRank;
+     }
+   }
 
  ?>
