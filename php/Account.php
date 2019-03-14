@@ -63,7 +63,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
                                         <label for=\"psw_repeat\"><b>Herhaal paswoord</b></label>
                                         <input type=\"password\" placeholder=\"wachtwoord herhalen\" class=\"account__input\" name=\"psw_repeat\" id=\"psw_repeat\" required>
 
-                                        <div class=\"account__btn\">
+                                        <div class=\"account__btn__body\">
                                           <input class=\"account__btn\" type=\"submit\" value=\"Paswoord veranderen\" name=\"Account__btn\" id=\"account__button\" disabled>
                                         </div>
 

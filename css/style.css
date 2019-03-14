@@ -546,21 +546,31 @@ meter[value="4"]::-moz-meter-bar { background: green; }
   /*display:none;*/
 }
 
+.account__btn__body{
+  margin-top: 10px;
+}
 .account__btn{
+  color:black;
   margin: 2px 2px 2px 2px;
   padding-top: 5px;
   padding-bottom: 5px;
+  border: 1px solid #2a69c9;
+  background-color: transparent;
+  transition: 0.3;
 }
+.account__btn:hover{
+  background-color: #2a69c9;
+  color: white;
+}
+
 
 .Body__account {
 background-color: white;
-
 }
 
 .Account__title{
 padding-top: 20px;
 padding-bottom: 15px;
-
 }
 
 .body__home--accountbox{
