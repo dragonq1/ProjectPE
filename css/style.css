@@ -255,6 +255,7 @@ input:-webkit-autofill:active  {
   overflow: auto;
   min-width: 250px;
   float: right;
+  height: 300px;
 }
 
 .item__group--coloum {
@@ -487,6 +488,52 @@ border-top: 1px solid black;
 
 .width-100 {
   width: 100%;
+}
+.item__member--box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+
+.item__member--items {
+  padding: 0px 40px 0px 10px;
+  margin: 0px 0px 10px 0px;
+  background-color: #ffffff;
+  width: 75%;
+  height: 40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #1f4e93;
+  box-shadow: 0px 0px 5px #1f4e93;
+  border-radius: 5px;
+  text-align: left;
+  line-height: 30px;
+
+}
+
+.item__member--items p {
+  display: inline;
+}
+
+.item__member--name {
+  text-align: left;
+  display: block;
+  width: 45%;
+}
+
+.item__member--nickname {
+  text-align: left;
+  display: block;
+  width: 30%;
+}
+
+.item__member--rank {
+  text-align: left;
+  display: block;
+  width: 20%;
 }
 
  /* Terms of service css */

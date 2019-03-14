@@ -1,4 +1,7 @@
 function home(){
+if(typeof destroyCourseModals === "function"){
+  destroyCourseModals();
+}
   $.ajax({
   url:"../php/actionsHome.php",
   type:"POST",
@@ -6,6 +9,15 @@ function home(){
   data: {homeMenu:1},
   success: function(data){
     $("#dom__interactive").html(data);
+    $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    datatype:"text",
+    data: {homeSidebar:1,homeMenu:1},
+    success: function(data){
+      $("#dom__sidebar--groups").html(data);
+      }
+    })
     }
   })
 }
@@ -62,6 +74,7 @@ function declineInvite(inviteID){
 }
 
 function leaveGroup(){
+  destroyCourseModals();
   $.ajax({
   url:"../php/actionsHome.php",
   type:"POST",
@@ -69,6 +82,18 @@ function leaveGroup(){
   data: {leaveGroup:1},
   success: function(){
     home();
+    }
+  })
+}
+
+function getGroupMembers(){
+  $.ajax({
+  url:"../php/actionsHome.php",
+  type:"POST",
+  datatype:"text",
+  data: {getGroupMembers:1},
+  success: function(data){
+    $("#dom__groupMembers").html(data);
     }
   })
 }

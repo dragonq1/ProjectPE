@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
   <head>
     <?php include_once("php/header.php") ?>
   </head>
@@ -65,13 +65,8 @@
             <div class="div__line--white"></div>
             <div class="navbar__group">
               <p class="navbar__text--groups">Mijn groepen</p>
-              <ol>
-                <?php
-                  foreach ($groups as $group) {
-                    echo "<li><a onclick=\"courses($group->GrID);\">$group->GrName</a></li>";
-                  }
-                ?>
-              </ol>
+                <ol id="dom__sidebar--groups">
+                </ol>
             </div>
             <div class="div__line--white"></div>
             <p class="navbar__text--groups">Overige</p>
@@ -97,14 +92,14 @@
         </div>
         <div class="modal__content">
           <div class="item__group--row input__group">
-            <input type="text" name="grNaam" id="grNaam" placeholder="Groep naam">
+            <input type="text" name="grNaam" id="grName" placeholder="Groep naam" required>
           </div>
           <div class="item__group--row input__group">
-            <input type="text" name="grDescription" id="GrDescription" placeholder="Groep beschrijving">
+            <input type="text" name="grDescription" id="grDescription" placeholder="Groep beschrijving" required>
           </div>
         </div>
         <div class="modal__controls">
-          <input type="submit" value="Aanmaken">
+          <button type="button" id="dom__submit--newGroup">Aanmaken</button>
           <button type="button" id="dom__btn--newGroupClose">Annuleren</button>
         </div>
       </form>
@@ -116,22 +111,81 @@
     <div class="item__group--coloum width-100">
       <form action="php/actionsHome.php" method="post">
         <div class="modal__title">
-          <h2>Gebruiker toevoegen</h2>
+          <h2>Gebruiker uitnodigen</h2>
         </div>
         <div class="modal__content">
           <div class="item__group--row input__group">
-            <input type="email" name="userMail" placeholder="E-mail gebruiker">
+            <input id="dom__inviteUser--mail" type="email" name="userMail" placeholder="E-mail gebruiker" required>
           </div>
         </div>
         <div class="modal__controls">
-          <input type="submit" value="Aanmaken">
+          <button type="button" id="dom__submit--inviteUser">Uitnodigen</button>
           <button type="button" id="dom__btn--inviteUserClose">Annuleren</button>
         </div>
       </form>
     </div>
   </div>
+
+  <!-- modal group verlaten -->
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--leaveGroup">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Weet u zeker dat u de groep wilt verlaten?</h2>
+        </div>
+        <div class="modal__controls">
+          <button type="button" onclick="leaveGroup();">Ja</button>
+          <button type="button" id="dom__btn--leaveGroupClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- Modal nieuw vak -->
+
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--newCourse">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Nieuw vak aanmaken</h2>
+        </div>
+        <div class="modal__content">
+          <div class="item__group--row input__group">
+            <input type="text" name="crName" id="crName" placeholder="Vak naam" required>
+          </div>
+          <div class="item__group--row input__group">
+            <input type="text" name="crDescription" id="crDescription" placeholder="Vak beschrijving" required>
+          </div>
+        </div>
+        <div class="modal__controls">
+          <button type="button" id="dom__submit--newCourse">Aanmaken</button>
+          <button type="button" id="dom__btn--newCourseClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- modal leden lijst -->
+
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--members">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Groeps leden</h2>
+        </div>
+        <div class="modal__content item__group--coloum item__member--box" id="dom__groupMembers">
+
+        </div>
+        <div class="modal__controls" >
+          <button type="button" id="dom__btn--membersClose">Sluiten</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <script src="js/main.js"></script>
-  <script type="text/javascript">
+  <script>
     window.onload=function() {
       home();
     };

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="nl">
 <head>
 
 <?php include_once("php/header.php") ?>
