@@ -46,12 +46,7 @@
 
   ?>
 
-  <?php if(isset($_SESSION["errormsg"])) {
-          $error = $_SESSION["errormsg"];
-          unset($_SESSION["errormsg"]);
-          echo ("<p> $error </p>");
-        }
-  ?>
+
 
     <div class="body__home">
       <div class="navbar__side">

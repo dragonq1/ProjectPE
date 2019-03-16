@@ -33,7 +33,13 @@ function courses(groupID){
       datatype:"text",
       data: {group:1,groupID:groupID},
       success: function(data){
-      $("#dom__interactive").html(data);
+      if(data == "403") {
+        // TODO: Notificatie systeem
+        alert("You don't have access to this group!");
+      }else{
+        $("#dom__interactive").html(data);
+      }
+
       }
   })
 }

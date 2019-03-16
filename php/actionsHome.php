@@ -200,7 +200,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && i
 
 
 }
-// 
+//
 // Group inladen
 //
 
@@ -215,6 +215,16 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
 
   $con = mysqli_connect($host, $user, $pass, $db);
   $courses = array();
+
+  //Nakijken of gebruiker tot groep behoort
+  $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
+  mysqli_stmt_bind_param($statement, "ii",  $userID,  $_POST["groupID"]);
+  mysqli_stmt_execute($statement);
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result) != 1) {
+    echo "403";
+    exit;
+  }
 
   $statement = mysqli_prepare($con, "SELECT c.CourseID, c.CrName, c.CrDescription, g.GrName, c.GroupID FROM courses c INNER JOIN groups g on g.GroupID = c.GroupID INNER JOIN UserGroups us ON us.GroupID = g.GroupID WHERE c.GroupID = ? AND us.UserID = ?;");
   mysqli_stmt_bind_param($statement, "ii", $_POST["groupID"], $userID);
@@ -530,6 +540,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
       $result->close();
       }
 }
+//
+// Groep verlaten
+//
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
 
@@ -545,16 +558,39 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
     $userID = $_SESSION["UserID"];
     $groupID = $_SESSION["GroupID"];
 
-    $statement = mysqli_prepare($con, "DELETE FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
+    //Controleren of gebruiker eigenaar is
+
+    $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE UserID = ? AND GroupID = ? AND UserRank = 1");
     mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
-    if(mysqli_stmt_execute($statement)) {
-      echo "success!";
-    }else{
+    if(!mysqli_stmt_execute($statement)) {
       $_SESSION["errormsg"] = "Er ging iets fout!";
       header("Location: redirect.php?home=1");
       exit;
     }
+    $result = $statement->get_result();
+    if(mysqli_num_rows($result) == 1) {
+      $_SESSION["errormsg"] = "Je kan de groep niet verlaten als eigenaar!";
+      header("Location: redirect.php?home=1");
+      $result->close();
+      exit;
+    }
+    $result->close();
+
+    $statement = mysqli_prepare($con, "DELETE FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
+    mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
+    if(mysqli_stmt_execute($statement)) {
+      echo "success!";
+      $result->close();
+    }else{
+      $_SESSION["errormsg"] = "Er ging iets fout!";
+      header("Location: redirect.php?home=1");
+      $result->close();
+      exit;
+    }
 }
+//
+// Leden opvragen van groep
+//
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["getGroupMembers"])) {
 
@@ -600,6 +636,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["getGroupMembers"])) {
 
 
 }
+//
+// Vak aanmaken
+//
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($_POST["crDescription"])) {
 
