@@ -3,9 +3,19 @@ btnInviteUser = document.getElementById("dom__btn--inviteUser");
 btnSubmitInviteUser = document.getElementById("dom__submit--inviteUser");
 btnInviteUserClose = document.getElementById("dom__btn--inviteUserClose");
 
+modalkickUser = document.getElementById("dom__modal--kickUser");
+btnkickUser = document.getElementById("dom__btn--kickUser");
+btnSubmitkickUser = document.getElementById("dom__submit--kickUser");
+btnkickUserClose = document.getElementById("dom__btn--kickUserClose");
+
 modalLeaveGroup = document.getElementById("dom__modal--leaveGroup");
 btnLeaveGroup = document.getElementById("dom__btn--leaveGroup");
 btnLeaveGroupClose = document.getElementById("dom__btn--leaveGroupClose");
+
+modalDeleteGroup = document.getElementById("dom__modal--deleteGroup");
+btnDeleteGroup = document.getElementById("dom__btn--deleteGroup");
+btnSubmitDeleteGroup = document.getElementById("dom__submit--deleteGroup");
+btnDeleteGroupClose = document.getElementById("dom__btn--deleteGroupClose");
 
 modalMembers = document.getElementById("dom__modal--members");
 btnMembers = document.getElementById("dom__btn--members");
@@ -30,14 +40,14 @@ btnInviteUserClose.onclick = function() {
 
 btnSubmitInviteUser.onclick = function() {
 
-  var userMail = document.getElementById("dom__inviteUser--mail").value;
+  var nickname = document.getElementById("dom__inviteUser--nickname").value;
 
-  if(userMail != "") {
+  if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
         datatype:"text",
-        data: {userMail:userMail},
+        data: {nickname:nickname,inviteUser:1},
         success: function(){
           destroyCourseModals();
         }
@@ -46,6 +56,38 @@ btnSubmitInviteUser.onclick = function() {
   alert("Voer alle velden in!")
   }
 }
+
+//Delete user modal
+btnkickUser.onclick = function() {
+  modalkickUser.classList.remove("slideOutUp");
+  modalkickUser.classList.add("slideInDown");
+  modalkickUser.style.display = "flex"
+}
+
+btnkickUserClose.onclick = function() {
+  modalkickUser.classList.remove("slideInDown");
+  modalkickUser.classList.add("slideOutUp");
+}
+
+btnSubmitkickUser.onclick = function() {
+
+  var nickname = document.getElementById("dom__kickUser--nickname").value;
+
+  if(nickname != "") {
+    $.ajax({
+        url:"../php/actionsHome.php",
+        type:"POST",
+        datatype:"text",
+        data: {nickname:nickname,deleteUser:1},
+        success: function(){
+          destroyCourseModals();
+        }
+    })
+  }else{
+  alert("Voer alle velden in!")
+  }
+}
+
 
 //Leave group modal
 
@@ -59,6 +101,34 @@ btnLeaveGroupClose.onclick = function() {
   modalLeaveGroup.classList.remove("slideInDown");
   modalLeaveGroup.classList.add("slideOutUp");
 }
+
+//Delete group modal
+
+btnDeleteGroup.onclick = function() {
+  modalDeleteGroup.classList.remove("slideOutUp");
+  modalDeleteGroup.classList.add("slideInDown");
+  modalDeleteGroup.style.display = "flex"
+}
+
+btnDeleteGroupClose.onclick = function() {
+  modalDeleteGroup.classList.remove("slideInDown");
+  modalDeleteGroup.classList.add("slideOutUp");
+}
+
+btnSubmitDeleteGroup.onclick = function() {
+
+    $.ajax({
+        url:"../php/actionsHome.php",
+        type:"POST",
+        datatype:"text",
+        data: {deleteGroup:1},
+        success: function(data){
+          destroyCourseModals();
+          home();
+        }
+    })
+  }
+
 
 //Member list
 
@@ -117,4 +187,6 @@ function destroyCourseModals() {
   modalInviteUser.style.display = "none";
   modalMembers.style.display = "none";
   modalNewCourse.style.display = "none"
+  modalkickUser.style.display = "none"
+  modalDeleteGroup.style.display = "none"
 }

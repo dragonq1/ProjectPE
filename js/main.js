@@ -24,6 +24,9 @@ if(typeof destroyCourseModals === "function"){
 
 function courses(groupID){
   destroyModals();
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
   $.ajax({
       url:"../php/actionsHome.php",
       type:"POST",
@@ -37,6 +40,9 @@ function courses(groupID){
 
 function account() {
   destroyModals();
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
   $.ajax({
     url:"../php/Account.php",
     type:"POST",

@@ -200,6 +200,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && i
 
 
 }
+// 
+// Group inladen
+//
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_POST["groupID"])) {
 
@@ -243,9 +246,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
       </div>
         <div class=\"item__group--coloum\">
           <div class=\"groups__controls\">
-          <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
-          <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
           <button type=\"button\" id=\"dom__btn--members\">Leden lijst</button>
+          <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
+          <button type=\"button\" id=\"dom__btn--kickUser\">Gebruiker verwijderen</button>
+          <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
+          <button type=\"button\" id=\"dom__btn--deleteGroup\">Groep verwijderen</button>
           </div>
         </div>
       <div class=\"item__group--coloum\"></div>
@@ -288,9 +293,11 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
         </div>
         <div class=\"item__group--coloum\">
           <div class=\"groups__controls\">
-              <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
-              <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
               <button type=\"button\" id=\"dom__btn--members\">Leden lijst</button>
+              <button type=\"button\" id=\"dom__btn--inviteUser\">Gebruiker toevoegen</button>
+              <button type=\"button\" id=\"dom__btn--kickUser\">Gebruiker verwijderen</button>
+              <button type=\"button\" id=\"dom__btn--leaveGroup\">Groep verlaten</button>
+              <button type=\"button\" id=\"dom__btn--deleteGroup\">Groep verwijderen</button>
           </div>
         </div>");
   echo("</div></div></div><script src=\"js/modalCourses.js\"></script>");
@@ -318,7 +325,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_
       mysqli_stmt_bind_param($statement, "ii", $newGroupId , $userID);
       if(mysqli_stmt_execute($statement)) {
         if (!file_exists("../files/$newGroupId")) {
-            mkdir("../bestanden/$newGroupId", 0666, true);
+            mkdir("../bestanden/$newGroupId", 0755, true);
         }else{
           $_SESSION["errormsg"] = "Er ging iets fout!";
           header("Location: ../home.php");
@@ -331,8 +338,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_
     }
   }
 }
+//
+// Gebruiker inviten
+//
 
-if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset($_POST["inviteUser"])) {
 
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
@@ -343,11 +353,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
   }else{
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
-      $userMail = $con->reaL_escape_string($_POST["userMail"]);
+      $nickname = $con->reaL_escape_string($_POST["nickname"]);
 
       // Kijken of gebruiker bestaat en id ophalen
-      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Email = ?;");
-      mysqli_stmt_bind_param($statement, "s", $userMail);
+      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
+      mysqli_stmt_bind_param($statement, "s", $nickname);
       mysqli_stmt_execute($statement);
       $result = $statement->get_result();
       if(mysqli_num_rows($result) == 1) {
@@ -403,6 +413,122 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["userMail"])) {
       }
   }
 
+}
+//
+// Gebruiker kicken
+//
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset($_POST["deleteUser"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if(!isset($_SESSION["GroupID"])) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: ../home.php");
+  }else{
+      $userID = $_SESSION["UserID"];
+      $groupID = $_SESSION["GroupID"];
+      $nickName = $con->reaL_escape_string($_POST["nickname"]);
+
+      //Kijken of gebruiker bestaat en id ophalen
+      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
+      mysqli_stmt_bind_param($statement, "s", $nickName);
+      mysqli_stmt_execute($statement);
+      $result = $statement->get_result();
+      if(mysqli_num_rows($result) == 1) {
+          while($row = mysqli_fetch_assoc($result)) {
+              $deletedUserID = $row["UserID"];
+          }
+      }else{
+        $_SESSION["errormsg"] = "Er ging iets fout bij het ophalen van de gebruiker!";
+        header("Location: redirect.php?home=1");
+        exit;
+      }
+          $result->close();
+
+          if($deletedUserID == $userID) {
+            $_SESSION["errormsg"] = "Je kan jezelf niet verwijderen uit de groep";
+            header("Location: redirect.php?home=1");
+            exit;
+          }
+
+          //Kijken of gebruiker juiste rank heeft
+          $statement = mysqli_prepare($con, "SELECT UserRank FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
+          mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
+          mysqli_stmt_execute($statement);
+          $result = $statement->get_result();
+          if(mysqli_num_rows($result) == 1) {
+            while($row = mysqli_fetch_assoc($result)) {
+                $userRank = $row["UserRank"];
+            }
+            $result->close();
+            if($userRank > 2) {
+              $_SESSION["errormsg"] = "Je hebt niet de juiste rank om gebruiker te verwijderen!";
+              header("Location: redirect.php?home=1");
+              exit;
+            }else{
+            //Gebruiker verwijderen
+              $statement = mysqli_prepare($con, "DELETE FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
+              mysqli_stmt_bind_param($statement, "ii", $deletedUserID, $groupID);
+              if(!mysqli_stmt_execute($statement)) {
+                $_SESSION["errormsg"] = "Er ging iets fout!";
+                exit;
+              }else{
+                $_SESSION["errormsg"] = "Gebruiker verwijderd!";
+                exit;
+              }
+            }
+          }else{
+            $_SESSION["errormsg"] = "Er ging iets fout bij het ophalen van je rank!";
+            header("Location: redirect.php?home=1");
+            exit;
+          }
+      }
+}
+
+
+//
+// Group verwijderen
+//
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if(!isset($_SESSION["GroupID"])) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: ../home.php");
+  }else{
+      $userID = $_SESSION["UserID"];
+      $groupID = $_SESSION["GroupID"];
+
+      //Kijken of gebruiker in group zit en juiste rank heeft
+      $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE GroupID = ? AND UserID = ? AND UserRank = 1;");
+      mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
+      mysqli_stmt_execute($statement);
+      $result = $statement->get_result();
+      if(mysqli_num_rows($result) == 1) {
+        //Group verwijderen en map
+        $result->close();
+
+        $statement = mysqli_prepare($con, "DELETE FROM groups WHERE GroupID = ?");
+        mysqli_stmt_bind_param($statement, "i", $groupID);
+        if(!mysqli_stmt_execute($statement)) {
+          $_SESSION["errormsg"] = "Er ging iets fout bij het verwijderen van de groep";
+          header("Location: redirect.php?home=1");
+          exit;
+        }else{
+          // TODO: Mappen verwijderen
+        }
+      }else{
+        $_SESSION["errormsg"] = "Je bent niet de eigenaar van de groep!";
+        header("Location: redirect.php?home=1");
+        exit;
+      }
+      $result->close();
+      }
 }
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
@@ -499,12 +625,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($
   }else{
     $newCrID = $con->insert_id;
     if (!file_exists("../files/$groupID")) {
-        mkdir("../files/$groupID", 0666, true);
-        mkdir("../files/$groupID/$newCrID", 0666, true);
+        mkdir("../files/$groupID", 0755, true);
+        mkdir("../files/$groupID/$newCrID", 0755, true);
         echo $groupID;
         exit;
     }else{
-        mkdir("../files/$groupID/$newCrID", 0666, true);
+        mkdir("../files/$groupID/$newCrID", 0755, true);
         echo $groupID;
         exit;
     }

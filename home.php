@@ -115,7 +115,8 @@
         </div>
         <div class="modal__content">
           <div class="item__group--row input__group">
-            <input id="dom__inviteUser--mail" type="email" name="userMail" placeholder="E-mail gebruiker" required>
+            <input id="dom__inviteUser--nickname" type="text" name="nickname" placeholder="Nickname gebruiker" required>
+            <input type="text" name="inviteUser" hidden="true" value="1" required>
           </div>
         </div>
         <div class="modal__controls">
@@ -126,7 +127,30 @@
     </div>
   </div>
 
+  <!-- Gebruiker verwijderen modal -->
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--kickUser">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Gebruiker verwijderen</h2>
+          <p>Om dit te kunnen doen moet je moderator of eigenaar zijn!</p>
+        </div>
+        <div class="modal__content">
+          <div class="item__group--row input__group">
+            <input id="dom__kickUser--nickname" type="text" name="nickname" placeholder="Nickname gebruiker" required>
+            <input type="text" name="deleteUser" hidden="true" value="1" required>
+          </div>
+        </div>
+        <div class="modal__controls">
+          <button type="button" id="dom__submit--kickUser">Verwijderen</button>
+          <button type="button" id="dom__btn--kickUserClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- modal group verlaten -->
+
   <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--leaveGroup">
     <div class="item__group--coloum width-100">
       <form action="php/actionsHome.php" method="post">
@@ -136,6 +160,24 @@
         <div class="modal__controls">
           <button type="button" onclick="leaveGroup();">Ja</button>
           <button type="button" id="dom__btn--leaveGroupClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- modal group verwijderen -->
+
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--deleteGroup">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Weet u zeker dat u de groep wilt verwijderen?</h2>
+          <p>Alle bestanden zullen permament worden verwijdered!</p>
+          <p>Om dit te kunnen doen moet je eigenaar zijn!</p>
+        </div>
+        <div class="modal__controls">
+          <button type="button" id="dom__submit--deleteGroup">Ja</button>
+          <button type="button" id="dom__btn--deleteGroupClose">Annuleren</button>
         </div>
       </form>
     </div>
