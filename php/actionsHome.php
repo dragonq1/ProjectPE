@@ -238,7 +238,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
   }else{
     echo ("
     <div class=\"body__home--home\">
-      <div class=\"body__home--courses body__home--boxes\">
+      <div class=\"body__home--courses body__home--boxes\" id=\"groups-mainbox\">
         <div class=\"body__home--title\">
             <h2>Kon geen vakken vinden voor deze groep</h2>
         </div>
@@ -272,7 +272,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
 
     echo ("
     <div class=\"body__home--home\">
-      <div class=\"body__home--courses body__home--boxes\">
+      <div class=\"body__home--courses body__home--boxes\" id=\"groups-mainbox\">
         <div class=\"body__home--title\">
           <h2>$GroupName</h2>
         </div>
@@ -679,6 +679,78 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($
   }
 
 }
+
+//
+// Files vak inladen
+//
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($_POST["courseID"])) {
+
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"]))) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+  $crName = $con->reaL_escape_string($_POST["courseID"]);
+  $userID = $_SESSION["UserID"];
+  $groupID = $_SESSION["GroupID"];
+  $courseID = $_POST["courseID"];
+  $_SESSION["CourseID"] = $courseID;
+
+
+  //Kijken of gebruiker toegang heeft tot group
+  $statement = mysqli_prepare($con, "SELECT us.UserID, us.GroupID, c.CourseID, c.CrName FROM UserGroups us INNER JOIN groups g ON us.GroupID = g.GroupID INNER JOIN courses c ON c.GroupID = g.GroupID WHERE us.UserID = ? AND us.GroupID = ? AND c.CourseID = ?;");
+  mysqli_stmt_bind_param($statement, "iii", $userID, $groupID, $courseID);
+  if(!mysqli_stmt_execute($statement)) {
+    $_SESSION["errormsg"] = "Er ging iets fout!";
+    header("Location: redirect.php?home=1");
+    exit;
+  }
+  $result = $statement->get_result();
+    if(mysqli_num_rows($result) != 1) {
+      $_SESSION["errormsg"] = "Je hebt geen toegang tot deze cursus!";
+      header("Location: redirect.php?home=1");
+      exit;
+  }else{
+    while($row = mysqli_fetch_assoc($result)) {
+        $courseName = $row["CrName"];
+    }
+  }
+
+  //Bestanden in directory ophalen
+  $path = "../files/$groupID/$courseID";
+  $files = array_diff(scandir($path), array('..', '.'));
+
+  echo ("
+  <div class=\"body__home--title\">
+    <h2>$courseName</h2>
+  </div>
+  <div class=\"\">");
+
+  if(count($files) != 0 && $files != false) {
+    foreach ($files as $file) {
+      $pathFile = $path."/".$file;
+      echo ("
+      <a class=\"group__file\" href=\"$pathFile\" target=\"_blank\">
+        $file
+      </a>");
+    }
+  }else{
+    echo("<p> Kon geen bestanden vinden in dit vak!</p>");
+  }
+  echo("<form id=\"DOM__courses--fileUploader\" class=\"group__file\" action=\"actionsHome.php\" method=\"POST\"\">
+    <input id=\"fileInputCourses\" type=\"file\" name=\"file\">
+    <input id=\"fileSubmitCourses\" type=\"button\" value=\"uploaden\" name=\"upload\" onclick=\"uploadFileCourse();\">
+  </form></div>");
+
+}
+
+//file uploader
+
+
 
 
 ?>

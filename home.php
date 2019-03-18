@@ -78,6 +78,7 @@
         </div>
       </div>
     </div>
+
   <!-- Nieuwe group modal -->
   <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--newgroup">
     <div class="item__group--coloum width-100">
@@ -219,8 +220,6 @@
       </form>
     </div>
   </div>
-
-
   <script src="js/main.js"></script>
   <script>
     window.onload=function() {
