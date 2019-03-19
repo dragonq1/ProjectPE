@@ -625,3 +625,65 @@ padding-bottom: 15px;
 }
 
 /*EINDE CSS ACCOUNT PAGINA */
+
+
+/*BEGIN CSS LIVECHAT*/
+.livechat__body--main{
+padding-bottom: 1%;
+position:absolute;
+bottom:0;
+right:0;
+/*Hide gedeelte live chat */
+height:7%;
+}
+.livechat__title{
+/* */
+  height:15%;
+}
+
+.livechat__title--anchor{
+width:100%;
+}
+.livechat__body{
+
+height: 85%;
+/*Hide gedeelte live chat */
+display: none;
+visibility: hidden;
+}
+
+
+.livechat__body--messages {
+border: 1px solid #2a69c9;
+height:70%;
+margin: 2%;
+}
+.livechat__body--input{
+height: 20%;
+/*border: 1px solid #2a69c9;
+*/margin-top: 2%;
+margin-left: 2%;
+margin-right: 2%;
+margin-bottom: 1%;
+}
+
+.livechat__textinput{
+border: 1px solid #2a69c9;
+width: 100%;
+height: 100%;
+
+}
+
+.livechat__submitbtn{
+margin-left: 2%;
+border: 1px solid #2a69c9;
+width:40%;
+float: left;
+}
+.livechat__submitbtn:hover{
+background-color: #2a69c9;
+}
+
+
+
+/*EINDE CSS LIVECHAT*/

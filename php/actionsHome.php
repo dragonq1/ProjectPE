@@ -2,21 +2,17 @@
 require 'classes.php';
 require 'db.php';
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
-
   session_start();
   if (!isset($_SESSION["UserID"])) {
     header("Location: index.php");
   }
   $userID = $_SESSION["UserID"];
-
   $con = mysqli_connect($host, $user, $pass, $db);
   $groups = array();
-
   $statement = mysqli_prepare($con, "SELECT g.GroupID, g.GrName, g.GrDescription, g.GrOwner FROM groups g INNER JOIN UserGroups ug ON g.GroupID = ug.GroupID WHERE ug.UserID = ?");
   mysqli_stmt_bind_param($statement, "i", $userID);
   mysqli_stmt_execute($statement);
   $result = $statement->get_result();
-
   if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
           $group = new Group($row["GroupID"], $row["GrName"], $row["GrDescription"], $row["GrOwner"]);
@@ -24,7 +20,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
       }
   }
   $result->close();
-
   $invites = array();
   $statement = mysqli_prepare($con, "SELECT i.InviteID, i.SenderID, i.ReceiverID, concat(us.FirstName, ' ',us.LastName) 'sName', concat(ur.FirstName,' ', ur.LastName) 'rName', i.GroupID, g.GrName FROM invites AS i
     INNER JOIN users AS us ON i.SenderID = us.userID
@@ -37,7 +32,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
       header("Location: ../home.php");
   }
   $result = $statement->get_result();
-
   if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
           $invite = new Invite($row["InviteID"], $row["SenderID"], $row["ReceiverID"], $row["sName"], $row["rName"], $row["GroupID"], $row["GrName"]);
@@ -45,8 +39,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
       }
   }
   $result->close();
-
-
   // Body voor groepen
   if(!isset($_POST["homeSidebar"])) {
     echo ("
@@ -69,7 +61,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
               </div>
             </a>");
           }
-
     echo("
         <a id=\"dom__btn--newgroup\" class=\"group__link\">
           <div class=\"group__link--symbol\">
@@ -78,7 +69,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
         </a>
       </div>
       </div>
-
   <div class=\"body__home--sidebar body__home--boxes\">
       <div class=\"body__home--title\">
           <h2>Meldingen</h2>
@@ -98,7 +88,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
             </div>
           ");
         }
-
   echo("</div></div></div><script src=\"js/modalsHome.js\"></script>");
   }else{
     foreach ($groups as $group) {
@@ -106,11 +95,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
     }
   }
 }
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && isset($_POST["inviteID"])) {
     //Invite gegevens ophalen
-
-
     // Nakijken of invite van juiste gebruiker is en nog niet beantwoord
     session_start();
     if (!isset($_SESSION["UserID"])) {
@@ -118,7 +104,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && is
     }
     $userID = $_SESSION["UserID"];
     $con = mysqli_connect($host, $user, $pass, $db);
-
     $statement = mysqli_prepare($con, "SELECT GroupID FROM invites i WHERE i.ReceiverID = ? AND i.InviteID = ?;");
     mysqli_stmt_bind_param($statement, "ii", $userID, $_POST["inviteID"]);
     mysqli_stmt_execute($statement);
@@ -127,41 +112,27 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && is
         while($row = mysqli_fetch_assoc($result)) {
             $groupID = $row["GroupID"];
         }
-
-
         $statement = mysqli_prepare($con, "UPDATE invites i SET i.Answer = '1' WHERE i.InviteID = ? AND i.ReceiverID = ? AND i.Answer = '0';");
         mysqli_stmt_bind_param($statement, "ii", $_POST["inviteID"], $userID);
         mysqli_stmt_execute($statement);
         if($statement->affected_rows == 1) {
-
           $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID, UserRank) VALUES (?, ?, 3);");
           mysqli_stmt_bind_param($statement, "ii", $groupID , $userID);
           mysqli_stmt_execute($statement);
-
           if($statement->affected_rows == 1) {
               echo "Succes!";
           }
-
         }else{
           echo "Something went wrong!";
           exit;
         }
-
     }else{
       echo "Something went wrong!";
       exit;
     }
-
-
-
-
-
 }
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && isset($_POST["inviteID"])) {
     //Invite gegevens ophalen
-
-
     // Nakijken of invite van juiste gebruiker is en nog niet beantwoord
     session_start();
     if (!isset($_SESSION["UserID"])) {
@@ -169,7 +140,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && i
     }
     $userID = $_SESSION["UserID"];
     $con = mysqli_connect($host, $user, $pass, $db);
-
     $statement = mysqli_prepare($con, "SELECT GroupID FROM invites i WHERE i.ReceiverID = ? AND i.InviteID = ?;");
     mysqli_stmt_bind_param($statement, "ii", $userID, $_POST["inviteID"]);
     mysqli_stmt_execute($statement);
@@ -178,44 +148,31 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && i
         while($row = mysqli_fetch_assoc($result)) {
             $groupID = $row["GroupID"];
         }
-
-
         $statement = mysqli_prepare($con, "UPDATE invites i SET i.Answer = '2' WHERE i.InviteID = ? AND i.ReceiverID = ? AND i.Answer = '0';");
         mysqli_stmt_bind_param($statement, "ii", $_POST["inviteID"], $userID);
         mysqli_stmt_execute($statement);
         if($statement->affected_rows == 1) {
-
         }else{
           echo "Something went wrong!";
           exit;
         }
-
     }else{
       echo "Something went wrong!";
       exit;
     }
-
-
-
-
-
 }
 //
 // Group inladen
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_POST["groupID"])) {
-
   session_start();
   if (!isset($_SESSION["UserID"])) {
     header("Location: index.php");
   }
   $userID = $_SESSION["UserID"];
   $_SESSION["GroupID"] = $_POST["groupID"];
-
   $con = mysqli_connect($host, $user, $pass, $db);
   $courses = array();
-
   //Nakijken of gebruiker tot groep behoort
   $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
   mysqli_stmt_bind_param($statement, "ii",  $userID,  $_POST["groupID"]);
@@ -225,7 +182,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
     echo "403";
     exit;
   }
-
   $statement = mysqli_prepare($con, "SELECT c.CourseID, c.CrName, c.CrDescription, g.GrName, c.GroupID FROM courses c INNER JOIN groups g on g.GroupID = c.GroupID INNER JOIN UserGroups us ON us.GroupID = g.GroupID WHERE c.GroupID = ? AND us.UserID = ?;");
   mysqli_stmt_bind_param($statement, "ii", $_POST["groupID"], $userID);
   mysqli_stmt_execute($statement);
@@ -269,7 +225,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
   }
   $result->close();
   $GroupName = $courses[0]->crGroupName;
-
     echo ("
     <div class=\"body__home--home\">
       <div class=\"body__home--courses body__home--boxes\">
@@ -290,13 +245,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["group"]) && isset($_P
         </div>
       </a>");
     };
-
 echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
         <div class=\"group__link--symbol\">
           <p>&#43;</p>
         </div>
       </a>
-
 </div></div><div class=\"body__home--sidebar body__home--boxes\">
         <div class=\"body__home--title\">
             <h2>Acties</h2>
@@ -310,19 +263,43 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
               <button type=\"button\" id=\"dom__btn--deleteGroup\">Groep verwijderen</button>
           </div>
         </div>");
-  echo("</div></div></div><script src=\"js/modalCourses.js\"></script>");
+  echo("</div>
+
+  <div id=\"DOM__livechat__body--main\" class=\"body__home--sidebar body__home--boxes livechat__body--main\">
+
+    <div id=\"DOM__livechat__title\" class=\"body__home--title livechat__title\">
+      <a id=\"DOM__livechat__title--\" class=\"livechat__title--anchor\" onclick=\"openchat();\" >Live-Chat</a>
+    </div>
+
+    <div id=\"DOM__livechat__body\" class=\"livechat__body\">
+      <div class=\"livechat__body--messages\">
+
+      </div>
+      <form action=\"\" method=\"POST\">
+          <div  class=\"livechat__body--input\">
+               <textarea id=\"DOM__livechat__text\" maxlength=\"256\" class=\"livechat__textinput\" required>
+               </textarea>
+
+          </div>
+          <div class=\"livechat__body--sendbutton\">
+            <input type=\"submit\" id=\"DOM__livechat__button\" name=\"livechat_btn\" value=\"Verzenden\" class=\"livechat__submitbtn\">
+          </div>
+      </form>
+      <div class=\"livechat__body--closechat\">
+        <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluit livechat\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
+      </div>
+    </div>
+  </div>
+ <script src=\"js/livechatscripts.js\"></script>
+</div></div><script src=\"js/modalCourses.js\"></script>");
   exit;
 }
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_POST["grDescription"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   $userID = $_SESSION["UserID"];
   $grName = $con->reaL_escape_string($_POST["grName"]);
   $grDescription = $con->real_escape_string($_POST["grDescription"]);
-
   if(!$con) {
     header("Location: ../home.php");
   }else{
@@ -330,7 +307,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_
     mysqli_stmt_bind_param($statement, "ssi", $grName, $grDescription, $userID);
     if(mysqli_stmt_execute($statement)) {
       $newGroupId = $con->insert_id;
-
       $statement = mysqli_prepare($con, "INSERT INTO UserGroups(GroupID, UserID, UserRank) VALUES (?, ?, 1);");
       mysqli_stmt_bind_param($statement, "ii", $newGroupId , $userID);
       if(mysqli_stmt_execute($statement)) {
@@ -342,7 +318,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_
         }
         header("Location: ../home.php");
       }
-
     }else{
     header("Location: ../home.php");
     }
@@ -351,12 +326,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_
 //
 // Gebruiker inviten
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset($_POST["inviteUser"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   if(!isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: ../home.php");
@@ -364,7 +336,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
       $nickname = $con->reaL_escape_string($_POST["nickname"]);
-
       // Kijken of gebruiker bestaat en id ophalen
       $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
       mysqli_stmt_bind_param($statement, "s", $nickname);
@@ -375,7 +346,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
               $invitedUserID = $row["UserID"];
           }
           $result->close();
-
           if($invitedUserID == $userID) {
             $_SESSION["errormsg"] = "Je kan geen uitnoding naar jezelf sturen!";
             header("Location: redirect.php?home=1");
@@ -391,7 +361,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
             header("Location: redirect.php?home=1");
             exit;
           }
-
           $result->close();
           //Kijken of gebruiker al invite heeft voor de groep
           $statement = mysqli_prepare($con, "SELECT InviteID FROM invites WHERE Answer = '0' && ReceiverID = ? && GroupID = ?;");
@@ -422,17 +391,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
         exit;
       }
   }
-
 }
 //
 // Gebruiker kicken
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset($_POST["deleteUser"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   if(!isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: ../home.php");
@@ -440,7 +405,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
       $nickName = $con->reaL_escape_string($_POST["nickname"]);
-
       //Kijken of gebruiker bestaat en id ophalen
       $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
       mysqli_stmt_bind_param($statement, "s", $nickName);
@@ -456,13 +420,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
         exit;
       }
           $result->close();
-
           if($deletedUserID == $userID) {
             $_SESSION["errormsg"] = "Je kan jezelf niet verwijderen uit de groep";
             header("Location: redirect.php?home=1");
             exit;
           }
-
           //Kijken of gebruiker juiste rank heeft
           $statement = mysqli_prepare($con, "SELECT UserRank FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
           mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
@@ -496,24 +458,18 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
           }
       }
 }
-
-
 //
 // Group verwijderen
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   if(!isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: ../home.php");
   }else{
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
-
       //Kijken of gebruiker in group zit en juiste rank heeft
       $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE GroupID = ? AND UserID = ? AND UserRank = 1;");
       mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
@@ -522,7 +478,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
       if(mysqli_num_rows($result) == 1) {
         //Group verwijderen en map
         $result->close();
-
         $statement = mysqli_prepare($con, "DELETE FROM groups WHERE GroupID = ?");
         mysqli_stmt_bind_param($statement, "i", $groupID);
         if(!mysqli_stmt_execute($statement)) {
@@ -543,23 +498,17 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
 //
 // Groep verlaten
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   if(!isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: redirect.php?home=1");
     exit;
   }
-
     $userID = $_SESSION["UserID"];
     $groupID = $_SESSION["GroupID"];
-
     //Controleren of gebruiker eigenaar is
-
     $statement = mysqli_prepare($con, "SELECT * FROM UserGroups WHERE UserID = ? AND GroupID = ? AND UserRank = 1");
     mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
     if(!mysqli_stmt_execute($statement)) {
@@ -575,7 +524,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
       exit;
     }
     $result->close();
-
     $statement = mysqli_prepare($con, "DELETE FROM UserGroups WHERE UserID = ? AND GroupID = ?;");
     mysqli_stmt_bind_param($statement, "ii", $userID, $groupID);
     if(mysqli_stmt_execute($statement)) {
@@ -591,12 +539,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["leaveGroup"])) {
 //
 // Leden opvragen van groep
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["getGroupMembers"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"]))) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: redirect.php?home=1");
@@ -605,7 +550,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["getGroupMembers"])) {
   $userID = $_SESSION["UserID"];
   $groupID = $_SESSION["GroupID"];
   $members = array();
-
   $statement = mysqli_prepare($con, "SELECT u.UserID, u.FirstName, u.LastName, u.Nickname, ur.rankName FROM UserGroups ug INNER JOIN users u ON ug.UserID = u.UserID INNER JOIN userRanks ur ON ur.rankID = ug.UserRank WHERE GroupID = ?;");
   mysqli_stmt_bind_param($statement, "i", $groupID);
   if(!mysqli_stmt_execute($statement)) {
@@ -626,25 +570,18 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["getGroupMembers"])) {
                 <div class=\"item__member--rank\"><p>$member->userRank</p></div>
               </div>");
       }
-
   }else{
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: redirect.php?home=1");
     exit;
   }
-
-
-
 }
 //
 // Vak aanmaken
 //
-
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($_POST["crDescription"])) {
-
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-
   if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"]))) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: redirect.php?home=1");
@@ -654,7 +591,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($
   $crDescription = $con->real_escape_string($_POST["crDescription"]);
   $userID = $_SESSION["UserID"];
   $groupID = $_SESSION["GroupID"];
-
   $statement = mysqli_prepare($con, "INSERT INTO courses(`GroupID`,`CrName`,`CrDescription`) VALUES (?,?,?);");
   mysqli_stmt_bind_param($statement, "iss", $groupID, $crName, $crDescription);
   if(!mysqli_stmt_execute($statement)) {
@@ -677,8 +613,5 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["crName"])  && isset($
     header("Location: redirect.php?home=1");
     exit;
   }
-
 }
-
-
 ?>
