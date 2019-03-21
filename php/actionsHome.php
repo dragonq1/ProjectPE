@@ -668,9 +668,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
     foreach ($files as $file) {
       $pathFile = $path."/".$file;
       echo ("
-      <a class=\"group__file\" href=\"$pathFile\" target=\"_blank\">
-        $file
-      </a>");
+      <div class=\"group__file\">
+        <a href=\"$pathFile\" target=\"_blank\">
+          $file
+        </a>
+        <button onClick=\"deleteFile(this);\">Verwijderen</button>
+      </div>");
     }
   }else{
     echo("<p> Kon geen bestanden vinden in dit vak!</p>");

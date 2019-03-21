@@ -151,6 +151,12 @@ function leaveGroup(){
   })
 }
 
+function deleteFile(element){
+  destroyCourseModals();
+  var fileName = element.parentElement.firstElementChild.textContent.trim();
+  alert(fileName);
+}
+
 function getGroupMembers(){
   $.ajax({
   url:"../php/actionsHome.php",

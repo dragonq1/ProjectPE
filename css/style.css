@@ -293,6 +293,8 @@ input:-webkit-autofill:active  {
 }
 
 
+/*file manager*/
+
 .group__file {
   display: block;
   min-height: 30px;
@@ -302,6 +304,33 @@ input:-webkit-autofill:active  {
   border-radius: 3px;
   transition: 0.3s;
   color:black;
+}
+
+.group__file button {
+  color: black;
+  float: right;
+  font-size: 16px;
+  transition: 0.3s;
+  background-color: transparent;
+  height: 30px;
+  border: 1px solid #ba2c2c;
+  width: 120px;
+}
+
+.group__file button:hover {
+  color: white;
+  background-color: #ba2c2c;
+  cursor: pointer;
+}
+
+.group__file a {
+  text-decoration: none;
+  color: black;
+  transition: 0.3s;
+}
+
+.group__file a:hover {
+  color: #2a69c9;
 }
 
 
