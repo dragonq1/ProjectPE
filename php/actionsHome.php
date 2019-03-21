@@ -331,13 +331,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
   $con = mysqli_connect($host, $user, $pass, $db);
   if(!isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
-    header("Location: ../home.php");
+    exit;
   }else{
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
       $nickname = $con->reaL_escape_string($_POST["nickname"]);
       // Kijken of gebruiker bestaat en id ophalen
-      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
+      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname LIKE ?;");
       mysqli_stmt_bind_param($statement, "s", $nickname);
       mysqli_stmt_execute($statement);
       $result = $statement->get_result();
@@ -358,7 +358,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
           $result = $statement->get_result();
           if(mysqli_num_rows($result) > 0) {
             $_SESSION["errormsg"] = "Deze gebruiker zit al in deze groep!";
-            header("Location: redirect.php?home=1");
             exit;
           }
           $result->close();
@@ -370,7 +369,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
           if(mysqli_num_rows($result) > 1) {
             $result->close();
             $_SESSION["errormsg"] = "Deze gebruiker heeft al een uitnoding voor deze groep!";
-            header("Location: redirect.php?home=1");
+            echo "test";
             exit;
           }else{
             //Invite toevoegen
@@ -381,13 +380,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
               header("Location: ../home.php");
             }else{
               $_SESSION["errormsg"] = "Er ging iets fout !";
-              header("Location: redirect.php?home=1");
+
               exit;
             }
           }
       }else{
         $_SESSION["errormsg"] = "Deze gebruiker bestaat niet!";
-        header("Location: redirect.php?home=1");
+              echo "test";
         exit;
       }
   }
@@ -406,7 +405,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
       $groupID = $_SESSION["GroupID"];
       $nickName = $con->reaL_escape_string($_POST["nickname"]);
       //Kijken of gebruiker bestaat en id ophalen
-      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
+      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname LIKE ?;");
       mysqli_stmt_bind_param($statement, "s", $nickName);
       mysqli_stmt_execute($statement);
       $result = $statement->get_result();
