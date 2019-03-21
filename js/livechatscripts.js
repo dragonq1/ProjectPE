@@ -30,7 +30,7 @@ function closechat(){
   bodymessages.style.display = "none";
   bodymessages.style.visibility = "hidden";
 
-  bodytitle.style.display= "inline";
+  bodytitle.style.display= "block";
   bodytitle.style.visibility= "visible";
 
   }

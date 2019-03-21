@@ -60,7 +60,8 @@
     <div class="div__dots">
       <canvas class='connecting-dots' id="dots-canvas"></canvas>
     </div>
-        <div class="body_loginpage">
+       <div class="body_loginpage">
+
          <div class="body__loginbox">
           <div class="body__loginbox--title">
             <h1>Welkom bij PVSTS</h1>
