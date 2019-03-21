@@ -276,10 +276,9 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
 
       </div>
       <form action=\"\" method=\"POST\">
-          <div  class=\"livechat__body--input\">
+          <div class=\"livechat__body--input\">
                <textarea id=\"DOM__livechat__text\" maxlength=\"256\" class=\"livechat__textinput\" required>
                </textarea>
-
           </div>
           <div class=\"livechat__body--sendbutton\">
             <input type=\"submit\" id=\"DOM__livechat__button\" name=\"livechat_btn\" value=\"Verzenden\" class=\"livechat__submitbtn\">
