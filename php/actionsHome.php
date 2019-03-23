@@ -290,7 +290,8 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
     </div>
   </div>
  <script src=\"js/livechatscripts.js\"></script>
-</div></div><script src=\"js/modalCourses.js\"></script>");
+ <script> $(document).ready(function(){ $.getScript(\"js/modalCourses.js\")}); </script>
+</div></div>");
   exit;
 }
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_POST["grDescription"])) {
@@ -483,7 +484,20 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
           header("Location: redirect.php?home=1");
           exit;
         }else{
-          // TODO: Mappen verwijderen
+          $dir = opendir("../files/$groupID");
+            while(false !== ( $file = readdir($dir)) ) {
+                if (( $file != '.' ) && ( $file != '..' )) {
+                    $full = $src . '/' . $file;
+                    if ( is_dir($full) ) {
+                        rrmdir($full);
+                    }
+                    else {
+                        unlink($full);
+                    }
+                }
+            }
+          closedir($dir);
+          rmdir($src);
         }
       }else{
         $_SESSION["errormsg"] = "Je bent niet de eigenaar van de groep!";
@@ -658,6 +672,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
   $files = array_diff(scandir($path), array('..', '.'));
 
   echo ("
+  <div id=\"dom__fileManager\">
   <div class=\"body__home--title\">
     <h2>$courseName</h2>
   </div>
@@ -671,7 +686,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
         <a href=\"$pathFile\" target=\"_blank\">
           $file
         </a>
-        <button onClick=\"deleteFile(this);\">Verwijderen</button>
+        <button class=\"dom__fileManager--deleteButton\">Verwijderen</button>
       </div>");
     }
   }else{
@@ -680,12 +695,52 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
   echo("<form id=\"DOM__courses--fileUploader\" class=\"group__file\" action=\"actionsHome.php\" method=\"POST\"\">
     <input id=\"fileInputCourses\" type=\"file\" name=\"file\">
     <input id=\"fileSubmitCourses\" type=\"button\" value=\"uploaden\" name=\"upload\" onclick=\"uploadFileCourse();\">
-  </form></div>");
+  </form></div></div>");
 
 }
 
-//file uploader
+//Bestand verwijderen
+if (($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteFile"])  && isset($_POST["file"])) {
 
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"])) || (!isset($_SESSION["CourseID"])) ) {
+    echo "501";
+    exit;
+  }
+  $file = $con->reaL_escape_string($_POST["file"]);
+  $userID = $_SESSION["UserID"];
+  $groupID = $_SESSION["GroupID"];
+  $courseID = $_SESSION["CourseID"];
+
+
+  //Kijken of gebruiker toegang heeft tot group
+  $statement = mysqli_prepare($con, "SELECT us.UserID, us.GroupID, c.CourseID, c.CrName FROM UserGroups us INNER JOIN groups g ON us.GroupID = g.GroupID INNER JOIN courses c ON c.GroupID = g.GroupID WHERE us.UserID = ? AND us.GroupID = ? AND c.CourseID = ? AND us.userRank = 1;");
+  mysqli_stmt_bind_param($statement, "iii", $userID, $groupID, $courseID);
+  if(!mysqli_stmt_execute($statement)) {
+    echo "501";
+    exit;
+  }
+  $result = $statement->get_result();
+    if(mysqli_num_rows($result) != 1) {
+      echo "403";
+      exit;
+  }
+
+  //Bestanden verwijderen als het bestaat
+  $filePath = "../files/$groupID/$courseID/$file";
+  if(file_exists($filePath)) {
+    if(unlink($filePath)) {
+      echo $courseID;
+    }else{
+      echo "701";
+    }
+
+  }
+
+
+}
 
 
 

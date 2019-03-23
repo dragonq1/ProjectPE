@@ -220,6 +220,26 @@
       </form>
     </div>
   </div>
+
+  <!-- modal bestand verwijderen -->
+
+  <div class="modal-box body__home--boxes animated slideInDown faster" id="dom__modal--deleteFile">
+    <div class="item__group--coloum width-100">
+      <form action="php/actionsHome.php" method="post">
+        <div class="modal__title">
+          <h2>Weet u zeker dat u dit bestand permament wilt verwijderen?</h2>
+          <p>Om dit te kunnen doen moet je eigenaar zijn!</p>
+        </div>
+        <div class="modal__controls">
+          <button type="button" id="dom__submit--deleteFile">Ja</button>
+          <button type="button" id="dom__btn--deleteFileClose">Annuleren</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
   <script src="js/main.js"></script>
   <script>
     window.onload=function() {

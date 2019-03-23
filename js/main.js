@@ -16,6 +16,8 @@ if(typeof destroyCourseModals === "function"){
     data: {homeSidebar:1,homeMenu:1},
     success: function(data){
       $("#dom__sidebar--groups").html(data);
+
+
       }
     })
     }
@@ -60,6 +62,7 @@ function course(courseID){
         alert("You don't have access to this course!");
       }else{
         $("#groups-mainbox").html(data);
+        loadDeleteButtons();
       }
 
       }
@@ -85,7 +88,14 @@ function uploadFileCourse() {
         processData: false,
         data: form_data,
         success: function(data){
-          course(data);
+          if(data == 700) {
+            alert("Er ging iets fout tijdens het uploaden!");
+          }else if(data == 705) {
+            alert("Een bestand met deze naam bestaat al!");
+          }else{
+            course(data);
+          }
+
         }
       })
     }else{
@@ -96,7 +106,6 @@ function uploadFileCourse() {
 }
 
 //Functie om account in te laden
-
 function account() {
   destroyModals();
   if(typeof destroyCourseModals === "function"){
@@ -164,6 +173,7 @@ function getGroupMembers(){
   datatype:"text",
   data: {getGroupMembers:1},
   success: function(data){
+
     $("#dom__groupMembers").html(data);
     }
   })
