@@ -463,7 +463,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-  if(!isset($_SESSION["GroupID"])) {
+  if(!isset($_SESSION["UserID"]) || !isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: ../home.php");
   }else{
@@ -477,36 +477,41 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
       if(mysqli_num_rows($result) == 1) {
         //Group verwijderen en map
         $result->close();
-        $statement = mysqli_prepare($con, "DELETE FROM groups WHERE GroupID = ?");
+        $statement = mysqli_prepare($con, "DELETE FROM groups WHERE groupID = ?");
         mysqli_stmt_bind_param($statement, "i", $groupID);
         if(!mysqli_stmt_execute($statement)) {
-          $_SESSION["errormsg"] = "Er ging iets fout bij het verwijderen van de groep";
-          header("Location: redirect.php?home=1");
+          echo "202";
           exit;
         }else{
-          $dir = opendir("../files/$groupID");
-            while(false !== ( $file = readdir($dir)) ) {
-                if (( $file != '.' ) && ( $file != '..' )) {
-                    $full = $src . '/' . $file;
-                    if ( is_dir($full) ) {
-                        rrmdir($full);
-                    }
-                    else {
-                        unlink($full);
-                    }
-                }
-            }
-          closedir($dir);
-          rmdir($src);
+          $dir = "../files/$groupID";
+          rrmdir($dir);
+          echo "200";
+          exit;
         }
       }else{
-        $_SESSION["errormsg"] = "Je bent niet de eigenaar van de groep!";
-        header("Location: redirect.php?home=1");
+        echo "201";
         exit;
       }
       $result->close();
       }
 }
+
+//Functie mappen Verwijderen
+function rrmdir($dir) {
+if (is_dir($dir)) {
+  $objects = scandir($dir);
+  foreach ($objects as $object) {
+    if ($object != "." && $object != "..") {
+      if (filetype($dir."/".$object) == "dir")
+         rrmdir($dir."/".$object);
+      else unlink   ($dir."/".$object);
+    }
+  }
+  reset($objects);
+  rmdir($dir);
+}
+}
+
 //
 // Groep verlaten
 //

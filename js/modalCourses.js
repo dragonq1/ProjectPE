@@ -53,7 +53,7 @@ function loadDeleteButtons() {
             if(data == 701) {
               alert("Er ging iets fout bij het verwijderen!");
             }else if(data == 403){
-              alert("U hoeft niet de juiste rechten om bestanden te verwijderen!");
+              alert("U heeft niet de juiste rechten om bestanden te verwijderen!");
             }else if(data == 501){
               alert("Er ging iets fout bij het ophalen van uw account gegevens!");
             }else{
@@ -164,7 +164,11 @@ btnSubmitDeleteGroup.onclick = function() {
         data: {deleteGroup:1},
         success: function(data){
           destroyCourseModals();
-          home();
+          if(data == 200) {
+            home();
+          }else{
+            alert(data);
+          }
         }
     })
   }
