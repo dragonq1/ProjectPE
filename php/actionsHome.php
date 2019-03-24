@@ -754,15 +754,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
   $userID = $_SESSION["UserID"];
-echo $_POST["livechat__text"];
 
 //Uitloggen indien niet geconnect
   if(!$con) {
     header("Location: ../home.php");
   }else{
-          echo $_POST["livechat__text"];
 
-          $livechatmessage = $con->reaL_escape_string($_POST["livechat_text"]);
+          $livechatmessage = $con->reaL_escape_string($_POST["livechat__text"]);
           $userID = $_SESSION["UserID"];
           $groupID = $_SESSION["GroupID"];
 

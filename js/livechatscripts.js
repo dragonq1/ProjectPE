@@ -40,8 +40,14 @@ function closechat(){
     $.ajax({
         type: 'POST',
         url: '../php/actionsHome.php',
-        data: {livechat__text:chatmessage},
-        dataType: "text"
+        data: {livechat__text:livechatmessage},
+        dataType: "text",
+        success: function(data){
+          //alert(data);
+        }
     });
+
+$('#DOM__livechat__text').val(' ');
+
 
   });
