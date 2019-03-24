@@ -275,16 +275,15 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
       <div class=\"livechat__body--messages\">
 
       </div>
-      <form action=\"\" method=\"POST\">
+      <form id=\"DOM__livechat__form\">
           <div  class=\"livechat__body--input\">
                <textarea id=\"DOM__livechat__text\" maxlength=\"256\" class=\"livechat__textinput\" required>
                </textarea>
-
           </div>
           <div class=\"livechat__body--sendbutton\">
             <input type=\"submit\" id=\"DOM__livechat__button\" name=\"livechat_btn\" value=\"Verzenden\" class=\"livechat__submitbtn\">
           </div>
-      </form>
+        </form>
       <div class=\"livechat__body--closechat\">
         <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluit livechat\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
       </div>
