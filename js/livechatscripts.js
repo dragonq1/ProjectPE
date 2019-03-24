@@ -1,22 +1,4 @@
 
-
-$('#DOM__livechat__form').submit(function(event) {
-  event.preventDefault();
-    // information to be sent to the server
-    var message = $('#DOM__livechat__text').val();
-    var messageGroupID = ;
-    var messagerUserID = "<?php echo $_SESSION[\"userID\"] ?>" ;
-
-    $.ajax({
-        type: "POST",
-        url: '../php/livechatsend.php',
-        data: {message},
-        dataType: "text"
-    });
-});
-
-
-
 function openchat(){
 var body = document.getElementById("DOM__livechat__body--main");
 var bodytitle = document.getElementById("DOM__livechat__title");
@@ -49,3 +31,17 @@ function closechat(){
   bodytitle.style.visibility= "visible";
 
   }
+
+  $("#DOM__livechat__form").submit(function(event) {
+  event.preventDefault();
+    // information to be sent to the server
+    var livechatmessage = $('#DOM__livechat__text').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '../php/actionsHome.php',
+        data: {livechat__text:chatmessage},
+        dataType: "text"
+    });
+
+  });

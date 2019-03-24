@@ -277,21 +277,19 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
       </div>
       <form id=\"DOM__livechat__form\">
           <div  class=\"livechat__body--input\">
-      <form action=\"\" method=\"POST\">
           <div class=\"livechat__body--input\">
-               <textarea id=\"DOM__livechat__text\" maxlength=\"256\" class=\"livechat__textinput\" required>
-               </textarea>
+               <textarea id=\"DOM__livechat__text\" maxlength=\"256\" class=\"livechat__textinput\" required></textarea>
           </div>
           <div class=\"livechat__body--sendbutton\">
             <input type=\"submit\" id=\"DOM__livechat__button\" name=\"livechat_btn\" value=\"Verzenden\" class=\"livechat__submitbtn\">
           </div>
-        </form>
+         </form>
       <div class=\"livechat__body--closechat\">
         <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluit livechat\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
       </div>
     </div>
   </div>
- <script src=\"js/livechatscripts.js\"></script>
+  <script src=\"js/livechatscripts.js\"></script>
  <script> $(document).ready(function(){ $.getScript(\"js/modalCourses.js\")}); </script>
 </div></div>");
   exit;
@@ -751,4 +749,34 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteFile"])  && is
 
 
 
+//Live Chat
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+  $userID = $_SESSION["UserID"];
+echo $_POST["livechat__text"];
+
+//Uitloggen indien niet geconnect
+  if(!$con) {
+    header("Location: ../home.php");
+  }else{
+          echo $_POST["livechat__text"];
+
+          $livechatmessage = $con->reaL_escape_string($_POST["livechat_text"]);
+          $userID = $_SESSION["UserID"];
+          $groupID = $_SESSION["GroupID"];
+
+          $statement = mysqli_prepare($con, "INSERT INTO chatMessages(`GroupID`,`userID`,`chatMessage`) VALUES (?,?,?);");
+          mysqli_stmt_bind_param($statement, "iis", $groupID, $userID, $livechatmessage);
+
+          if(!mysqli_stmt_execute($statement)) {
+            $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
+            exit;
+          }else{
+
+
+               }
+
+       }
+}
 ?>

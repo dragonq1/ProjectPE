@@ -1,5 +1,7 @@
 <?php
 
+echo($_POST['message']);
+/*
 //Live Chat
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["message"])) {
   session_start();
@@ -10,7 +12,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["message"])) {
   if(!$con) {
     header("Location: ../home.php");
   }else{
-
+*/
 
 
 
