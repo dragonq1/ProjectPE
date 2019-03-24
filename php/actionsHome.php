@@ -277,6 +277,8 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
       </div>
       <form id=\"DOM__livechat__form\">
           <div  class=\"livechat__body--input\">
+      <form action=\"\" method=\"POST\">
+          <div class=\"livechat__body--input\">
                <textarea id=\"DOM__livechat__text\" maxlength=\"256\" class=\"livechat__textinput\" required>
                </textarea>
           </div>
@@ -290,7 +292,8 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
     </div>
   </div>
  <script src=\"js/livechatscripts.js\"></script>
-</div></div><script src=\"js/modalCourses.js\"></script>");
+ <script> $(document).ready(function(){ $.getScript(\"js/modalCourses.js\")}); </script>
+</div></div>");
   exit;
 }
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_POST["grDescription"])) {
@@ -330,13 +333,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
   $con = mysqli_connect($host, $user, $pass, $db);
   if(!isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
-    header("Location: ../home.php");
+    exit;
   }else{
       $userID = $_SESSION["UserID"];
       $groupID = $_SESSION["GroupID"];
       $nickname = $con->reaL_escape_string($_POST["nickname"]);
       // Kijken of gebruiker bestaat en id ophalen
-      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
+      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname LIKE ?;");
       mysqli_stmt_bind_param($statement, "s", $nickname);
       mysqli_stmt_execute($statement);
       $result = $statement->get_result();
@@ -357,7 +360,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
           $result = $statement->get_result();
           if(mysqli_num_rows($result) > 0) {
             $_SESSION["errormsg"] = "Deze gebruiker zit al in deze groep!";
-            header("Location: redirect.php?home=1");
             exit;
           }
           $result->close();
@@ -369,7 +371,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
           if(mysqli_num_rows($result) > 1) {
             $result->close();
             $_SESSION["errormsg"] = "Deze gebruiker heeft al een uitnoding voor deze groep!";
-            header("Location: redirect.php?home=1");
+            echo "test";
             exit;
           }else{
             //Invite toevoegen
@@ -380,13 +382,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
               header("Location: ../home.php");
             }else{
               $_SESSION["errormsg"] = "Er ging iets fout !";
-              header("Location: redirect.php?home=1");
+
               exit;
             }
           }
       }else{
         $_SESSION["errormsg"] = "Deze gebruiker bestaat niet!";
-        header("Location: redirect.php?home=1");
+              echo "test";
         exit;
       }
   }
@@ -405,7 +407,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
       $groupID = $_SESSION["GroupID"];
       $nickName = $con->reaL_escape_string($_POST["nickname"]);
       //Kijken of gebruiker bestaat en id ophalen
-      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname = ?;");
+      $statement = mysqli_prepare($con, "SELECT UserID FROM users WHERE Nickname LIKE ?;");
       mysqli_stmt_bind_param($statement, "s", $nickName);
       mysqli_stmt_execute($statement);
       $result = $statement->get_result();
@@ -463,7 +465,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["nickname"]) && isset(
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
-  if(!isset($_SESSION["GroupID"])) {
+  if(!isset($_SESSION["UserID"]) || !isset($_SESSION["GroupID"])) {
     $_SESSION["errormsg"] = "Er ging iets fout!";
     header("Location: ../home.php");
   }else{
@@ -477,23 +479,41 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteGroup"])) {
       if(mysqli_num_rows($result) == 1) {
         //Group verwijderen en map
         $result->close();
-        $statement = mysqli_prepare($con, "DELETE FROM groups WHERE GroupID = ?");
+        $statement = mysqli_prepare($con, "DELETE FROM groups WHERE groupID = ?");
         mysqli_stmt_bind_param($statement, "i", $groupID);
         if(!mysqli_stmt_execute($statement)) {
-          $_SESSION["errormsg"] = "Er ging iets fout bij het verwijderen van de groep";
-          header("Location: redirect.php?home=1");
+          echo "202";
           exit;
         }else{
-          // TODO: Mappen verwijderen
+          $dir = "../files/$groupID";
+          rrmdir($dir);
+          echo "200";
+          exit;
         }
       }else{
-        $_SESSION["errormsg"] = "Je bent niet de eigenaar van de groep!";
-        header("Location: redirect.php?home=1");
+        echo "201";
         exit;
       }
       $result->close();
       }
 }
+
+//Functie mappen Verwijderen
+function rrmdir($dir) {
+if (is_dir($dir)) {
+  $objects = scandir($dir);
+  foreach ($objects as $object) {
+    if ($object != "." && $object != "..") {
+      if (filetype($dir."/".$object) == "dir")
+         rrmdir($dir."/".$object);
+      else unlink   ($dir."/".$object);
+    }
+  }
+  reset($objects);
+  rmdir($dir);
+}
+}
+
 //
 // Groep verlaten
 //
@@ -659,6 +679,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
   $files = array_diff(scandir($path), array('..', '.'));
 
   echo ("
+  <div id=\"dom__fileManager\">
   <div class=\"body__home--title\">
     <h2>$courseName</h2>
   </div>
@@ -668,9 +689,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
     foreach ($files as $file) {
       $pathFile = $path."/".$file;
       echo ("
-      <a class=\"group__file\" href=\"$pathFile\" target=\"_blank\">
-        $file
-      </a>");
+      <div class=\"group__file\">
+        <a href=\"$pathFile\" target=\"_blank\">
+          $file
+        </a>
+        <button class=\"dom__fileManager--deleteButton\">Verwijderen</button>
+      </div>");
     }
   }else{
     echo("<p> Kon geen bestanden vinden in dit vak!</p>");
@@ -678,12 +702,52 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["course"])  && isset($
   echo("<form id=\"DOM__courses--fileUploader\" class=\"group__file\" action=\"actionsHome.php\" method=\"POST\"\">
     <input id=\"fileInputCourses\" type=\"file\" name=\"file\">
     <input id=\"fileSubmitCourses\" type=\"button\" value=\"uploaden\" name=\"upload\" onclick=\"uploadFileCourse();\">
-  </form></div>");
+  </form></div></div>");
 
 }
 
-//file uploader
+//Bestand verwijderen
+if (($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteFile"])  && isset($_POST["file"])) {
 
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+
+  if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"])) || (!isset($_SESSION["CourseID"])) ) {
+    echo "501";
+    exit;
+  }
+  $file = $con->reaL_escape_string($_POST["file"]);
+  $userID = $_SESSION["UserID"];
+  $groupID = $_SESSION["GroupID"];
+  $courseID = $_SESSION["CourseID"];
+
+
+  //Kijken of gebruiker toegang heeft tot group
+  $statement = mysqli_prepare($con, "SELECT us.UserID, us.GroupID, c.CourseID, c.CrName FROM UserGroups us INNER JOIN groups g ON us.GroupID = g.GroupID INNER JOIN courses c ON c.GroupID = g.GroupID WHERE us.UserID = ? AND us.GroupID = ? AND c.CourseID = ? AND us.userRank = 1;");
+  mysqli_stmt_bind_param($statement, "iii", $userID, $groupID, $courseID);
+  if(!mysqli_stmt_execute($statement)) {
+    echo "501";
+    exit;
+  }
+  $result = $statement->get_result();
+    if(mysqli_num_rows($result) != 1) {
+      echo "403";
+      exit;
+  }
+
+  //Bestanden verwijderen als het bestaat
+  $filePath = "../files/$groupID/$courseID/$file";
+  if(file_exists($filePath)) {
+    if(unlink($filePath)) {
+      echo $courseID;
+    }else{
+      echo "701";
+    }
+
+  }
+
+
+}
 
 
 

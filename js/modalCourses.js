@@ -17,6 +17,8 @@ btnDeleteGroup = document.getElementById("dom__btn--deleteGroup");
 btnSubmitDeleteGroup = document.getElementById("dom__submit--deleteGroup");
 btnDeleteGroupClose = document.getElementById("dom__btn--deleteGroupClose");
 
+modalDeleteFile = document.getElementById("dom__modal--deleteFile");
+
 modalMembers = document.getElementById("dom__modal--members");
 btnMembers = document.getElementById("dom__btn--members");
 btnMembersClose = document.getElementById("dom__btn--membersClose");
@@ -25,6 +27,44 @@ modalNewCourse = document.getElementById("dom__modal--newCourse");
 btnNewCourse = document.getElementById("dom__btn--newCourse");
 btnsubmitCr = document.getElementById("dom__submit--newCourse");
 btnNewCourseClose = document.getElementById("dom__btn--newCourseClose");
+
+//Bestand verwijderen modal
+function loadDeleteButtons() {
+  $(".dom__fileManager--deleteButton").on('click', function() {
+    var file = $(this).parent().find("a").text().trim();
+    modalDeleteFile.classList.remove("slideOutUp");
+    modalDeleteFile.classList.add("slideInDown");
+    modalDeleteFile.style.display = "flex"
+    $("#dom__btn--deleteFileClose").on('click', function() {
+      modalDeleteFile.classList.remove("slideInDown");
+      modalDeleteFile.classList.add("slideOutUp");
+      $("#dom__submit--deleteFile").unbind();
+    });
+    $("#dom__submit--deleteFile").on('click', function() {
+      modalDeleteFile.classList.remove("slideInDown");
+      modalDeleteFile.classList.add("slideOutUp");
+      $("#dom__submit--deleteFile").unbind();
+      $.ajax({
+          url:"../php/actionsHome.php",
+          type:"POST",
+          datatype:"text",
+          data: {deleteFile:1,file:file},
+          success: function(data){
+            if(data == 701) {
+              alert("Er ging iets fout bij het verwijderen!");
+            }else if(data == 403){
+              alert("U heeft niet de juiste rechten om bestanden te verwijderen!");
+            }else if(data == 501){
+              alert("Er ging iets fout bij het ophalen van uw account gegevens!");
+            }else{
+              course(data);
+            }
+          }
+      })
+    });
+  });
+}
+
 
 //Invite user modal
 btnInviteUser.onclick = function() {
@@ -124,7 +164,11 @@ btnSubmitDeleteGroup.onclick = function() {
         data: {deleteGroup:1},
         success: function(data){
           destroyCourseModals();
-          home();
+          if(data == 200) {
+            home();
+          }else{
+            alert(data);
+          }
         }
     })
   }
