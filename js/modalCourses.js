@@ -47,17 +47,13 @@ function loadDeleteButtons() {
       $.ajax({
           url:"../php/actionsHome.php",
           type:"POST",
-          datatype:"text",
+          dataType:"json",
           data: {deleteFile:1,file:file},
           success: function(data){
-            if(data == 701) {
-              alert("Er ging iets fout bij het verwijderen!");
-            }else if(data == 403){
-              alert("U heeft niet de juiste rechten om bestanden te verwijderen!");
-            }else if(data == 501){
-              alert("Er ging iets fout bij het ophalen van uw account gegevens!");
+            if(data.returnCode == 0) {
+              course(data.output);
             }else{
-              course(data);
+              alert(data.returnCode);
             }
           }
       })
@@ -80,21 +76,29 @@ btnInviteUserClose.onclick = function() {
 
 btnSubmitInviteUser.onclick = function() {
 
-  var nickname = document.getElementById("dom__inviteUser--nickname").value;
+  var inputNickname = document.getElementById("dom__inviteUser--nickname");
+  var nickname = inputNickname.value;
 
   if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {nickname:nickname,inviteUser:1},
-        success: function(){
-          destroyCourseModals();
+        success: function(data){
+          if(data.returnCode == 0) {
+            destroyCourseModals();
+          }else{
+            alert(data.returnCode);
+          }
         }
     })
   }else{
   alert("Voer alle velden in!")
   }
+
+  inputNickname.value = "";
+
 }
 
 //Delete user modal
@@ -111,21 +115,29 @@ btnkickUserClose.onclick = function() {
 
 btnSubmitkickUser.onclick = function() {
 
-  var nickname = document.getElementById("dom__kickUser--nickname").value;
+  var inputNickname = document.getElementById("dom__kickUser--nickname");
+  var nickname = inputNickname.value;
 
   if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {nickname:nickname,deleteUser:1},
-        success: function(){
-          destroyCourseModals();
+        success: function(data){
+          if(data.returnCode == 0) {
+            destroyCourseModals();
+          }else{
+            alert(data.returnCode);
+          }
         }
     })
   }else{
   alert("Voer alle velden in!")
   }
+
+  inputNickname.value = "";
+
 }
 
 
@@ -160,14 +172,15 @@ btnSubmitDeleteGroup.onclick = function() {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {deleteGroup:1},
         success: function(data){
-          destroyCourseModals();
-          if(data == 200) {
+          if(data.returnCode == 0) {
+            destroyCourseModals();
             home();
           }else{
-            alert(data);
+            destroyCourseModals();
+            alert(data.returnCode);
           }
         }
     })
@@ -205,23 +218,36 @@ btnNewCourseClose.onclick = function() {
 
 btnsubmitCr.onclick = function() {
 
-  var crName = document.getElementById("crName").value;
-  var crDescription = document.getElementById("crDescription").value;
+  var crNameField = document.getElementById("crName");
+  var crDescriptionField = document.getElementById("crDescription");
+
+  var crName = crNameField.value;
+  var crDescription = crDescriptionField.value;
+
 
   if(crName != "" && crDescription != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {crName:crName,crDescription:crDescription},
         success: function(data){
+          if(data.returnCode == 0) {
+            courses(data.output);
+          }else{
+            alert(data.returnCode);
+          }
           destroyCourseModals();
-          courses(data);
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    alert("Voer alle velden in!")
+    // TODO: Van alert notificatie maken
   }
+
+  crNameField.value = "";
+  crDescription.value = "";
+
 }
 
 

@@ -1,7 +1,7 @@
 <?php
-
 if(($_SERVER["REQUEST_METHOD"] == "POST")) {
-
+  require 'classes.php';
+  $data = new jsonData(0, "");
   if($_FILES['file']['error'] > 0) {
     echo $_FILES['file']['error'];
     exit;
@@ -10,8 +10,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST")) {
   session_start();
 
   if((!isset($_SESSION["GroupID"])) || (!isset($_SESSION["UserID"])) || (!isset($_SESSION["CourseID"]))) {
-    $_SESSION["errormsg"] = "Er ging iets fout!";
-    echo "700";
+    header("Location: index.php");
     exit;
   }
   $userID = $_SESSION["UserID"];
@@ -23,13 +22,15 @@ if(($_SERVER["REQUEST_METHOD"] == "POST")) {
     move_uploaded_file($_FILES['file']['tmp_name'],
       "../files/$groupID/$courseID/" . $_FILES['file']['name']);
   }else{
-    $_SESSION["errormsg"] = "Er ging iets fout!";
-    echo "705";
+    $data->returnCode = 803;
+    echo json_encode($data);
     exit;
   }
 
 
-  echo "$courseID";
-}
+  $data->output = $courseID;
+  echo json_encode($data);
+  exit;
 
+}
 ?>

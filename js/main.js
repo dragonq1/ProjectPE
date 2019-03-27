@@ -3,23 +3,30 @@ if(typeof destroyCourseModals === "function"){
   destroyCourseModals();
 }
   $.ajax({
-  url:"../php/actionsHome.php",
-  type:"POST",
-  datatype:"text",
-  data: {homeMenu:1},
-  success: function(data){
-    $("#dom__interactive").html(data);
-    $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
-    datatype:"text",
+    dataType:"json",
+    data: {homeMenu:1},
+    success: function(data){
+      if(data.returnCode == 0) {
+        $("#dom__interactive").html(data.output);
+      }else{
+        alert(data);
+      }
+    }
+  })
+
+  $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
     data: {homeSidebar:1,homeMenu:1},
     success: function(data){
-      $("#dom__sidebar--groups").html(data);
-
-
+      if(data.returnCode == 0) {
+        $("#dom__sidebar--groups").html(data.output);
+      }else{
+        alert(data);
       }
-    })
     }
   })
 }
@@ -32,16 +39,14 @@ function courses(groupID){
   $.ajax({
       url:"../php/actionsHome.php",
       type:"POST",
-      datatype:"text",
+      dataType:"json",
       data: {group:1,groupID:groupID},
       success: function(data){
-      if(data == "403") {
-        // TODO: Notificatie systeem
-        alert("You don't have access to this group!");
-      }else{
-        $("#dom__interactive").html(data);
-      }
-
+        if(data.returnCode == 0) {
+          $("#dom__interactive").html(data.output);
+        }else{
+          alert(data.returnCode);
+        }
       }
   })
 }
@@ -54,17 +59,15 @@ function course(courseID){
   $.ajax({
       url:"../php/actionsHome.php",
       type:"POST",
-      datatype:"text",
+      dataType:"json",
       data: {course:1,courseID:courseID},
       success: function(data){
-      if(data == "403") {
-        // TODO: Notificatie systeem
-        alert("You don't have access to this course!");
-      }else{
-        $("#groups-mainbox").html(data);
-        loadDeleteButtons();
-      }
-
+        if(data.returnCode == 0) {
+          $("#groups-mainbox").html(data.output);
+          loadDeleteButtons();
+        }else{
+          alert(data.returnCode);
+        }
       }
   })
 }
@@ -75,6 +78,7 @@ function uploadFileCourse() {
     destroyCourseModals();
   }
   var file = $("#fileInputCourses").prop("files")[0];
+  $("#fileInputCourses").val("");
   if(typeof file == "object") {
     if(file.size < 20971520) {
       var form_data = new FormData();
@@ -82,20 +86,17 @@ function uploadFileCourse() {
       $.ajax({
         url:"../php/fileUploader.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         cache: false,
         contentType: false,
         processData: false,
         data: form_data,
         success: function(data){
-          if(data == 700) {
-            alert("Er ging iets fout tijdens het uploaden!");
-          }else if(data == 705) {
-            alert("Een bestand met deze naam bestaat al!");
+          if(data.returnCode == 0) {
+            course(data.output);
           }else{
-            course(data);
+            alert(data.returnCode);
           }
-
         }
       })
     }else{
@@ -112,12 +113,16 @@ function account() {
     destroyCourseModals();
   }
   $.ajax({
-    url:"../php/Account.php",
+    url:"../php/actionsHome.php",
     type:"POST",
-    datatype:"text",
-    data: {homeMenu:1},
+    dataType:"json",
+    data: {account:1},
     success: function(data){
-      $("#dom__interactive").html(data);
+      if(data.returnCode == 0) {
+        $("#dom__interactive").html(data.output);
+      }else{
+        alert(data.returnCode);
+      }
     }
   })
 }
@@ -127,22 +132,30 @@ function acceptInvite(inviteID){
   $.ajax({
   url:"../php/actionsHome.php",
   type:"POST",
-  datatype:"text",
+  dataType:"json",
   data: {acceptInvite:1,inviteID:inviteID},
   success: function(data){
-    home();
+    if(data.returnCode == 0) {
+      home();
+    }else{
+      alert(data.returnCode);
+    }
     }
   })
 }
 
 function declineInvite(inviteID){
-  $.ajax({
-  url:"../php/actionsHome.php",
-  type:"POST",
-  datatype:"text",
-  data: {declineInvite:1,inviteID:inviteID},
-  success: function(data){
-    home();
+    $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {declineInvite:1,inviteID:inviteID},
+    success: function(data){
+      if(data.returnCode == 0) {
+        home();
+      }else{
+        alert(data.returnCode);
+      }
     }
   })
 }
@@ -150,31 +163,32 @@ function declineInvite(inviteID){
 function leaveGroup(){
   destroyCourseModals();
   $.ajax({
-  url:"../php/actionsHome.php",
-  type:"POST",
-  datatype:"text",
-  data: {leaveGroup:1},
-  success: function(){
-    home();
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {leaveGroup:1},
+    success: function(data){
+      if(data.returnCode == 0) {
+        home();
+      }else{
+        alert(data.returnCode);
+      }
     }
   })
 }
 
-function deleteFile(element){
-  destroyCourseModals();
-  var fileName = element.parentElement.firstElementChild.textContent.trim();
-  alert(fileName);
-}
-
 function getGroupMembers(){
-  $.ajax({
-  url:"../php/actionsHome.php",
-  type:"POST",
-  datatype:"text",
-  data: {getGroupMembers:1},
-  success: function(data){
-
-    $("#dom__groupMembers").html(data);
+    $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {getGroupMembers:1},
+    success: function(data){
+      if(data.returnCode == 0) {
+      $("#dom__groupMembers").html(data.output);
+      }else{
+        alert(data.returnCode);
+      }
     }
   })
 }
