@@ -152,7 +152,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && is
           mysqli_stmt_bind_param($statement, "ii", $groupID , $userID);
           mysqli_stmt_execute($statement);
           if($statement->affected_rows == 1) {
-              $data->returnCode = 503;
+              $data->returnCode = 0;
               echo json_encode($data);
           }
         }else{

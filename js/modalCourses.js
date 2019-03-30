@@ -52,8 +52,9 @@ function loadDeleteButtons() {
           success: function(data){
             if(data.returnCode == 0) {
               course(data.output);
+              notify(806);
             }else{
-              alert(data.returnCode);
+              notify(data.returnCode);
             }
           }
       })
@@ -87,14 +88,16 @@ btnSubmitInviteUser.onclick = function() {
         data: {nickname:nickname,inviteUser:1},
         success: function(data){
           if(data.returnCode == 0) {
+            notify(508)
             destroyCourseModals();
           }else{
-            alert(data.returnCode);
+            notify(data.returnCode);
           }
+
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
 
   inputNickname.value = "";
@@ -127,13 +130,15 @@ btnSubmitkickUser.onclick = function() {
         success: function(data){
           if(data.returnCode == 0) {
             destroyCourseModals();
+            notify(907);
           }else{
-            alert(data.returnCode);
+            destroyCourseModals();
+            notify(data.returnCode);
           }
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
 
   inputNickname.value = "";
@@ -176,12 +181,12 @@ btnSubmitDeleteGroup.onclick = function() {
         data: {deleteGroup:1},
         success: function(data){
           if(data.returnCode == 0) {
-            destroyCourseModals();
+            notify(908);
             home();
           }else{
-            destroyCourseModals();
-            alert(data.returnCode);
+            notify(data.returnCode);
           }
+          destroyCourseModals();
         }
     })
   }
@@ -234,14 +239,15 @@ btnsubmitCr.onclick = function() {
         success: function(data){
           if(data.returnCode == 0) {
             courses(data.output);
+            notify(909);
           }else{
-            alert(data.returnCode);
+            notify(data.returnCode);
           }
           destroyCourseModals();
         }
     })
   }else{
-    alert("Voer alle velden in!")
+    notify(701);
     // TODO: Van alert notificatie maken
   }
 

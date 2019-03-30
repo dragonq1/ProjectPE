@@ -35,13 +35,14 @@ btnNewGroupSubmit.onclick = function() {
           if(data.returnCode == 0) {
             destroyModals();
             home();
+            notify(910);
           }else{
-            alert(data.returnCode);
+            notify(data.returnCode);
           }
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
 
 
