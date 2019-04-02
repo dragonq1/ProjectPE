@@ -29,15 +29,20 @@ btnNewGroupSubmit.onclick = function() {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {grName:grName,grDescription:grDescription},
         success: function(data){
-          destroyModals();
-          home();
+          if(data.returnCode == 0) {
+            destroyModals();
+            home();
+            notify(910);
+          }else{
+            notify(data.returnCode);
+          }
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
 
 

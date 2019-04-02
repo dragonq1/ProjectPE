@@ -1,4 +1,17 @@
 <?php
+/**
+ * Class voor groepen
+ */
+class jsonData
+{
+
+  function __construct($returnCode, $output)
+  {
+    $this->returnCode = $returnCode;
+    $this->output = $output;
+
+  }
+}
   /**
    * Class voor groepen
    */

@@ -47,17 +47,14 @@ function loadDeleteButtons() {
       $.ajax({
           url:"../php/actionsHome.php",
           type:"POST",
-          datatype:"text",
+          dataType:"json",
           data: {deleteFile:1,file:file},
           success: function(data){
-            if(data == 701) {
-              alert("Er ging iets fout bij het verwijderen!");
-            }else if(data == 403){
-              alert("U heeft niet de juiste rechten om bestanden te verwijderen!");
-            }else if(data == 501){
-              alert("Er ging iets fout bij het ophalen van uw account gegevens!");
+            if(data.returnCode == 0) {
+              course(data.output);
+              notify(806);
             }else{
-              course(data);
+              notify(data.returnCode);
             }
           }
       })
@@ -80,21 +77,31 @@ btnInviteUserClose.onclick = function() {
 
 btnSubmitInviteUser.onclick = function() {
 
-  var nickname = document.getElementById("dom__inviteUser--nickname").value;
+  var inputNickname = document.getElementById("dom__inviteUser--nickname");
+  var nickname = inputNickname.value;
 
   if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {nickname:nickname,inviteUser:1},
-        success: function(){
-          destroyCourseModals();
+        success: function(data){
+          if(data.returnCode == 0) {
+            notify(508)
+            destroyCourseModals();
+          }else{
+            notify(data.returnCode);
+          }
+
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
+
+  inputNickname.value = "";
+
 }
 
 //Delete user modal
@@ -111,21 +118,31 @@ btnkickUserClose.onclick = function() {
 
 btnSubmitkickUser.onclick = function() {
 
-  var nickname = document.getElementById("dom__kickUser--nickname").value;
+  var inputNickname = document.getElementById("dom__kickUser--nickname");
+  var nickname = inputNickname.value;
 
   if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {nickname:nickname,deleteUser:1},
-        success: function(){
-          destroyCourseModals();
+        success: function(data){
+          if(data.returnCode == 0) {
+            destroyCourseModals();
+            notify(907);
+          }else{
+            destroyCourseModals();
+            notify(data.returnCode);
+          }
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
+
+  inputNickname.value = "";
+
 }
 
 
@@ -160,15 +177,16 @@ btnSubmitDeleteGroup.onclick = function() {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {deleteGroup:1},
         success: function(data){
-          destroyCourseModals();
-          if(data == 200) {
+          if(data.returnCode == 0) {
+            notify(908);
             home();
           }else{
-            alert(data);
+            notify(data.returnCode);
           }
+          destroyCourseModals();
         }
     })
   }
@@ -205,23 +223,37 @@ btnNewCourseClose.onclick = function() {
 
 btnsubmitCr.onclick = function() {
 
-  var crName = document.getElementById("crName").value;
-  var crDescription = document.getElementById("crDescription").value;
+  var crNameField = document.getElementById("crName");
+  var crDescriptionField = document.getElementById("crDescription");
+
+  var crName = crNameField.value;
+  var crDescription = crDescriptionField.value;
+
 
   if(crName != "" && crDescription != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {crName:crName,crDescription:crDescription},
         success: function(data){
+          if(data.returnCode == 0) {
+            courses(data.output);
+            notify(909);
+          }else{
+            notify(data.returnCode);
+          }
           destroyCourseModals();
-          courses(data);
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
+    // TODO: Van alert notificatie maken
   }
+
+  crNameField.value = "";
+  crDescription.value = "";
+
 }
 
 
