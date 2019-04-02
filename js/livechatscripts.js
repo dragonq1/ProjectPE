@@ -51,3 +51,20 @@ $('#DOM__livechat__text').val(' ');
 
 
   });
+
+
+
+  $("#DOM__livechat__body--messages").ready(function() {
+
+  var poll = 1;
+
+    $.ajax({
+        type: 'POST',
+        url: '../php/actionsHome.php',
+        data: {pollchat:poll},
+        dataType: "text",
+        success: function(data){
+          alert(data[0]);
+        }
+    });
+  });

@@ -272,9 +272,9 @@ echo(" <a id=\"dom__btn--newCourse\" class=\"group__link\">
     </div>
 
     <div id=\"DOM__livechat__body\" class=\"livechat__body\">
-      <div class=\"livechat__body--messages\">
-
+      <div id=\"livechatmessages\" class=\"livechat__body--messages\">
       </div>
+
       <form id=\"DOM__livechat__form\">
           <div  class=\"livechat__body--input\">
           <div class=\"livechat__body--input\">
@@ -776,5 +776,48 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
                }
 
        }
+}
+
+//Live Chat ophalen berichten
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+  $userID = $_SESSION["UserID"];
+
+//Uitloggen indien niet geconnect
+  if(!$con) {
+    header("Location: ../home.php");
+  }else{
+
+    $userID = $_SESSION["UserID"];
+    $groupID = $_SESSION["GroupID"];
+
+    $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.userID = ? ORDER BY chatSendtime desc limit 100;");
+    mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
+
+    if(!mysqli_stmt_execute($statement)) {
+      $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
+      echo $_SESSION["errormsg"];
+      exit;
+    }else{
+         $result = $statement->get_result();
+
+         if(mysqli_num_rows($result1)>=1)
+         {
+           //verwerken van de messages
+
+
+
+         }else{
+           $_SESSION['msg'] ='Er ging iets fout bij het ophalen van de livechat messages';
+           echo $_SESSION['msg'];
+           exit;
+         }
+
+
+
+         }
+
+ }
 }
 ?>
