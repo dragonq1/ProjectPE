@@ -46,15 +46,11 @@ function closechat(){
           //alert(data);
         }
     });
-
-$('#DOM__livechat__text').val(' ');
-
-
-  });
+    $('#DOM__livechat__text').val('');
+});
 
 
-
-  $("#DOM__livechat__body--messages").ready(function() {
+  setInterval(function() {
 
   var poll = 1;
 
@@ -62,9 +58,14 @@ $('#DOM__livechat__text').val(' ');
         type: 'POST',
         url: '../php/actionsHome.php',
         data: {pollchat:poll},
-        dataType: "text",
+        dataType: "json",
         success: function(data){
-          alert(data[0]);
+          if(data.returnCode == 0) {
+            $("#DOM__livechatmessages").html(data.output);
+          }else{
+            notify(data.returnCode);
+          }
         }
     });
-  });
+var poll = 0;
+  },5000);

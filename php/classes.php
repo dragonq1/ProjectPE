@@ -77,5 +77,18 @@ class jsonData
        $this->userRank = $userRank;
      }
    }
+/*Class voor chatMessages
+*/
+class chatMessage{
+
+    function __construct($chatMessage, $chatSendtime,$Nickname)
+    {
+      $this->chatMessage = $chatMessage;
+      $this->chatSendtime = $chatSendtime;
+      $this->nickname = $Nickname;
+    }
+
+}
+
 
  ?>
