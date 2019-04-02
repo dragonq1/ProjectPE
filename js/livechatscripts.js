@@ -30,35 +30,39 @@ function closechat(){
   bodytitle.style.display= "block";
   bodytitle.style.visibility= "visible";
 
-  }
+}
 
-  $("#DOM__livechat__form").submit(function(event) {
-  event.preventDefault();
-    // information to be sent to the server
-    var livechatmessage = $('#DOM__livechat__text').val();
+$("#DOM__livechat__form").submit(function(event) {
+event.preventDefault();
+  // information to be sent to the server
+  var livechatmessage = $('#DOM__livechat__text').val();
 
-    $.ajax({
-        type: 'POST',
-        url: '../php/actionsHome.php',
-        data: {livechat__text:livechatmessage},
-        dataType: "text",
-        success: function(data){
-          //alert(data);
-        }
-    });
-    $('#DOM__livechat__text').val('');
+  $.ajax({
+      type: 'POST',
+      url: '../php/actionsHome.php',
+      data: {livechat__text:livechatmessage},
+      dataType: "text",
+      success: function(data){
+        //alert(data);
+      }
+  });
+  $('#DOM__livechat__text').val('');
 });
 
 
-  setInterval(function() {
+$(document).ready(function() {
 
-  var poll = 1;
+  timer = window.setTimeout("ophalen();", 1000);
+
+})
+
+function ophalen() {
 
     $.ajax({
-        type: 'POST',
-        url: '../php/actionsHome.php',
-        data: {pollchat:poll},
-        dataType: "json",
+        type:"POST",
+        url:"../php/actionsHome.php",
+        dataType:"json",
+        data:{pollchat:1},
         success: function(data){
           if(data.returnCode == 0) {
             $("#DOM__livechatmessages").html(data.output);
@@ -67,5 +71,4 @@ function closechat(){
           }
         }
     });
-var poll = 0;
-  },5000);
+}

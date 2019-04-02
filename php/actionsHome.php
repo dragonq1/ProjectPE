@@ -331,7 +331,7 @@ $outputString .= (" <a id=\"dom__btn--newCourse\" class=\"group__link\">
     </div>
   </div>
   <script src=\"js/livechatscripts.js\"></script>
- <script> $(document).ready(function(){ $.getScript(\"js/modalCourses.js\")}); </script>
+  <script> $(document).ready(function(){ $.getScript(\"js/modalCourses.js\")}); </script>
 </div></div>");
   $data->output = $outputString;
   echo json_encode($data);
@@ -1020,47 +1020,46 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
   $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
 
 //Uitloggen indien niet geconnect
   if(!$con) {
     header("Location: ../home.php");
       }else{
+        $userID = $_SESSION["UserID"];
+        $groupID = $_SESSION["GroupID"];
+        $messages = array();
 
-                  $userID = $_SESSION["UserID"];
-                  $groupID = $_SESSION["GroupID"];
-                  $messages = array();
+        $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.userID = ? ORDER BY chatSendtime desc limit 100;");
+        mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
 
-                  $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.userID = ? ORDER BY chatSendtime desc limit 100;");
-                  mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
-
-                  if(!mysqli_stmt_execute($statement)) {
-                    $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
-                    echo $_SESSION["errormsg"];
-                    exit;
-                        }else{
-                                     $result = $statement->get_result();
-                                     if(mysqli_num_rows($result) > 0) {
-                                             while($row = mysqli_fetch_assoc($result)) {
-                                                 $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
-                                                 array_push($messages, $message);
-                                             }
-                                             foreach ($messages as $message) {
-                                               $outputString .= ("<div class=\"recvchat__message\">
-                                                       <p>$message->chatMessage $message->Nickname $message->chatSendtime </p>
-                                                     </div>");
-                                             }
-                                     }else{
-                                           //$data->returnCode = 905;
-                                           //echo json_encode($data);
-                                           //exit;
-                                     }
-                                     $data->output = $outputString;
-                                     echo json_encode($data);
-                                     exit;
-                                     echo("alert(\"test\")");
-
-                            }
-
-         }
+        if(!mysqli_stmt_execute($statement)) {
+          $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
+          echo $_SESSION["errormsg"];
+          exit;
+              }else{
+                 $result = $statement->get_result();
+                 if(mysqli_num_rows($result) > 0) {
+                         while($row = mysqli_fetch_assoc($result)) {
+                             $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
+                             array_push($messages, $message);
+                         }
+                         foreach ($messages as $message) {
+                           $outputString .= ("<div class=\"recvchat__message\">
+                                   <p>$message->chatMessage $message->nickname $message->chatSendtime </p>
+                                 </div>");
+                         }
+                       }else{
+                             //$data->returnCode = 905;
+                             //echo json_encode($data);
+                             //exit;
+                       }
+                       $data->output = $outputString;
+                       echo json_encode($data);
+                       exit;
+                       echo("alert(\"test\")");
+                  }
+        }
 }
 ?>
