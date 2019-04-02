@@ -729,6 +729,23 @@ float: left;
 background-color: #2a69c9;
 }
 
+.recvchat__message__body{
+  width:80%;
+  border: 2px solid #2a69c9;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
 
+.recvchat__time{
+font-size: 15px;
+}
+
+.recvchat__nickname{
+font-size: 10px;
+}
+
+.recvchat__message{
+font-size: 10px;
+}
 
 /*EINDE CSS LIVECHAT*/

@@ -81,7 +81,7 @@ class jsonData
 */
 class chatMessage{
 
-    function __construct($chatMessage, $chatSendtime,$Nickname)
+    function __construct($chatMessage, $chatSendtime , $Nickname)
     {
       $this->chatMessage = $chatMessage;
       $this->chatSendtime = $chatSendtime;

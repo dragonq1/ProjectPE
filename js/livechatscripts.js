@@ -50,11 +50,7 @@ event.preventDefault();
 });
 
 
-$(document).ready(function() {
 
-  timer = window.setTimeout("ophalen();", 1000);
-
-})
 
 function ophalen() {
 
@@ -65,10 +61,16 @@ function ophalen() {
         data:{pollchat:1},
         success: function(data){
           if(data.returnCode == 0) {
-            $("#DOM__livechatmessages").html(data.output);
+            $("#DOM__livechatmessages").append(data.output);
           }else{
             notify(data.returnCode);
           }
         }
     });
 }
+
+$(document).ready(function() {
+
+  setInterval("ophalen()", 5000);
+
+})

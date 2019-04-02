@@ -314,6 +314,7 @@ $outputString .= (" <a id=\"dom__btn--newCourse\" class=\"group__link\">
 
     <div id=\"DOM__livechat__body\" class=\"livechat__body\">
       <div id=\"DOM__livechatmessages\" class=\"livechat__body--messages\">
+
       </div>
 
       <form id=\"DOM__livechat__form\">
@@ -1030,9 +1031,10 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
         $userID = $_SESSION["UserID"];
         $groupID = $_SESSION["GroupID"];
         $messages = array();
+        $chatdate = '0';
 
-        $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.userID = ? ORDER BY chatSendtime desc limit 100;");
-        mysqli_stmt_bind_param($statement, "ii", $groupID, $userID);
+        $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime desc limit 100;");
+        mysqli_stmt_bind_param($statement, "ii", $groupID,$chatdate);
 
         if(!mysqli_stmt_execute($statement)) {
           $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
@@ -1046,9 +1048,10 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
                              array_push($messages, $message);
                          }
                          foreach ($messages as $message) {
-                           $outputString .= ("<div class=\"recvchat__message\">
-                                   <p>$message->chatMessage $message->nickname $message->chatSendtime </p>
+                           $outputString .= ("<div class=\"recvchat__message__body\">
+                                  <p class=\"recvchat__nickname\">$message->nickname</p><p class=\"recvchat__message\">$message->chatMessage</p><p class=\"recvchat__time\">$message->chatSendtime</p>
                                  </div>");
+
                          }
                        }else{
                              //$data->returnCode = 905;
