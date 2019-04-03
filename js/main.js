@@ -63,7 +63,7 @@ function course(courseID){
       data: {course:1,courseID:courseID},
       success: function(data){
         if(data.returnCode == 0) {
-          $("#groups-mainbox").append(data.output);
+          $("#groups-mainbox").html(data.output);
           loadDeleteButtons();
         }else{
           notify(data.returnCode);
