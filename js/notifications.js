@@ -71,6 +71,20 @@ function notify(returnCode) {
         clickToHide: true
       });
       break;
+    case 350:
+      $.notify("Incorrecte inlog gegevens!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 351:
+      $.notify("Incorrecte inlog gegevens!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
     case 401:
       $.notify("Er ging iets fout! #401", {
         style: "error",

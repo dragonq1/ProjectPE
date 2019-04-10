@@ -17,12 +17,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["loginBody"])) {
       <h1>Welkom bij PVSTS</h1>
       <p>Inloggen</p>
     </div>
-    <form action=\"#\" method=\"post\">
+    <form id=\"dom__form--login\">
           <div class=\"form-group body__loginbox--groups\">
-            <input type=\"email\" name=\"email\" class=\"input__login\" placeholder=\"e-mail\" required>
+            <input type=\"email\" name=\"email\" id=\"dom__inputLogin--email\" class=\"input__login\" placeholder=\"e-mail\">
           </div>
           <div class=\"form-group body__loginbox--groups\">
-            <input type=\"password\" name=\"password\" class=\"input__login\" placeholder=\"wachtwoord\" required>
+            <input type=\"password\" name=\"password\" id=\"dom__inputLogin--password\" class=\"input__login\" placeholder=\"wachtwoord\">
          </div>
           <a class=\"link__form--primary\" id=\"dom__link--reset\">Wachtwoord vergeten?</a>
          <input type=\"submit\" name=\"btnLogin\" value=\"Inloggen\" class=\"btn__form--primary btn btn__login\">
@@ -201,7 +201,53 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["passwordReset"])) &&
   echo json_encode($data);
   exit;
 }
+//
+// Inloggen
+//
 
+if(($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["login"])) && (isset($_POST["password"])) && (isset($_POST["email"]))) {
+    //JSON data
+    $data = new jsonData(0, "");
 
+    if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+      $data->returnCode = 402;
+      echo json_encode($data);
+      exit;
+    }
+
+    $email = $con->escape_string($_POST["email"]);
+    $password = $con->escape_string($_POST["password"]);
+
+    $statement = mysqli_prepare($con, "SELECT Password, UserID FROM users where Email = ?");
+    mysqli_stmt_bind_param($statement, "s", $email);
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+
+    $result = $statement->get_result();
+    if(mysqli_num_rows($result) == 1) {
+        while($row = mysqli_fetch_assoc($result)) {
+            $checkHash = $row["Password"];
+            $userID = $row["UserID"];
+        }
+
+        if(password_verify($_POST["password"], $checkHash)){
+            session_start();
+            $data->returnCode = 0;
+            echo json_encode($data);
+            exit;
+        }else{
+          $data->returnCode = 350;
+          echo json_encode($data);
+          exit;
+        }
+    }
+    $data->returnCode = 351;
+    echo json_encode($data);
+    exit;
+
+}
 
  ?>

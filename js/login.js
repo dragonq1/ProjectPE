@@ -19,12 +19,43 @@ function loadLogin() {
         $('#dom__link--reset').click(function() {
             loadPSReset();
         });
+        $('#dom__form--login').submit(function(event) {
+            event.preventDefault();
+            login();
+        });
       }else{
         notify(data.returnCode);
       }
 
     }
   })
+}
+
+//Inloggen
+function login() {
+  var emailField = $("#dom__inputLogin--email");
+  var passwordField = $("#dom__inputLogin--password");
+  var email = emailField.val();
+  var password = passwordField.val();
+
+  if(email != "" && password != "") {
+    $.ajax({
+      url:"../php/login.php",
+      type:"POST",
+      dataType:"json",
+      data: {login:1,password:password,email:email},
+      success: function(data){
+        if(data.returnCode == 0) {
+          window.location.replace("../home.php");
+        }else{
+          notify(data.returnCode);
+        }
+      }
+    })
+  }else{
+    notify(701);
+  }
+
 }
 
 //Wachtwoord vergeten box
