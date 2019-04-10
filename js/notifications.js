@@ -41,8 +41,56 @@ function notifiStyles() {
 }
 
 function notify(returnCode) {
-
   switch(returnCode) {
+    case 201:
+      $.notify("Een account met dat e-mail adres bestaat al!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 202:
+      $.notify("Een account met die nickname adres bestaat al!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 203:
+      $.notify("Wachtwoorden komen niet overeen!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 204:
+      $.notify("Registratie succesvol, bevestig uw account via e-mail!", {
+        style: "success",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 205:
+      $.notify("Deze registratie token is niet geldig!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 206:
+      $.notify("Uw account is bevestigd! U kan nu inloggen!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 207:
+      $.notify("Er ging iets fout! #207", {
+        style: "error",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
     case 301:
       $.notify("Wachtwoorden zijn niet hetzelfde!", {
         style: "warning",
@@ -80,6 +128,13 @@ function notify(returnCode) {
       break;
     case 351:
       $.notify("Incorrecte inlog gegevens!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 352:
+      $.notify("Account is nog niet geverifeerd! Kijk uw e-mail om uw account te bevestigen.", {
         style: "warning",
         autoHide: true,
         clickToHide: true

@@ -214,10 +214,25 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["login"])) && (isset(
       echo json_encode($data);
       exit;
     }
-
     $email = $con->escape_string($_POST["email"]);
     $password = $con->escape_string($_POST["password"]);
 
+    //Kijken of account bevestigd is
+    $statement = mysqli_prepare($con, "SELECT UserID FROM users where Email = ? AND verified = 1");
+    mysqli_stmt_bind_param($statement, "s", $email);
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+    $result = $statement->get_result();
+    if(mysqli_num_rows($result) == 0) {
+      $data->returnCode = 352;
+      echo json_encode($data);
+      exit;
+    }
+
+    //Account gegevens ophalen
     $statement = mysqli_prepare($con, "SELECT Password, UserID FROM users where Email = ?");
     mysqli_stmt_bind_param($statement, "s", $email);
     if(!mysqli_stmt_execute($statement)) {
@@ -232,17 +247,17 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["login"])) && (isset(
             $checkHash = $row["Password"];
             $userID = $row["UserID"];
         }
-
-        if(password_verify($_POST["password"], $checkHash)){
-            session_start();
-            $data->returnCode = 0;
-            echo json_encode($data);
-            exit;
-        }else{
-          $data->returnCode = 350;
+      if(password_verify($_POST["password"], $checkHash)){
+          session_start();
+          $_SESSION['UserID'] = $userID;
+          $data->returnCode = 0;
           echo json_encode($data);
           exit;
-        }
+      }else{
+        $data->returnCode = 350;
+        echo json_encode($data);
+        exit;
+      }
     }
     $data->returnCode = 351;
     echo json_encode($data);
