@@ -19,7 +19,6 @@
             mysqli_stmt_execute($statement);
           }catch(Exception $e) {
               $error = "Er ging iets fout! Probeer opnieuw!";
-              syslog(LOG_ALERT, "mysqli error on login page: ".$e);
               exit;
           }
 
@@ -48,39 +47,24 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
-    <title>ProjectNaam</title>
+    <?php include_once("php/header.php") ?>
     <link rel="stylesheet" href="/css/styledots.css">
+    <title>ProjectNaam</title>
+
   </head>
   <body class="dots__body">
     <div class="div__dots">
       <canvas class='connecting-dots' id="dots-canvas"></canvas>
     </div>
-        <div class="body_loginpage">
-         <div class="body__loginbox">
-          <div class="body__loginbox--title">
-            <h1>Welkom bij PVSTS</h1>
-            <p>Inloggen</p>
-          </div>
-            <form class="" action="index.php" method="post">
-                  <div class="form-group body__loginbox--groups">
-                    <input type="email" name="email" class="input__login" placeholder="e-mail" required>
-                  </div>
-                  <div class="form-group body__loginbox--groups">
-                    <input type="password" name="password" class="input__login" placeholder="wachtwoord" required>
-                 </div>
-                 <input type="submit" name="btnLogin" value="Inloggen" class="btn__form--primary btn btn__login">
-            </form>
-            <a href="registratie.php"><button value="Registreren" class="btn__form--primary btn btn__register">Registeren</button></a>
-            <?php if (isset($error)) {echo ("<p class=\"text__error\">$error</p>");} ?>
-         </div>
-       </div>
+    <div class="body_loginpage">
+      <div class="body__loginbox" id="dom__loginBox">
+      </div>
+    </div>
 
+  <?php include_once("php/footer.php") ?>
+  <script src="js/login.js"></script>
   <script src="js/dots.js"></script>
+
 
   </body>
 </html>
