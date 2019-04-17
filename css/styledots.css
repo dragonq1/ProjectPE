@@ -2,8 +2,6 @@ body{
     font-family: 'Open Sans', sans-serif;
 }
 
-
-
 .body_loginpage{
   display: flex;
   position: absolute;
@@ -31,17 +29,11 @@ body{
   width: 100%;
 }
 
-.body__loginbox a {
-  color: black;
-}
-
 .body__home{
   display: flex;
   justify-content: flex-start;
   width: 100%
 }
-
-
 
 .input__login {
   margin: auto;
@@ -78,19 +70,18 @@ body{
   background-color: transparent;
   color: white;
   transition: 0.3;
+  height: 43px;
+  margin: 0px 0px 5px 0px;
 }
 
 .btn__form--primary:hover{
   background-color: #2a69c9;
   color: white;
-
 }
 
-
-.btn__register{
-
-  margin-top: 5px;
-
+.link__form--primary {
+  color: #2a69c9 !important;
+  text-align: center;
 }
 
 .dots__body{

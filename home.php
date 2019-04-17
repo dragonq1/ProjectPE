@@ -244,7 +244,6 @@
   <script>
     window.onload=function() {
       home();
-      notifiStyles();
     };
   </script>
   <?php include_once("php/footer.php") ?>
