@@ -1024,6 +1024,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
   $data = new jsonData(0, "");
   $outputString = "";
 
+
 //Uitloggen indien niet geconnect
   if(!$con) {
     header("Location: ../home.php");
@@ -1031,10 +1032,17 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
         $userID = $_SESSION["UserID"];
         $groupID = $_SESSION["GroupID"];
         $messages = array();
-        $chatdate = '0';
+
+//Kijken als er al eerder een tijd van laatste chatmessage is bijgehouden. Indien niet op 0 zetten.
+        if(isset($_SESSION["LastMessageTime"])){
+          //Timestamp van het laatste opgehaald bericht aanwezig
+           }else{
+          //Nog geen berichten opgehaald
+          $_SESSION["LastMessageTime"] = 0;
+        }
 
         $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime desc limit 100;");
-        mysqli_stmt_bind_param($statement, "ii", $groupID,$chatdate);
+        mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
 
         if(!mysqli_stmt_execute($statement)) {
           $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
@@ -1047,10 +1055,16 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
                              $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
                              array_push($messages, $message);
                          }
+                         //Tijd van laatste message bijhouden voor ophalen messages volgende keer
+                         $_SESSION["LastMessageTime"] =$messages[0]->chatSendtime;
+
                          foreach ($messages as $message) {
+                           //newlines omzetten naar <br>
+                          $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
+
                            $outputString .= ("<div class=\"recvchat__message__body\">
-                                  <p class=\"recvchat__nickname\">$message->nickname</p><p class=\"recvchat__message\">$message->chatMessage</p><p class=\"recvchat__time\">$message->chatSendtime</p>
-                                 </div>");
+                                  <p class=\"recvchat__nickname\">$message->nickname</p><p class=\"recvchat__message\">$correctmessage</p><p class=\"recvchat__time\">$message->chatSendtime</p>
+                                </div>");
 
                          }
                        }else{
