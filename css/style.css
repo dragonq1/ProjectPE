@@ -697,6 +697,7 @@ border: 1px solid #2a69c9;
 height:70%;
 margin: 2%;
 overflow-y: scroll;
+overflow-x: hidden;
 }
 .livechat__body--input{
 height: 20%;
@@ -729,16 +730,19 @@ background-color: #2a69c9;
   color: #f2f2f2;
   background-color: #2a69c9;
   margin-left: 10px;
-  margin-top: 10px;
-  border-radius: 95px 95px 250px 25px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-radius: 25px 25px 25px 25px;
 /*-moz-border-radius: 129px 112px 200px 64px;
 -webkit-border-radius: 129px 112px 200px 64px;
 */}
 
+/* Wanneer tijd in chatmessage eigen paragraph had.
 .recvchat__time{
 font-size: 7px;
 margin-left: 2px;
 }
+*/
 
 .recvchat__nickname{
 font-size: 12px;
@@ -746,14 +750,13 @@ margin-left: 10px;
 font-weight:900;
 margin-top: 7%;
 margin-left: 9%;
+margin-bottom: 2px;
 }
 
 .recvchat__message{
-font-size: 10px;
-margin-left: 2px;
-padding-left: 2px;
+font-size: 12px;
+margin-left: 10px;
 display: block;
-margin-left: 2px;
 }
 
 /*EINDE CSS LIVECHAT*/

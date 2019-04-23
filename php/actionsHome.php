@@ -1041,7 +1041,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
           $_SESSION["LastMessageTime"] = 0;
         }
 
-        $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime desc limit 100;");
+        $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
         mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
 
         if(!mysqli_stmt_execute($statement)) {
@@ -1056,14 +1056,17 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
                              array_push($messages, $message);
                          }
                          //Tijd van laatste message bijhouden voor ophalen messages volgende keer
-                         $_SESSION["LastMessageTime"] =$messages[0]->chatSendtime;
+                             //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
+                         end($messages);
+                         $Lastarrayelement = key($messages);
+                         $_SESSION["LastMessageTime"] = $messages[$Lastarrayelement]->chatSendtime;
 
                          foreach ($messages as $message) {
                            //newlines omzetten naar <br>
-                          $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
+                           $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
 
                            $outputString .= ("<div class=\"recvchat__message__body\">
-                                  <p class=\"recvchat__nickname\">$message->nickname</p><p class=\"recvchat__message\">$correctmessage</p><p class=\"recvchat__time\">$message->chatSendtime</p>
+                                  <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
                                 </div>");
 
                          }
