@@ -1063,14 +1063,17 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
                          }
 
                          //Tijd van laatste message bijhouden voor ophalen messages volgende keer
-                         $_SESSION["LastMessageTime"] = $messages[0]->chatSendtime;
+                             //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
+                         end($messages);
+                         $Lastarrayelement = key($messages);
+                         $_SESSION["LastMessageTime"] = $messages[$Lastarrayelement]->chatSendtime;
 
                          foreach ($messages as $message) {
                            //newlines omzetten naar <br>
-                          $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
+                           $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
 
                            $outputString .= ("<div class=\"recvchat__message__body\">
-                                  <p class=\"recvchat__nickname\">$message->nickname</p><p class=\"recvchat__message\">$correctmessage</p><p class=\"recvchat__time\">$message->chatSendtime</p>
+                                  <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
                                 </div>");
 
                          }
