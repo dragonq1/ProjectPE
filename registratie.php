@@ -38,7 +38,7 @@
 
                   <p>Door een account te maken gaat u akkoord met de Terms Of Service.</p> <?php // TODO: TOS pagina toevoegen/linken ?>
 
-                  <div class="registratie__btn">
+                  <div>
                     <input class="registratie__btn" type="submit" value="Registreren" name="registratie__btn">
                   </div>
                   <div>

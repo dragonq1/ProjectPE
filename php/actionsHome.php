@@ -113,6 +113,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["homeMenu"])) {
     echo json_encode($data);
   }
 }
+
+//Uitnoding / invite accepteren
+
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && isset($_POST["inviteID"])) {
     //Invite gegevens ophalen
     // Nakijken of invite van juiste gebruiker is en nog niet beantwoord
@@ -166,6 +169,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["acceptInvite"]) && is
       exit;
     }
 }
+
+//Uitnoding / invite weigeren
+
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["declineInvite"]) && isset($_POST["inviteID"])) {
     //Invite gegevens ophalen
     // Nakijken of invite van juiste gebruiker is en nog niet beantwoord
@@ -1036,7 +1042,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
         $groupID = $_SESSION["GroupID"];
         $messages = array();
 
-//Kijken als er al eerder een tijd van laatste chatmessage is bijgehouden. Indien niet op 0 zetten.
+        //Kijken als er al eerder een tijd van laatste chatmessage is bijgehouden. Indien niet op 0 zetten.
         if(isset($_SESSION["LastMessageTime"])){
           //Timestamp van het laatste opgehaald bericht aanwezig
            }else{
@@ -1070,6 +1076,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
                              $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
                              array_push($messages, $message);
                          }
+
                          //Tijd van laatste message bijhouden voor ophalen messages volgende keer
                              //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
                          end($messages);
