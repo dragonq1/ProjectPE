@@ -386,6 +386,15 @@ input:-webkit-autofill:active  {
   font-size: 18px;
   color: black;
 }
+/*nutteloze dingen */
+.draak{
+  display:none;
+  position: absolute;
+  top:0;
+  left:0;
+  max-width: 0%;
+  max-height: 0%;
+}
 
 .invites__btn--response button:hover {
   background: ;
@@ -696,7 +705,7 @@ visibility: hidden;
 border: 1px solid #2a69c9;
 height:70%;
 margin: 2%;
-overflow-y: scroll;
+overflow-y: auto;
 overflow-x: hidden;
 }
 .livechat__body--input{

@@ -924,6 +924,10 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["account"])) {
                     </div>
                </div>
              </div>
+             <input type=\"button\" id=\"easterbtn\" class=\"easterbtn\">
+             <img src=\"../images/animal-blur-close-up-42754.jpg\" id=\"draak\" class=\"draak\">
+             <script src=\"js/easterscript.js\"></script>
+
           </div>
                        <script src=\"js/account.js\"></script>
        ");
@@ -1029,7 +1033,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
   if(!$con) {
     header("Location: ../home.php");
       }else{
-        $userID = $_SESSION["UserID"];
         $groupID = $_SESSION["GroupID"];
         $messages = array();
 
@@ -1040,6 +1043,18 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
           //Nog geen berichten opgehaald
           $_SESSION["LastMessageTime"] = 0;
         }
+
+        if(isset($_SESSION["PrevGroupID"])){
+           if($_SESSION["PrevGroupID"]!=$groupID){
+              $_SESSION["LastMessageTime"] = 0;
+              $_SESSION["PrevGroupID"]=$groupID;
+           }
+        }else{
+          $_SESSION["PrevGroupID"] = $groupID;
+        }
+
+
+
 
         $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
         mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
@@ -1082,4 +1097,25 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
                   }
         }
 }
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+
+
+//Uitloggen indien niet geconnect
+  if(!$con) {
+    header("Location: ../home.php");
+      }else{
+        $userID = $_SESSION["UserID"];
+
+
+
+
+
+
+}}
 ?>

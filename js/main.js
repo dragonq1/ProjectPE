@@ -196,3 +196,24 @@ function getGroupMembers(){
     }
   })
 }
+//forum inladen
+
+function forum() {
+  destroyModals();
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
+  $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {forum:1},
+    success: function(data){
+      if(data.returnCode == 0) {
+        $("#dom__interactive").html(data.output);
+      }else{
+        notify(data.returnCode);
+      }
+    }
+  })
+}

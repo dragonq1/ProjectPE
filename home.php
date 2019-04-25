@@ -55,6 +55,7 @@
               <ol>
                 <li><a onclick="home();">Home</a></li>
                 <li><a onclick="account();">Account</a></li>
+                <li><a onclick="forum();">Forum</a> </li>
               </ol>
             </div>
             <div class="div__line--white"></div>

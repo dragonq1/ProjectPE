@@ -67,10 +67,16 @@ function ophalen() {
           }
         }
     });
+    //var messagesdiv= document.getElementById("DOM__livechatmessages");
+    //messagesdiv.scrollTop = messagesdiv.scrollHeight;
+    $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
+
+
 }
 
 $(document).ready(function() {
 
+  ophalen();
   setInterval("ophalen()", 5000);
 
 })
