@@ -80,3 +80,9 @@ $(document).ready(function() {
   setInterval("ophalen()", 5000);
 
 })
+
+window.addEventListener("beforeunload", function(event) {
+  if(typeof logout === 'function') {
+    logout();
+  }
+});

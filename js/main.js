@@ -217,3 +217,19 @@ function forum() {
     }
   })
 }
+
+//Uitloggen
+function logout() {
+  $.ajax({
+    url:"../php/logout.php",
+    type:"POST",
+    dataType:"json",
+    success: function(data){
+      if(data.returnCode == 0) {
+        window.location.href = "../index.php";
+      }else{
+        notify(data.returnCode);
+      }
+    }
+  })
+}

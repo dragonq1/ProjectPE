@@ -3,9 +3,9 @@ html {
 }
 
 body{
-    font-family: 'Open Sans', sans-serif;
-    background-color: #f2f2f2;
-    height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f2f2f2;
+  height: 100%;
 }
 
 /* Algemene titels */
@@ -23,45 +23,93 @@ h3 {
 }
 
 
-/* .body_loginpage{
+/*Login box*/
+
+.body_loginpage{
   display: flex;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 1;
 }
 .body__loginbox{
   margin: auto;
-  padding-left: 7%;
-  padding-top: 3%;
-  padding-bottom: 3%;
-  padding-right: 7%;
   border-width: 1px;
   width: 300px;
+}
+
+.body__loginbox--title {
+  color: white;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .body__loginbox > form {
   margin: auto;
   padding-top: 2%;
+  width: 100%;
 }
 
- .input__login {
+.input__login {
   margin: auto;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   padding: 7px 5px 7px 5px;
-  border: none;
   font-size: 18px;
-  border-left: 0px;
-  border-right: 0px;
-  border-top: 0px;
   border-bottom: 1px;
+  border-color: white;
   border-style: solid;
+  width: 100%;
+  box-shadow: 0px 0px 10px #201049;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+
 }
 
 .input__login:focus {
   outline: none;
-} */
+}
+
+.text__error{
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  margin-top: 5px;
+}
+
+
+.btn__form--primary{
+  border: 1px solid #2a69c9;
+  border-radius: 2px;
+  text-align: center;
+  width: 100%;
+  background-color: transparent;
+  color: white;
+  transition: 0.3s;
+  height: 43px;
+  margin: 0px 0px 5px 0px;
+}
+
+.btn__form--primary:hover{
+  background-color: #2a69c9;
+  color: white;
+  cursor: pointer;
+}
+
+.link__form--primary {
+  color: #2a69c9 !important;
+  text-align: center;
+}
+
+.dots__body{
+  background-color: black;
+  transition: background-color 5000ms linear;
+}
+.dots__body:hover {
+  background-color: #000032;
+}
+
 
 /*Gele achtergrond van autofill weghalen*/
 input:-webkit-autofill,
@@ -86,24 +134,10 @@ input:-webkit-autofill:active  {
   border-radius: 0px;
   text-align: center;
   width: 100%;
-  background-color: #dddddd;
 }
-
-.btn__form--primary:hover{
-  background-color: #c1c1c1;
-  transition-delay: 0,5s;
-
-}
-
 
 .btn__register{
-
   margin-top: 5px;
-
-}
-
-.body__home{
-
 }
 
 .navbar__side{
@@ -196,7 +230,6 @@ input:-webkit-autofill:active  {
 }
 
 .body__home--boxes {
-  /* border: 1px solid #2a69c9; */
   box-shadow: 1px 2px 10px #808080;
   color: black;
   background-color: #ffffff;
@@ -676,62 +709,61 @@ padding-bottom: 15px;
 
 /*BEGIN CSS LIVECHAT*/
 .livechat__body--main{
-padding-bottom: 1%;
-position:fixed;
-bottom:0;
-right:0;
-/*Hide gedeelte live chat */
-height:7%;
+  padding-bottom: 1%;
+  position:fixed;
+  bottom:0;
+  right:0;
+  /*Hide gedeelte live chat */
+  height:7%;
 }
 .livechat__title{
-/* */
   height:15%;
   display: block;
 }
 
 .livechat__title--anchor{
-width:100%;
+  width:100%;
 }
 .livechat__body{
-
-height: 85%;
-/*Hide gedeelte live chat */
-display: none;
-visibility: hidden;
+  height: 85%;
+  /*Hide gedeelte live chat */
+  display: none;
+  visibility: hidden;
 }
 
 
 .livechat__body--messages {
-border: 1px solid #2a69c9;
-height:70%;
-margin: 2%;
-overflow-y: auto;
-overflow-x: hidden;
+  border: 1px solid #2a69c9;
+  height:70%;
+  margin: 2%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .livechat__body--input{
-height: 20%;
-/*border: 1px solid #2a69c9;
-*/margin-top: 2%;
-margin-left: 2%;
-margin-right: 2%;
-margin-bottom: 1%;
+  height: 20%;
+  /*border: 1px solid #2a69c9;
+  */margin-top: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-bottom: 1%;
+
 }
 
 .livechat__textinput{
-border: 1px solid #2a69c9;
-width: 100%;
-height: 100%;
-
+  border: 1px solid #2a69c9;
+  width: 100%;
+  height: 100%;
+  resize: none;
 }
 
 .livechat__submitbtn{
-margin-left: 2%;
-border: 1px solid #2a69c9;
-width:40%;
-float: left;
+  margin-left: 2%;
+  border: 1px solid #2a69c9;
+  width:40%;
+  float: left;
 }
 .livechat__submitbtn:hover{
-background-color: #2a69c9;
+  background-color: #2a69c9;
 }
 
 .recvchat__message__body{
@@ -754,18 +786,32 @@ margin-left: 2px;
 */
 
 .recvchat__nickname{
-font-size: 12px;
-margin-left: 10px;
-font-weight:900;
-margin-top: 7%;
-margin-left: 9%;
-margin-bottom: 2px;
+  font-size: 12px;
+  margin-left: 10px;
+  font-weight:900;
+  margin-top: 7%;
+  margin-left: 9%;
+  margin-bottom: 2px;
 }
 
 .recvchat__message{
-font-size: 12px;
-margin-left: 10px;
-display: block;
+  font-size: 12px;
+  margin-left: 10px;
+  display: block;
 }
 
 /*EINDE CSS LIVECHAT*/
+
+/*Wachtwoord reset*/
+.text__psReset p{
+  color: white;
+}
+
+.body__psReset {
+  position: absolute;
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0;
+  z-index: 1;
+}
