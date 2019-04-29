@@ -62,15 +62,12 @@ function ophalen() {
         success: function(data){
           if(data.returnCode == 0) {
             $("#DOM__livechatmessages").append(data.output);
+            $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
           }else{
             notify(data.returnCode);
           }
         }
     });
-    //var messagesdiv= document.getElementById("DOM__livechatmessages");
-    //messagesdiv.scrollTop = messagesdiv.scrollHeight;
-    $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
-
 
 }
 

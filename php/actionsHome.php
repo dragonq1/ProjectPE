@@ -1004,27 +1004,25 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
   $userID = $_SESSION["UserID"];
 
 //Uitloggen indien niet geconnect
-  if(!$con) {
-    header("Location: ../home.php");
-  }else{
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+    $livechatmessage = $con->reaL_escape_string($_POST["livechat__text"]);
+    $userID = $_SESSION["UserID"];
+    $groupID = $_SESSION["GroupID"];
 
-          $livechatmessage = $con->reaL_escape_string($_POST["livechat__text"]);
-          $userID = $_SESSION["UserID"];
-          $groupID = $_SESSION["GroupID"];
+    $statement = mysqli_prepare($con, "INSERT INTO chatMessages(`GroupID`,`userID`,`chatMessage`) VALUES (?,?,?);");
+    mysqli_stmt_bind_param($statement, "iis", $groupID, $userID, $livechatmessage);
 
-          $statement = mysqli_prepare($con, "INSERT INTO chatMessages(`GroupID`,`userID`,`chatMessage`) VALUES (?,?,?);");
-          mysqli_stmt_bind_param($statement, "iis", $groupID, $userID, $livechatmessage);
-
-          if(!mysqli_stmt_execute($statement)) {
-            $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
-            exit;
-          }else{
-
-
-               }
-
-       }
+    if(!mysqli_stmt_execute($statement)) {
+      $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
+      // TODO: Aparte error code hiervoor gebruiken.
+      exit;
+    }
 }
+
 
 //Live Chat ophalen berichten
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
@@ -1036,74 +1034,70 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
 
 
 //Uitloggen indien niet geconnect
-  if(!$con) {
-    header("Location: ../home.php");
-      }else{
-        $groupID = $_SESSION["GroupID"];
-        $messages = array();
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+  $groupID = $_SESSION["GroupID"];
+  $messages = array();
 
-        //Kijken als er al eerder een tijd van laatste chatmessage is bijgehouden. Indien niet op 0 zetten.
-        if(isset($_SESSION["LastMessageTime"])){
-          //Timestamp van het laatste opgehaald bericht aanwezig
-           }else{
-          //Nog geen berichten opgehaald
-          $_SESSION["LastMessageTime"] = 0;
-        }
-//kijken als groep veranderd is indien ja reset van LastmessageTime
-        if(isset($_SESSION["PrevGroupID"])){
-           if($_SESSION["PrevGroupID"]!=$groupID){
-              $_SESSION["LastMessageTime"] = 0;
-              $_SESSION["PrevGroupID"]=$groupID;
-           }
-        }else{
-          $_SESSION["PrevGroupID"] = $groupID;
-        }
+  //Kijken als er al eerder een tijd van laatste chatmessage is bijgehouden. Indien niet op 0 zetten.
+  if(isset($_SESSION["LastMessageTime"])){
+    //Timestamp van het laatste opgehaald bericht aanwezig
+  }else{
+    //Nog geen berichten opgehaald
+    $_SESSION["LastMessageTime"] = 0;
+  }
+  //kijken als groep veranderd is indien ja reset van LastmessageTime
+  if(isset($_SESSION["PrevGroupID"])){
+     if($_SESSION["PrevGroupID"]!=$groupID){
+        $_SESSION["LastMessageTime"] = 0;
+        $_SESSION["PrevGroupID"]=$groupID;
+     }
+  }else{
+    $_SESSION["PrevGroupID"] = $groupID;
+  }
 
+  $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
+  mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
 
+  if(!mysqli_stmt_execute($statement)) {
+    $data->returnCode = 401;
+    echo json_encode($data);
+    exit;
+  }
 
+   $result = $statement->get_result();
+    if(mysqli_num_rows($result) > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+        $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
+        array_push($messages, $message);
+    }
+           //Tijd van laatste message bijhouden voor ophalen messages volgende keer
+               //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
+    end($messages);
+    $Lastarrayelement = key($messages);
+    $_SESSION["LastMessageTime"] = $messages[$Lastarrayelement]->chatSendtime;
 
-        $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
-        mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
+    foreach ($messages as $message) {
+     //newlines omzetten naar <br>
+     $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
 
-        if(!mysqli_stmt_execute($statement)) {
-          $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
-          echo $_SESSION["errormsg"];
-          exit;
-              }else{
-                 $result = $statement->get_result();
-                 if(mysqli_num_rows($result) > 0) {
-                         while($row = mysqli_fetch_assoc($result)) {
-                             $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
-                             array_push($messages, $message);
-                         }
-
-                         //Tijd van laatste message bijhouden voor ophalen messages volgende keer
-                             //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
-                         end($messages);
-                         $Lastarrayelement = key($messages);
-                         $_SESSION["LastMessageTime"] = $messages[$Lastarrayelement]->chatSendtime;
-
-                         foreach ($messages as $message) {
-                           //newlines omzetten naar <br>
-                           $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
-
-                           $outputString .= ("<div class=\"recvchat__message__body\">
-                                  <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
-                                </div>");
-
-                         }
-                       }else{
-                             //$data->returnCode = 905;
-                             //echo json_encode($data);
-                             //exit;
-                       }
-                       $data->output = $outputString;
-                       echo json_encode($data);
-                       exit;
-                       echo("alert(\"test\")");
-                  }
-        }
+     $outputString .= ("<div class=\"recvchat__message__body\">
+            <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
+          </div>");
+    }
+    }else{
+         //$data->returnCode = 905;
+         //echo json_encode($data);
+         //exit;
+    }
+    $data->output = $outputString;
+    echo json_encode($data);
+    exit;
 }
+
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
   session_start();
@@ -1112,132 +1106,101 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
   $data = new jsonData(0, "");
   $outputString = "";
 
-
-//Uitloggen indien niet geconnect
-  if(!$con) {
-    header("Location: ../home.php");
-      }else{
-        $userID = $_SESSION["UserID"];
-}}
-//
-// Wachtwoord veranderen van account pagina
-//
-
-
-        $categories = array();
-
-        $statement = mysqli_prepare($con, "SELECT * from categories;");
-
-        if(!mysqli_stmt_execute($statement)) {
-          $_SESSION["errormsg"] = "Er ging iets fout bij het ophalen van de catogoriën!";
-          echo $_SESSION["errormsg"];
-          exit;
-              }else{
-                 $result = $statement->get_result();
-                 if(mysqli_num_rows($result) > 0) {
-                         while($row = mysqli_fetch_assoc($result)) {
-                             $category = $row["CatergoryName"];
-                             array_push($categories, $category);
-                         }
-
- $outputString .= ("
-      <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
-          <div id=\"DOM_forum_head\" class=\"forum__head\" >
-            <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
-            <hr class=\"forum__title__line\">
-          </div>
-
-          <div id=\"DOM_forum_container\" class=\"forum__container\" >
- ");
-
- foreach ($categories as $category) {
-   $outputString .= ("<a onclick=\"forum_subcat()\" class=\"DOM__forum_category group__link\">$category</a>");}
-
-
- $outputString .= ("
-          </div>
-
-          <div id=\"DOM_forum_footer\" class=\"forum__footer\">
-          </div>
-     </div>
-
-     <div id=\"\" class=\"forum__actions body__home--boxes\">
-       <div>
-        <h2>Acties</h2>
-       </div>
-       <div>
-
-       </div>
-     </div>
- ");
-
-}else{
-      //$data->returnCode = 905;
-      //echo json_encode($data);
-      //exit;
-}
-$data->output = $outputString;
-echo json_encode($data);
-exit;
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
   }
- }
-}
+  $categories = array();
+  $statement = mysqli_prepare($con, "SELECT * from categories;");
+  if(!mysqli_stmt_execute($statement)) {
+    $data->returnCode = 401;
+    echo json_encode($data);
+    exit;
+  }
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $category = $row["CatergoryName"];
+      array_push($categories, $category);
+    }
+    $outputString .= ("
+    <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+      <div id=\"DOM_forum_head\" class=\"forum__head\" >
+        <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+        <hr class=\"forum__title__line\">
+      </div>
+      <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+    foreach ($categories as $category) {
+    $outputString .= ("<a onclick=\"forum_subcat()\" class=\"DOM__forum_category group__link\">$category</a>");}
+    $outputString .= ("
+        </div>
+        <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+        </div>
+      </div>
+      <div id=\"\" class=\"forum__actions body__home--boxes\">
+      <div>
+        <h2>Acties</h2>
+      </div>
+      <div>
+      </div>
+      </div>
+   ");
+  }else{
+        //$data->returnCode = 905;
+        //echo json_encode($data);
+        //exit;
+  }
+    $data->output = $outputString;
+    echo json_encode($data);
+    exit;
+  }
 
 
 
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
   session_start();
-  $con = mysqli_connect($host, $user, $pass, $db);
   $userID = $_SESSION["UserID"];
   $data = new jsonData(0, "");
   $outputString = "";
 
 
 //Uitloggen indien niet geconnect
-  if(!$con) {
-    header("Location: ../home.php");
-      }else{
-        $userID = $_SESSION["UserID"];
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
 
-        $subcategories = array();
+    $subcategories = array();
+    $statement = mysqli_prepare($con, "SELECT SubCatergorieName FROM `subCatergories` left join categories on categories.CatergoryID =subCatergories.CatergorieID WHERE Categories.CatergoryName = ?;");
+    mysqli_stmt_bind_param($statement, "s", );
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+     $result = $statement->get_result();
+     if(mysqli_num_rows($result) > 0) {
+       while($row = mysqli_fetch_assoc($result)) {
+         $subcategory = $row["SuBCatergorieName"];
+         array_push($subcategories, $subcategory);
+       }
+      $outputString .= ("
+          <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+              <div id=\"DOM_forum_head\" class=\"forum__head\" >
+                <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+                <hr class=\"forum__title__line\">
+              </div>
+              <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+     foreach ($subcategories as $subcategory) {
 
-        $statement = mysqli_prepare($con, "SELECT SubCatergorieName FROM `subCatergories` left join categories on categories.CatergoryID =subCatergories.CatergorieID WHERE Categories.CatergoryName = ?;");
-        mysqli_stmt_bind_param($statement, "s", );
-        if(!mysqli_stmt_execute($statement)) {
-          $_SESSION["errormsg"] = "Er ging iets fout bij het ophalen van de catogoriën!";
-          echo $_SESSION["errormsg"];
-          exit;
-              }else{
-                 $result = $statement->get_result();
-                 if(mysqli_num_rows($result) > 0) {
-                         while($row = mysqli_fetch_assoc($result)) {
-                             $subcategory = $row["SuBCatergorieName"];
-                             array_push($subcategories, $subcategory);
-                         }
-
- $outputString .= ("
-      <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
-          <div id=\"DOM_forum_head\" class=\"forum__head\" >
-            <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
-            <hr class=\"forum__title__line\">
-          </div>
-
-          <div id=\"DOM_forum_container\" class=\"forum__container\" >
- ");
-
- foreach ($subcategories as $subcategory) {
-
-   $outputString .= ("<a onclick=\"\" class=\"DOM__forum_category group__link\">$subcategory</a>");}
-
-  $userID = $_SESSION["UserID"];
-
- $outputString .= ("
-          </div>
-
-          <div id=\"DOM_forum_footer\" class=\"forum__footer\">
-          </div>
-     </div>
-
+      $outputString .= ("<a onclick=\"\" class=\"DOM__forum_category group__link\">$subcategory</a>");}
+      $outputString .= ("
+              </div>
+              <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+              </div>
+         </div>
      <div id=\"\" class=\"forum__actions body__home--boxes\">
        <div>
         <h2>Acties</h2>
@@ -1247,7 +1210,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
        </div>
      </div>
  ");
-
 }else{
       //$data->returnCode = 905;
       //echo json_encode($data);
@@ -1256,14 +1218,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
 $data->output = $outputString;
 echo json_encode($data);
 exit;
-  }
- }
+
 }
 
 //
 // Wachtwoord veranderen van account pagina
 //
-
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["psChange"]) && isset($_POST["psOld"]) && isset($_POST["password1"]) && isset($_POST["password2"])) {
   session_start();
