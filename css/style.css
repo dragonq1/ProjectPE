@@ -392,8 +392,11 @@ input:-webkit-autofill:active  {
   position: absolute;
   top:0;
   left:0;
-  max-width: 0%;
-  max-height: 0%;
+  width: 0%;
+  height: 0%;
+}
+.easterbtn{
+opacity: 0.035;
 }
 
 .invites__btn--response button:hover {
@@ -769,3 +772,34 @@ display: block;
 }
 
 /*EINDE CSS LIVECHAT*/
+
+/*BEGIN CSS FORUM */
+.forum__body{
+width: 65%;
+float: left;
+margin-right: 2%;
+}
+.forum__title{
+  padding-top: 1%;
+  text-align: center;
+}
+.forum__title__line{
+  border-color: #2a69c9;
+}
+.forum__head{
+padding-right: 1%;
+}
+.forum__actions{
+float: left;
+width:25%;
+text-align: center;
+padding-right: 1%;
+}
+.DOM__forum_category{
+width:30%;
+height:5%;
+
+}
+
+
+/*EINDE CSS FORUM*/

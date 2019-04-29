@@ -1,17 +1,12 @@
 
-
-
-
-
 $(document).ready(function(){
 
 $("#easterbtn").click(function(){
-$("#draak").animate(
-{
-  maxHeight: "99%",
-  maxWidth: "150%"},2000,function(){$("#draak").hide()}
-}
-);
-
-
+  console.log("test");
+    $("#draak").animate(
+    {
+      height: "99%",
+      width: "150%",
+      display: "inherit"},2000,function(){$("#draak").hide()});
+    })
 });
