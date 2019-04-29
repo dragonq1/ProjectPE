@@ -66,7 +66,7 @@
             </div>
             <div class="div__line--white"></div>
             <p class="navbar__text--groups">Overige</p>
-            <a href="index.php">Uitloggen</a>
+            <a onclick="logout();">Uitloggen</a>
       </div>
       <div class="body__home--containers">
         <div class="home__title">

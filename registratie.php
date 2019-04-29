@@ -29,9 +29,9 @@
                   <label for="psw"><b>Paswoord</b></label>
                   <input type="password" placeholder="Wachtwoord" class="registratie__input" name="psw"  id="dom__inputReg--password1" required>
 
-                  <meter min="0" max="4" id="password_strength_meter"></meter>
-                  <p id="password_strength_text"> </p>
-                  <p id="password_cracktime"></p>
+                  <meter min="0" max="4" id="DOM_password_meter"></meter>
+                  <p id="DOM_password_strength_text"> </p>
+                  <p id="DOM_password_suggestions"></p>
 
                   <label for="psw_repeat"><b>Herhaal paswoord</b></label>
                   <input type="password" placeholder="Wachtwoord herhalen" class="registratie__input" name="psw_repeat"  id="dom__inputReg--password2" required>

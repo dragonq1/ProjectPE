@@ -1,6 +1,4 @@
 <?php
-
-
 //Nakijken of token nog geldig is
 if(isset($_GET["token"])) {
 
@@ -53,7 +51,6 @@ if(isset($_GET["token"])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php include_once("php/header.php") ?>
-    <link rel="stylesheet" href="css/styledots.css">
     <title>ProjectNaam</title>
   </head>
   <body class="dots__body">
@@ -69,10 +66,15 @@ if(isset($_GET["token"])) {
           <div class="form-group body__loginbox--groups">
             <input type="password" name="password" class="input__login" placeholder="Nieuw wachtwoord" id="dom__input--password1">
           </div>
+          <div class="text__psReset">
+            <meter min="0" max="4" id="dom__meter--sterkte"></meter>
+            <p id="dom__text--sterkte"> </p>
+            <p id="dom__suggesties"> </p>
+          </div>
           <div class="form-group body__loginbox--groups">
             <input type="password" name="password" class="input__login" placeholder="Nieuw wachtwoord herhalen" id="dom__input--password2">
          </div>
-         <input type="submit" name="btnLogin" value="Resetten" class="btn__form--primary btn__login">
+         <input type="submit" name="btnLogin" value="Resetten" class="btn__form--primary">
         </form>
       </div>
     </div>
