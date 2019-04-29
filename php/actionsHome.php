@@ -1049,7 +1049,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
           //Nog geen berichten opgehaald
           $_SESSION["LastMessageTime"] = 0;
         }
-
+//kijken als groep veranderd is indien ja reset van LastmessageTime
         if(isset($_SESSION["PrevGroupID"])){
            if($_SESSION["PrevGroupID"]!=$groupID){
               $_SESSION["LastMessageTime"] = 0;
@@ -1119,6 +1119,147 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
       }else{
         $userID = $_SESSION["UserID"];
 }}
+//
+// Wachtwoord veranderen van account pagina
+//
+
+
+        $categories = array();
+
+        $statement = mysqli_prepare($con, "SELECT * from categories;");
+
+        if(!mysqli_stmt_execute($statement)) {
+          $_SESSION["errormsg"] = "Er ging iets fout bij het ophalen van de catogoriën!";
+          echo $_SESSION["errormsg"];
+          exit;
+              }else{
+                 $result = $statement->get_result();
+                 if(mysqli_num_rows($result) > 0) {
+                         while($row = mysqli_fetch_assoc($result)) {
+                             $category = $row["CatergoryName"];
+                             array_push($categories, $category);
+                         }
+
+ $outputString .= ("
+      <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+          <div id=\"DOM_forum_head\" class=\"forum__head\" >
+            <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+            <hr class=\"forum__title__line\">
+          </div>
+
+          <div id=\"DOM_forum_container\" class=\"forum__container\" >
+ ");
+
+ foreach ($categories as $category) {
+   $outputString .= ("<a onclick=\"forum_subcat()\" class=\"DOM__forum_category group__link\">$category</a>");}
+
+
+ $outputString .= ("
+          </div>
+
+          <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+          </div>
+     </div>
+
+     <div id=\"\" class=\"forum__actions body__home--boxes\">
+       <div>
+        <h2>Acties</h2>
+       </div>
+       <div>
+
+       </div>
+     </div>
+ ");
+
+}else{
+      //$data->returnCode = 905;
+      //echo json_encode($data);
+      //exit;
+}
+$data->output = $outputString;
+echo json_encode($data);
+exit;
+  }
+ }
+}
+
+
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
+  session_start();
+  $con = mysqli_connect($host, $user, $pass, $db);
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+
+
+//Uitloggen indien niet geconnect
+  if(!$con) {
+    header("Location: ../home.php");
+      }else{
+        $userID = $_SESSION["UserID"];
+
+        $subcategories = array();
+
+        $statement = mysqli_prepare($con, "SELECT SubCatergorieName FROM `subCatergories` left join categories on categories.CatergoryID =subCatergories.CatergorieID WHERE Categories.CatergoryName = ?;");
+        mysqli_stmt_bind_param($statement, "s", );
+        if(!mysqli_stmt_execute($statement)) {
+          $_SESSION["errormsg"] = "Er ging iets fout bij het ophalen van de catogoriën!";
+          echo $_SESSION["errormsg"];
+          exit;
+              }else{
+                 $result = $statement->get_result();
+                 if(mysqli_num_rows($result) > 0) {
+                         while($row = mysqli_fetch_assoc($result)) {
+                             $subcategory = $row["SuBCatergorieName"];
+                             array_push($subcategories, $subcategory);
+                         }
+
+ $outputString .= ("
+      <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+          <div id=\"DOM_forum_head\" class=\"forum__head\" >
+            <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+            <hr class=\"forum__title__line\">
+          </div>
+
+          <div id=\"DOM_forum_container\" class=\"forum__container\" >
+ ");
+
+ foreach ($subcategories as $subcategory) {
+
+   $outputString .= ("<a onclick=\"\" class=\"DOM__forum_category group__link\">$subcategory</a>");}
+
+  $userID = $_SESSION["UserID"];
+
+ $outputString .= ("
+          </div>
+
+          <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+          </div>
+     </div>
+
+     <div id=\"\" class=\"forum__actions body__home--boxes\">
+       <div>
+        <h2>Acties</h2>
+       </div>
+       <div>
+
+       </div>
+     </div>
+ ");
+
+}else{
+      //$data->returnCode = 905;
+      //echo json_encode($data);
+      //exit;
+}
+$data->output = $outputString;
+echo json_encode($data);
+exit;
+  }
+ }
+}
+
 //
 // Wachtwoord veranderen van account pagina
 //
@@ -1194,5 +1335,4 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["psChange"]) && isset($_
         }
     }
 }
-
 ?>

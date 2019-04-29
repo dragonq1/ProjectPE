@@ -217,7 +217,26 @@ function forum() {
     }
   })
 }
-
+//subcategorien inladen
+function forum_subcat(){
+  destroyModals();
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
+  $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {forumsub:1},
+    success: function(data){
+      if(data.returnCode == 0) {
+        $("#dom__interactive").html(data.output);
+      }else{
+        notify(data.returnCode);
+      }
+    }
+  })
+}
 //Uitloggen
 function logout() {
   $.ajax({
