@@ -154,6 +154,34 @@ function notify(returnCode) {
         clickToHide: true
       });
       break;
+    case 450:
+      $.notify("Er ging iets fout bij het ophalen van account gegevens! #450", {
+        style: "error",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 451:
+      $.notify("Het oude wachtwoord is niet correct!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+      case 452:
+        $.notify("Wachtwoord herhalen is niet correct!", {
+          style: "warning",
+          autoHide: true,
+          clickToHide: true
+        });
+        break;
+      case 453:
+        $.notify("Wachtwoord veranderen gelukt!", {
+          style: "success",
+          autoHide: true,
+          clickToHide: true
+        });
+        break;
     case 501:
       $.notify("Er ging iets fout! #501", {
         style: "error",
@@ -241,6 +269,13 @@ function notify(returnCode) {
     case 702:
       $.notify("Er ging iets fout! #702", {
         style: "error",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
+    case 703:
+      $.notify("Wachtwoord herhalen is niet correct!", {
+        style: "warning",
         autoHide: true,
         clickToHide: true
       });

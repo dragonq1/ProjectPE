@@ -908,22 +908,22 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["account"])) {
 
                   <div class=\"col-sm-6\">
                     <div id=\"DOM_paswreset\" class=\"Account__paswreset\">
-                              <form action=\"php\account.php\" name=\"psw_resetform\" class=\"psw__resetform\" method=\"post\">
-                                  <label for=\"pswoud\"><b>Oud paswoord</b></label>
-                                  <input type=\"password\" placeholder=\"wachtwoordoud\" class=\"account__input\" name=\"pswoud\" id=\"pswoud\" required>
+                              <form id=\"DOM__form--psReset\" class=\"psw__resetform\" method=\"post\">
+                                  <label for=\"passwordOld\"><b>Oud paswoord</b></label>
+                                  <input type=\"password\" placeholder=\"wachtwoordoud\" class=\"account__input\" name=\"password\" id=\"passwordOld\">
 
-                                  <label for=\"psw\"><b>paswoord</b></label>
-                                  <input type=\"password\" placeholder=\"wachtwoord\" class=\"account__input\" name=\"psw\" id=\"DOM__psw\" required>
+                                  <label for=\"password1\"><b>paswoord</b></label>
+                                  <input type=\"password\" placeholder=\"wachtwoord\" class=\"account__input\" name=\"psw\" id=\"password1\">
 
                                   <meter min=\"0\" max=\"4\" id=\"password_strength_meter\"></meter>
                                   <p id=\"password_strength_text\"> </p>
-                                  <p id=\"password_cracktime\"></p>
+                                  <p id=\"password_suggestions\"></p>
 
-                                  <label for=\"psw_repeat\"><b>Herhaal paswoord</b></label>
-                                  <input type=\"password\" placeholder=\"wachtwoord herhalen\" class=\"account__input\" name=\"psw_repeat\" id=\"psw_repeat\" required>
+                                  <label for=\"password2\"><b>Herhaal paswoord</b></label>
+                                  <input type=\"password\" placeholder=\"wachtwoord herhalen\" class=\"account__input\" name=\"psw_repeat\" id=\"password2\">
 
                                   <div class=\"account__btn__body\">
-                                    <input class=\"account__btn\" type=\"submit\" value=\"Paswoord veranderen\" name=\"Account__btn\" id=\"account__button\" disabled>
+                                    <input class=\"account__btn\" type=\"submit\" value=\"Paswoord veranderen\" name=\"Account__btn\" id=\"account__button\">
                                   </div>
 
                              </form>
@@ -933,9 +933,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["account"])) {
              <input type=\"button\" id=\"easterbtn\" class=\"easterbtn\">
              <img src=\"../images/animal-blur-close-up-42754.jpg\" id=\"draak\" class=\"draak\">
              <script src=\"js/easterscript.js\"></script>
-
+              <script src=\"js/account.js\"></script>
           </div>
-                       <script src=\"js/account.js\"></script>
+
        ");
     }
 
@@ -1118,11 +1118,81 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
     header("Location: ../home.php");
       }else{
         $userID = $_SESSION["UserID"];
-
-
-
-
-
-
 }}
+//
+// Wachtwoord veranderen van account pagina
+//
+
+
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["psChange"]) && isset($_POST["psOld"]) && isset($_POST["password1"]) && isset($_POST["password2"])) {
+  session_start();
+  $data = new jsonData(0, "");
+
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+
+  $psOld = $con->real_escape_string($_POST['psOld']);
+  $password1 = $con->real_escape_string($_POST['password1']);
+  $password2 = $con->real_escape_string($_POST['password2']);
+
+  if (!isset($_SESSION["UserID"])) {
+    $data->returnCode = 702;
+    echo json_encode($data);
+    exit;
+  }
+
+  $userID = $_SESSION["UserID"];
+
+  //Account gegevens ophalen
+  $statement = mysqli_prepare($con,"SELECT Password FROM users where UserID = ?;");
+  mysqli_stmt_bind_param($statement,"i",$userID);
+  if(!mysqli_stmt_execute($statement)) {
+    $data->returnCode = 401;
+    echo json_encode($data);
+    exit;
+  }
+
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result)>=1) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $psw_ori = $row["Password"];
+     }
+  }else{
+    $data->returnCode = 450;
+    echo json_encode($data);
+    exit;
+  }
+
+  //Wachtwoord herhalen controleren
+  if($password1 != $password2) {
+    $data->returnCode = 452;
+    echo json_encode($data);
+    exit;
+  }
+
+  //Oud wachtwoord controleren
+  if(!password_verify($psOld,$psw_ori)) {
+    $data->returnCode = 451;
+    echo json_encode($data);
+    exit;
+  }else{
+        //Wachtwoord in database aanpassen
+        $pswHashed = password_hash($password1,PASSWORD_DEFAULT);
+        $statement = mysqli_prepare ($con, ("UPDATE users SET Password = ? WHERE UserID = ?;"));
+        mysqli_stmt_bind_param($statement, "si", $pswHashed, $userID);
+        if(!mysqli_stmt_execute($statement)) {
+          $data->returnCode = 401;
+          echo json_encode($data);
+          exit;
+        }else{
+          $data->returnCode = 0;
+          echo json_encode($data);
+          exit;
+        }
+    }
+}
+
 ?>

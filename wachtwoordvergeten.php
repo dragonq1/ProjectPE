@@ -58,7 +58,7 @@ if(isset($_GET["token"])) {
       <canvas class='connecting-dots' id="dots-canvas"></canvas>
     </div>
     <div class="body_loginpage">
-      <div class="body__loginbox" id="dom__loginBox">
+      <div class="body__passwordReset" id="dom__loginBox">
         <div class="body__loginbox--title">
           <h1>Wachtwoord resetten</h1>
         </div>
