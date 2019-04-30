@@ -1098,20 +1098,19 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
     exit;
 }
 
-
+   //Forum inladen
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
   session_start();
   $con = mysqli_connect($host, $user, $pass, $db);
   $userID = $_SESSION["UserID"];
   $data = new jsonData(0, "");
   $outputString = "";
-
+//Uitloggen indien niet geconnecteerd
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
     echo json_encode($data);
     exit;
   }
-  $categories = array();
   $statement = mysqli_prepare($con, "SELECT * from categories;");
   if(!mysqli_stmt_execute($statement)) {
     $data->returnCode = 401;
@@ -1119,20 +1118,22 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
     exit;
   }
   $result = $statement->get_result();
+
+  $outputString .= ("
+  <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+    <div id=\"DOM_forum_head\" class=\"forum__head\" >
+      <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+      <hr class=\"forum__title__line\">
+    </div>
+    <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+
   if(mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
-      $category = $row["CatergoryName"];
-      array_push($categories, $category);
+      $category = $row["CategoryName"];
+      $categoryID = $row["CategoryID"];
+      $outputString .= ("<a onclick=\"forum_subcat($categoryID)\" class=\"DOM__forum_category group__link\">$category</a>");
     }
-    $outputString .= ("
-    <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
-      <div id=\"DOM_forum_head\" class=\"forum__head\" >
-        <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
-        <hr class=\"forum__title__line\">
-      </div>
-      <div id=\"DOM_forum_container\" class=\"forum__container\" >");
-    foreach ($categories as $category) {
-    $outputString .= ("<a onclick=\"forum_subcat()\" class=\"DOM__forum_category group__link\">$category</a>");}
+
     $outputString .= ("
         </div>
         <div id=\"DOM_forum_footer\" class=\"forum__footer\">
@@ -1157,13 +1158,13 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
   }
 
 
-
-if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
+//Subcategorieen forum inladen
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])&& isset($_POST["catid"])) {
   session_start();
   $userID = $_SESSION["UserID"];
   $data = new jsonData(0, "");
   $outputString = "";
-
+  $catID = $_POST["catid"];
 
 //Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
@@ -1172,39 +1173,39 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
     exit;
   }
 
-    $subcategories = array();
-    $statement = mysqli_prepare($con, "SELECT SubCatergorieName FROM `subCatergories` left join categories on categories.CatergoryID =subCatergories.CatergorieID WHERE Categories.CatergoryName = ?;");
-    mysqli_stmt_bind_param($statement, "s", );
+    $statement = mysqli_prepare($con,"SELECT SubCategoryName,SubCategoryID FROM `subCategories` left join categories on categories.CategoryID =subCategories.CategoryID WHERE categories.CategoryID = ? ;");
+    mysqli_stmt_bind_param($statement, "i" ,$catID);
     if(!mysqli_stmt_execute($statement)) {
       $data->returnCode = 401;
       echo json_encode($data);
       exit;
     }
      $result = $statement->get_result();
+
+     $outputString .= ("
+         <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+             <div id=\"DOM_forum_head\" class=\"forum__head\" >
+               <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+               <hr class=\"forum__title__line\">
+             </div>
+             <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+
      if(mysqli_num_rows($result) > 0) {
        while($row = mysqli_fetch_assoc($result)) {
-         $subcategory = $row["SuBCatergorieName"];
-         array_push($subcategories, $subcategory);
+         $subcategory = $row["SubCategoryName"];
+         $subcategoryID = $row["SubCategoryID"];
+         $outputString .= ("<a onclick=\"forum_posts($subcategoryID)\" class=\"DOM__forum_category group__link\">$subcategory</a>");
        }
-      $outputString .= ("
-          <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
-              <div id=\"DOM_forum_head\" class=\"forum__head\" >
-                <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
-                <hr class=\"forum__title__line\">
-              </div>
-              <div id=\"DOM_forum_container\" class=\"forum__container\" >");
-     foreach ($subcategories as $subcategory) {
 
-      $outputString .= ("<a onclick=\"\" class=\"DOM__forum_category group__link\">$subcategory</a>");}
       $outputString .= ("
               </div>
               <div id=\"DOM_forum_footer\" class=\"forum__footer\">
               </div>
          </div>
      <div id=\"\" class=\"forum__actions body__home--boxes\">
-       <div>
-        <h2>Acties</h2>
-       </div>
+        <div>
+          <h2>Acties</h2>
+         </div>
        <div>
 
        </div>
@@ -1295,4 +1296,69 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["psChange"]) && isset($_
         }
     }
 }
+
+//Posts van een subcategorie inladen
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset($_POST["subcatid"])) {
+  session_start();
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+  $subcatID = $_POST["subcatid"];
+
+//Uitloggen indien niet geconnect
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+
+    $statement = mysqli_prepare($con,"SELECT FPostID,FPostTitle FROM `forumposts` left join subCategories on forumposts.SubCategoryID =forumposts.SubCategoryID WHERE subCategories.SubCategoryID = ? ;");
+    mysqli_stmt_bind_param($statement, "i" ,$subcatID);
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+     $result = $statement->get_result();
+
+     $outputString .= ("
+         <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+             <div id=\"DOM_forum_head\" class=\"forum__head\" >
+               <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+               <hr class=\"forum__title__line\">
+             </div>
+             <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+
+     if(mysqli_num_rows($result) > 0) {
+       while($row = mysqli_fetch_assoc($result)) {
+         $postTitle = $row["FPostTitle"];
+         $postID = $row["FPostID"];
+         $outputString .= ("<a onclick=\"load_posts($postID)\" class=\"DOM__forum_post group__link\">$postTitle</a>");
+       }
+
+      $outputString .= ("
+              </div>
+              <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+              </div>
+         </div>
+     <div id=\"\" class=\"forum__actions body__home--boxes\">
+        <div>
+          <h2>Acties</h2>
+         </div>
+       <div>
+
+       </div>
+     </div>
+ ");
+}else{
+      $data->returnCode = 905;
+      echo json_encode($data);
+      exit;
+}
+$data->output = $outputString;
+echo json_encode($data);
+exit;
+
+}
+
 ?>

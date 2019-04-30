@@ -218,7 +218,7 @@ function forum() {
   })
 }
 //subcategorien inladen
-function forum_subcat(){
+function forum_subcat(catid){
   destroyModals();
   if(typeof destroyCourseModals === "function"){
     destroyCourseModals();
@@ -227,7 +227,7 @@ function forum_subcat(){
     url:"../php/actionsHome.php",
     type:"POST",
     dataType:"json",
-    data: {forumsub:1},
+    data: {forumsub:1,catid:catid},
     success: function(data){
       if(data.returnCode == 0) {
         $("#dom__interactive").html(data.output);
@@ -246,6 +246,46 @@ function logout() {
     success: function(data){
       if(data.returnCode == 0) {
         window.location.href = "../index.php";
+      }else{
+        notify(data.returnCode);
+      }
+    }
+  })
+}
+//posts inladen
+function forum_posts(subcatid){
+  destroyModals();
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
+  $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {forumposts:1,subcatid:subcatid},
+    success: function(data){
+      if(data.returnCode == 0) {
+        $("#dom__interactive").html(data.output);
+      }else{
+        notify(data.returnCode);
+      }
+    }
+  })
+}
+//POST inladen
+function forum_posts(postID){
+  destroyModals();
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
+  $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {initpost:1,postid:postID},
+    success: function(data){
+      if(data.returnCode == 0) {
+        $("#dom__interactive").html(data.output);
       }else{
         notify(data.returnCode);
       }
