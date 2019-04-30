@@ -1303,7 +1303,6 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
   $data = new jsonData(0, "");
   $outputString = "";
   $subcatID = $_POST["subcatid"];
-
 //Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
@@ -1316,7 +1315,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
     if(!mysqli_stmt_execute($statement)) {
       $data->returnCode = 401;
       echo json_encode($data);
+
       exit;
+
     }
      $result = $statement->get_result();
 
@@ -1350,9 +1351,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
      </div>
  ");
 }else{
-      $data->returnCode = 905;
-      echo json_encode($data);
-      exit;
+    //  $data->returnCode = 905;
+    //  echo json_encode($data);
+    //  exit;
 }
 $data->output = $outputString;
 echo json_encode($data);
