@@ -996,12 +996,14 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["deleteFile"])  && is
 }
 
 
-
-//Live Chat
+//
+// Bericht versturen livechat
+//
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
   session_start();
-  $con = mysqli_connect($host, $user, $pass, $db);
   $userID = $_SESSION["UserID"];
+  $groupID = $_SESSION["GroupID"];
+  $data = new jsonData(0, "");
 
 //Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
@@ -1009,18 +1011,15 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
     echo json_encode($data);
     exit;
   }
-    $livechatmessage = $con->reaL_escape_string($_POST["livechat__text"]);
-    $userID = $_SESSION["UserID"];
-    $groupID = $_SESSION["GroupID"];
+  $livechatmessage = $con->reaL_escape_string($_POST["livechat__text"]);
 
-    $statement = mysqli_prepare($con, "INSERT INTO chatMessages(`GroupID`,`userID`,`chatMessage`) VALUES (?,?,?);");
-    mysqli_stmt_bind_param($statement, "iis", $groupID, $userID, $livechatmessage);
-
-    if(!mysqli_stmt_execute($statement)) {
-      $_SESSION["errormsg"] = "Er ging iets fout bij het verzenden van de chat!";
-      // TODO: Aparte error code hiervoor gebruiken.
-      exit;
-    }
+  $statement = mysqli_prepare($con, "INSERT INTO chatMessages(`GroupID`,`userID`,`chatMessage`) VALUES (?,?,?);");
+  mysqli_stmt_bind_param($statement, "iis", $groupID, $userID, $livechatmessage);
+  if(!mysqli_stmt_execute($statement)) {
+    $data->returnCode = 650;
+    echo json_encode($data);
+    exit;
+  }
 }
 
 
@@ -1174,7 +1173,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])) {
 
     $subcategories = array();
     $statement = mysqli_prepare($con, "SELECT SubCatergorieName FROM `subCatergories` left join categories on categories.CatergoryID =subCatergories.CatergorieID WHERE Categories.CatergoryName = ?;");
-    mysqli_stmt_bind_param($statement, "s", );
+    mysqli_stmt_bind_param($statement, "s");
     if(!mysqli_stmt_execute($statement)) {
       $data->returnCode = 401;
       echo json_encode($data);
