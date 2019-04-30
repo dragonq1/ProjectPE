@@ -252,6 +252,13 @@ function notify(returnCode) {
         clickToHide: true
       });
       break;
+    case 650:
+      $.notify("Fout bij versturen van bericht!", {
+        style: "warning",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
     case 700:
       $.notify("Je hebt niet genoeg rechten!", {
         style: "warning",

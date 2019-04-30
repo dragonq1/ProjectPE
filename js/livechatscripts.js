@@ -36,14 +36,17 @@ $("#DOM__livechat__form").submit(function(event) {
 event.preventDefault();
   // information to be sent to the server
   var livechatmessage = $('#DOM__livechat__text').val();
-
   $.ajax({
       type: 'POST',
       url: '../php/actionsHome.php',
       data: {livechat__text:livechatmessage},
-      dataType: "text",
+      dataType: "json",
       success: function(data){
-        //alert(data);
+        if(data.returnCode == 0) {
+          ophalen();
+        }else{
+          notify(data.returnCode);
+        }
       }
   });
   $('#DOM__livechat__text').val('');
@@ -53,7 +56,6 @@ event.preventDefault();
 
 
 function ophalen() {
-
     $.ajax({
         type:"POST",
         url:"../php/actionsHome.php",
@@ -68,7 +70,6 @@ function ophalen() {
           }
         }
     });
-
 }
 
 $(document).ready(function() {
