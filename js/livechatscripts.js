@@ -1,4 +1,4 @@
-
+var autoscroll = false, interval, btnAutscroll;
 function openchat(){
 var body = document.getElementById("DOM__livechat__body--main");
 var bodytitle = document.getElementById("DOM__livechat__title");
@@ -52,7 +52,15 @@ event.preventDefault();
   $('#DOM__livechat__text').val('');
 });
 
-
+function toggleAutoscroll() {
+  if(autoscroll) {
+    autoscroll = false;
+    btnAutscroll.removeClass('livechat__submitbtn--active');
+  }else{
+    btnAutscroll.addClass('livechat__submitbtn--active');
+    autoscroll = true;
+  }
+}
 
 
 function ophalen() {
@@ -64,7 +72,8 @@ function ophalen() {
         success: function(data){
           if(data.returnCode == 0) {
             $("#DOM__livechatmessages").append(data.output);
-            $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
+            if(autoscroll)
+              $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
           }else{
             notify(data.returnCode);
           }
@@ -73,10 +82,13 @@ function ophalen() {
 }
 
 $(document).ready(function() {
-
   ophalen();
-  setInterval("ophalen()", 5000);
-
+  interval = setInterval("ophalen()", 5000);
+  btnAutscroll = $('#DOM__livechat__autoscroll');
+  toggleAutoscroll();
+  btnAutscroll.on('click', function() {
+    toggleAutoscroll();
+  });
 })
 
 window.addEventListener("beforeunload", function(event) {
