@@ -82,11 +82,12 @@ class Member
 */
 class chatMessage{
 
-    function __construct($chatMessage, $chatSendtime , $Nickname)
+    function __construct($chatMessage, $chatSendtime , $Nickname, $UserID)
     {
       $this->chatMessage = $chatMessage;
       $this->chatSendtime = $chatSendtime;
       $this->nickname = $Nickname;
+      $this->userID = $UserID;
     }
 
 }

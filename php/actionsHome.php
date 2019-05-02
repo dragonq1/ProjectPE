@@ -332,9 +332,12 @@ $outputString .= (" <a id=\"dom__btn--newCourse\" class=\"group__link\">
             <input type=\"submit\" id=\"DOM__livechat__button\" name=\"livechat_btn\" value=\"Verzenden\" class=\"livechat__submitbtn\">
           </div>
          </form>
-      <div class=\"livechat__body--closechat\">
-        <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluit livechat\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
-      </div>
+         <div class=\"livechat__body--closechat\">
+           <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluiten\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
+         </div>
+         <div class=\"livechat__body--closechat\">
+           <input type=\"button\" id=\"DOM__livechat__autoscroll\" name=\"livechat_closebtn\" value=\"Autoscroll\" class=\"livechat__submitbtn\">
+         </div>
     </div>
   </div>
   <script src=\"js/livechatscripts.js\"></script>
@@ -1056,7 +1059,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
     $_SESSION["PrevGroupID"] = $groupID;
   }
 
-  $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
+  $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname, users.UserID from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
   mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
 
   if(!mysqli_stmt_execute($statement)) {
@@ -1068,7 +1071,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
    $result = $statement->get_result();
     if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
-        $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
+        $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"], $row["UserID"]);
         array_push($messages, $message);
     }
            //Tijd van laatste message bijhouden voor ophalen messages volgende keer
@@ -1081,9 +1084,15 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
      //newlines omzetten naar <br>
      $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
 
-     $outputString .= ("<div class=\"recvchat__message__body\">
-            <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
-          </div>");
+     if($message->userID == $userID) {
+       $outputString .= ("<div class=\"recvchat__message--body2\">
+              <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
+            </div>");
+     }else{
+       $outputString .= ("<div class=\"recvchat__message--body1\">
+              <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
+            </div>");
+     }
     }
     }else{
          //$data->returnCode = 905;
@@ -1395,7 +1404,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
 
 
 
-                                 
+
 
                                  <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
                                      <div id=\"DOM_forum_head\" class=\"forum__head\" >
