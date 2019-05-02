@@ -1395,7 +1395,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
 
 
 
-
+                                 
 
                                  <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
                                      <div id=\"DOM_forum_head\" class=\"forum__head\" >

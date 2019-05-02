@@ -239,7 +239,18 @@
     </div>
   </div>
 
-
+<!--modal nieuwe post aanmaken -->
+<div class="modal-box body__home--boxes animated slideDown faster" id="DOM__modal--newpost">
+  <div class="item__group--coloum width-100">
+      <div class="modal__title">
+        <h2>Geef een titel en daarna een omschrijving van het probleem.</h2>
+     </div>
+     <div class="modal__controls">
+       <input type="text" max="25">
+       <textarea maxlength="256" rows="4" cols="50"></textarea>
+     </div>
+  </div>
+</div>
 
   <script src="js/main.js"></script>
   <script>
