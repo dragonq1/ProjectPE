@@ -273,7 +273,7 @@ function forum_posts(subcatid){
   })
 }
 //POST inladen
-function forum_posts(postID){
+function load_post(postID){
   destroyModals();
   if(typeof destroyCourseModals === "function"){
     destroyCourseModals();
@@ -291,4 +291,25 @@ function forum_posts(postID){
       }
     }
   })
+
+
+setInterval(function(){
+
+  $.ajax({
+    url:"../php/actionsHome.php",
+    type:"POST",
+    dataType:"json",
+    data: {initanswer:1,postid:postID},
+    success: function(data){
+      if(data.returnCode == 0) {
+        $("#DOM__forum__useranswers").append(data.output);
+      }else{
+        notify(data.returnCode);
+      }
+    }
+    })
+
+    },10000);
+
+
 }

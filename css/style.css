@@ -835,9 +835,20 @@ text-align: center;
 padding-right: 1%;
 }
 .DOM__forum_category{
-width:30%;
-height:5%;
-
+width:100%;
+display: block;
+min-height:40px;
+max-height: 100px;
+min-width: 300px;
+text-align: center;
+}
+.DOM__forum_post{
+  width:100%;
+  display: block;
+  min-height:40px;
+  max-height: 100px;
+  min-width: 300px;
+  text-align: center;
 }
 
 

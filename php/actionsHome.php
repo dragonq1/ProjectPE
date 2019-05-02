@@ -1310,14 +1310,12 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
     exit;
   }
 
-    $statement = mysqli_prepare($con,"SELECT FPostID,FPostTitle FROM `forumposts` left join subCategories on forumposts.SubCategoryID =forumposts.SubCategoryID WHERE subCategories.SubCategoryID = ? ;");
+    $statement = mysqli_prepare($con,"SELECT FPostID,FPostTitle FROM `forumposts` left join subCategories on subCategories.SubCategoryID =forumposts.SubCategoryID WHERE subCategories.SubCategoryID = ? ;");
     mysqli_stmt_bind_param($statement, "i" ,$subcatID);
     if(!mysqli_stmt_execute($statement)) {
       $data->returnCode = 401;
       echo json_encode($data);
-
       exit;
-
     }
      $result = $statement->get_result();
 
@@ -1333,23 +1331,23 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
        while($row = mysqli_fetch_assoc($result)) {
          $postTitle = $row["FPostTitle"];
          $postID = $row["FPostID"];
-         $outputString .= ("<a onclick=\"load_posts($postID)\" class=\"DOM__forum_post group__link\">$postTitle</a>");
+         $outputString .= ("<a onclick=\"load_post($postID)\" class=\"DOM__forum_post group__link\">$postTitle</a>");
        }
 
       $outputString .= ("
-              </div>
-              <div id=\"DOM_forum_footer\" class=\"forum__footer\">
-              </div>
-         </div>
-     <div id=\"\" class=\"forum__actions body__home--boxes\">
-        <div>
-          <h2>Acties</h2>
-         </div>
-       <div>
+                  </div>
+                  <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+                  </div>
+             </div>
+         <div id=\"\" class=\"forum__actions body__home--boxes\">
+            <div>
+              <h2>Acties</h2>
+             </div>
+           <div>
 
-       </div>
-     </div>
- ");
+           </div>
+         </div>
+  ");
 }else{
     //  $data->returnCode = 905;
     //  echo json_encode($data);
@@ -1359,6 +1357,132 @@ $data->output = $outputString;
 echo json_encode($data);
 exit;
 
+}
+
+//Post inladen
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($_POST["postid"])) {
+  session_start();
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+  $postID = $_POST["postid"];
+//Uitloggen indien niet geconnect
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+
+    $statement = mysqli_prepare($con,"SELECT FPostID,FPostTitle,FPostMessage,FPostTimestamp,Nickname FROM `forumposts` left join users on users.UserID =forumposts.UserID WHERE forumposts.FPostID = ? AND users.userID = forumposts.userID;");
+    mysqli_stmt_bind_param($statement, "i" ,$postID);
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+     $result = $statement->get_result();
+
+
+     if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+       //post gedeelte
+         $posttitle = $row["FPostTitle"];
+         $postID = $row["FPostID"];
+         $postmessage =$row["FPostMessage"];
+         $posttimestamp = $row["FPostTimestamp"];
+         $postmaker = $row["Nickname"];
+         $outputString .= ("
+
+
+
+
+
+                                 <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+                                     <div id=\"DOM_forum_head\" class=\"forum__head\" >
+                                       <h2 id=\"DOM__forum_title\" class=\"forum__title\" >$posttitle</h2>
+                                       <hr class=\"forum__title__line\">
+                                     </div>
+                                     <div id=\"DOM_forum_container\" class=\"forum__container\" >
+
+                                     <div id=\"DOM__forum_userpost\" class=\"forum_userpost\">
+                                             <div class\"post__info\"><p>$postmaker  $posttimestamp</p></div><div class=\"post__message\">$postmessage</div>
+                                      </div>
+                                      <div id=\"DOM__forum__useranswers\" class=\"forum__useranswersdiv\"></div>
+
+
+                                          </div>
+                                          <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+                                          </div>
+                                     </div>
+                                 <div id=\"\" class=\"forum__actions body__home--boxes\">
+                                    <div>
+                                      <h2>Acties</h2>
+                                     </div>
+                                   <div>
+
+                                   </div>
+                                 </div>
+
+                    ");
+               }
+}else{
+    //  $data->returnCode = 905;
+    //  echo json_encode($data);
+    //  exit;
+}
+$data->output = $outputString;
+echo json_encode($data);
+exit;
+
+}
+
+//Antwoorden post inladen
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initanswer"])&& isset($_POST["postid"])) {
+  session_start();
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+  $postID = $_POST["postid"];
+//Uitloggen indien niet geconnect
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+
+    $statement = mysqli_prepare($con,"SELECT users.Nickname,FPostAnswerMessage,FPostAnswerTimestamp FROM `forumpostsAnswers` left join users on users.UserID = forumpostsAnswers.UserID WHERE forumpostsAnswers.FPostID = ? ORDER BY FPostAnswerTimestamp DESC;");
+    mysqli_stmt_bind_param($statement, "i" ,$postID);
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+     $result = $statement->get_result();
+
+
+     if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+       //post gedeelte
+         $postanswermessage =$row["FPostAnswerMessage"];
+         $postanswertimestamp = $row["FPostAnswerTimestamp"];
+         $postanswernick = $row["Nickname"];
+         $outputString .= ("
+
+                          <div id=\"DOM__forum__answer\" class=\"forum__answer\">
+                               <div class=\"forum__answer__head\"><p>$postanswernick $postanswertimestamp</p></div>
+                               <div class=\"forum__answer__message\">$postanswermessage</div>
+                          </div>
+
+                    ");
+               }
+}else{
+    //  $data->returnCode = 905;
+    //  echo json_encode($data);
+    //  exit;
+}
+$data->output = $outputString;
+echo json_encode($data);
+exit;
 }
 
 ?>
