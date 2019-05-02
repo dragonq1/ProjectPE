@@ -309,7 +309,7 @@ setInterval(function(){
     }
     })
 
-    },10000);
+  },5000); //tijd tussen ophalen nieuwe antwoorden
 
 
 }

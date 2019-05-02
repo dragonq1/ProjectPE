@@ -332,12 +332,9 @@ $outputString .= (" <a id=\"dom__btn--newCourse\" class=\"group__link\">
             <input type=\"submit\" id=\"DOM__livechat__button\" name=\"livechat_btn\" value=\"Verzenden\" class=\"livechat__submitbtn\">
           </div>
          </form>
-        <div class=\"livechat__body--closechat\">
-          <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluiten\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
-        </div>
-        <div class=\"livechat__body--closechat\">
-          <input type=\"button\" id=\"DOM__livechat__autoscroll\" name=\"livechat_closebtn\" value=\"Autoscroll\" class=\"livechat__submitbtn\">
-        </div>
+      <div class=\"livechat__body--closechat\">
+        <input type=\"button\" id=\"DOM__livechat__close\" name=\"livechat_closebtn\" value=\"Sluit livechat\" onclick=\"closechat()\" class=\"livechat__submitbtn\">
+      </div>
     </div>
   </div>
   <script src=\"js/livechatscripts.js\"></script>
@@ -1029,12 +1026,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["livechat__text"])) {
 //Live Chat ophalen berichten
 if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
   session_start();
-  $con = mysqli_connect($host, $user, $pass, $db);
   $userID = $_SESSION["UserID"];
   $data = new jsonData(0, "");
   $outputString = "";
 
-
+//Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
     echo json_encode($data);
@@ -1060,7 +1056,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
     $_SESSION["PrevGroupID"] = $groupID;
   }
 
-  $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname, users.UserID from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
+  $statement = mysqli_prepare($con, "SELECT chatMessages.chatMessage,chatMessages.chatSendtime,users.Nickname from chatMessages left join users on users.UserID = chatMessages.userID WHERE chatMessages.groupID = ? AND chatMessages.chatSendtime > ? ORDER BY chatSendtime asc limit 100;");
   mysqli_stmt_bind_param($statement, "is", $groupID,$_SESSION["LastMessageTime"]);
 
   if(!mysqli_stmt_execute($statement)) {
@@ -1072,11 +1068,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
    $result = $statement->get_result();
     if(mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
-        $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"], $row["UserID"]);
+        $message = new chatMessage($row["chatMessage"],$row["chatSendtime"],$row["Nickname"]);
         array_push($messages, $message);
     }
            //Tijd van laatste message bijhouden voor ophalen messages volgende keer
-            //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
+               //$_SESSION["LastMessageTime"] =$messages[0]->chatSendtime; OLD METHOD
     end($messages);
     $Lastarrayelement = key($messages);
     $_SESSION["LastMessageTime"] = $messages[$Lastarrayelement]->chatSendtime;
@@ -1085,15 +1081,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["pollchat"])) {
      //newlines omzetten naar <br>
      $correctmessage = str_replace('\n',"<br>",$message->chatMessage);
 
-      if($message->userID == $userID) {
-        $outputString .= ("<div class=\"recvchat__message--body2\">
-               <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
-             </div>");
-      }else{
-        $outputString .= ("<div class=\"recvchat__message--body1\">
-               <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
-             </div>");
-      }
+     $outputString .= ("<div class=\"recvchat__message__body\">
+            <p class=\"recvchat__nickname\">$message->nickname $message->chatSendtime</p><p class=\"recvchat__message\">$correctmessage</p>
+          </div>");
     }
     }else{
          //$data->returnCode = 905;
@@ -1352,7 +1342,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
               <h2>Acties</h2>
              </div>
            <div>
-
+           <div>
+           <input type=\"button\" id=\"DOM__new__post\" class=\"forum__controls__button\" value=\"Post aanmaken\" onclick=\"new__post($subcatID)\">
+           </div>
            </div>
          </div>
   ");
@@ -1412,8 +1404,8 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
                                      </div>
                                      <div id=\"DOM_forum_container\" class=\"forum__container\" >
 
-                                     <div id=\"DOM__forum_userpost\" class=\"forum_userpost\">
-                                             <div class\"post__info\"><p>$postmaker  $posttimestamp</p></div><div class=\"post__message\">$postmessage</div>
+                                     <div id=\"DOM__forum_userpost\" class=\"forum__userpost\">
+                                             <div ><p class\"post__info\">By $postmaker  Post created at: $posttimestamp</p></div><div class=\"post__message\"><p>$postmessage</p></div>
                                       </div>
                                       <div id=\"DOM__forum__useranswers\" class=\"forum__useranswersdiv\"></div>
 
@@ -1423,9 +1415,11 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
                                           </div>
                                      </div>
                                  <div id=\"\" class=\"forum__actions body__home--boxes\">
+
                                     <div>
                                       <h2>Acties</h2>
                                      </div>
+
                                    <div>
 
                                    </div>
@@ -1450,16 +1444,39 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initanswer"])&& isset
   $userID = $_SESSION["UserID"];
   $data = new jsonData(0, "");
   $outputString = "";
-  $postID = $_POST["postid"];
+
 //Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
     echo json_encode($data);
     exit;
   }
+$answers = array();
+$postID = $_POST["postid"];
 
-    $statement = mysqli_prepare($con,"SELECT users.Nickname,FPostAnswerMessage,FPostAnswerTimestamp FROM `forumpostsAnswers` left join users on users.UserID = forumpostsAnswers.UserID WHERE forumpostsAnswers.FPostID = ? ORDER BY FPostAnswerTimestamp DESC;");
-    mysqli_stmt_bind_param($statement, "i" ,$postID);
+
+  //Kijken als er al eerder een tijd van laatste postmessage is bijgehouden. Indien niet op 0 zetten.
+  if(isset($_SESSION["ForumLastAnswer"])){
+    //Timestamp van het laatste opgehaalde post aanwezig
+  }else{
+    //Nog geen nieuwe posts opgehaald
+    $_SESSION["ForumLastAnswer"] = 0;
+  }
+  //kijken als er van post is veranderd, indien ja reset van ForumLastAnswer
+  if(isset($_SESSION["PrevPostID"])){
+
+     if($_SESSION["PrevPostID"]!=$postID){
+
+        $_SESSION["ForumLastAnswer"] = 0;
+        $_SESSION["PrevPostID"]=$postID;
+     }
+  }else{
+    $_SESSION["PrevPostID"] = $postID;
+  }
+
+    $statement = mysqli_prepare($con,"SELECT users.Nickname,FPostAnswerMessage,FPostAnswerTimestamp FROM `forumpostsAnswers` left join users on users.UserID = forumpostsAnswers.UserID WHERE forumpostsAnswers.FPostID = ? AND FPostAnswerTimestamp > ? ORDER BY FPostAnswerTimestamp asc;");
+    mysqli_stmt_bind_param($statement, "is" ,$postID,$_SESSION["ForumLastAnswer"]);
+
     if(!mysqli_stmt_execute($statement)) {
       $data->returnCode = 401;
       echo json_encode($data);
@@ -1467,22 +1484,28 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initanswer"])&& isset
     }
      $result = $statement->get_result();
 
-
      if(mysqli_num_rows($result) > 0) {
         while($row = mysqli_fetch_assoc($result)) {
-       //post gedeelte
-         $postanswermessage =$row["FPostAnswerMessage"];
-         $postanswertimestamp = $row["FPostAnswerTimestamp"];
-         $postanswernick = $row["Nickname"];
+       $answer = new forumAnswer($row["FPostAnswerMessage"],$row["FPostAnswerTimestamp"],$row["Nickname"]);
+       array_push($answers, $answer);
+     }
+     end($answers);
+     $Lastarrayelement = key($answers);
+     $_SESSION["ForumLastAnswer"] = $answers[$Lastarrayelement]->FPostAnswerTimestamp;
+
+        foreach($answers as $answer ){
+
          $outputString .= ("
 
                           <div id=\"DOM__forum__answer\" class=\"forum__answer\">
-                               <div class=\"forum__answer__head\"><p>$postanswernick $postanswertimestamp</p></div>
-                               <div class=\"forum__answer__message\">$postanswermessage</div>
+                               <div class=\"forum__answer__head\"><p>By $answer->Nickname Answerd on:$answer->FPostAnswerTimestamp</p></div>
+                               <div class=\"forum__answer__message\">$answer->FPostAnswerMessage</div>
                           </div>
 
                     ");
-               }
+
+                  }
+
 }else{
     //  $data->returnCode = 905;
     //  echo json_encode($data);

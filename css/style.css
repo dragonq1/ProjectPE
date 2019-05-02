@@ -862,8 +862,58 @@ text-align: center;
   min-width: 300px;
   text-align: center;
 }
+.forum__userpost{
+width:80%;
+height:auto;
+/*border: 1px solid #2a69c9;
+*/margin-right: 2%;
+margin-left: 1%;
+margin-bottom: 10%;
+padding-bottom: 1%;
+padding-left: 1%;
+border-radius: 25px 25px 25px 25px;
+}
+.post__info{
+font-size: 14px;
+}
+.post__message{
+margin-top: 2%;
+}
+.forum__answer{
+  width:80%;
+  height: 20%;
+  border-bottom: solid;
+  border-color: #2a69c9;
+  border-width: 1px;
+  margin-top: 10%;
+  margin-bottom: 1%;
 
+}
+.forum__answer__head{
 
+}
+.forum__answer__message{
+margin-top: 1%;
+margin-bottom: 2%;
+}
+.forum__controls__button{
+  border: 1px solid #2a69c9;
+    border-radius: 2px;
+    text-align: center;
+    background-color: transparent;
+    color: black;
+    transition: 0.3s;
+    min-height: 40px;
+    height: auto;
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 5px;
+    display: block;
+}
+.forum__controls__button:hover{
+background-color: #2a69c9;
+color: white;
+}
 /*EINDE CSS FORUM*/
 /*Wachtwoord reset*/
 .text__psReset p{
