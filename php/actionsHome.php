@@ -1310,6 +1310,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
   $data = new jsonData(0, "");
   $outputString = "";
   $subcatID = $_POST["subcatid"];
+  $_SESSION["subcatid"]= $_POST["subcatid"];
 //Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
@@ -1344,7 +1345,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
       $outputString .= ("
                   </div>
                   <div id=\"DOM_forum_footer\" class=\"forum__footer\">
-                  </div>
+                  </div><script src=\"js/modalPost.js\"></script>
              </div>
          <div id=\"\" class=\"forum__actions body__home--boxes\">
             <div>
@@ -1352,7 +1353,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
              </div>
            <div>
            <div>
-           <input type=\"button\" id=\"DOM__new__post\" class=\"forum__controls__button\" value=\"Post aanmaken\" onclick=\"new__post($subcatID)\">
+           <input type=\"button\" id=\"DOM__new__post\" class=\"forum__controls__button\" value=\"Post aanmaken\">
            </div>
            </div>
          </div>
@@ -1375,6 +1376,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
   $data = new jsonData(0, "");
   $outputString = "";
   $postID = $_POST["postid"];
+  $_SESSION["postid"] = $_POST["postid"];
 //Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
@@ -1421,7 +1423,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
 
                                           </div>
                                           <div id=\"DOM_forum_footer\" class=\"forum__footer\">
-                                          </div>
+                                          </div><script src=\"js/modalAnswer.js\"></script>
                                      </div>
                                  <div id=\"\" class=\"forum__actions body__home--boxes\">
 
@@ -1430,7 +1432,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
                                      </div>
 
                                    <div>
-
+                                   <div>
+                                   <input type=\"button\" id=\"DOM__new__answer\" class=\"answer__controls__button\" value=\"Post antwoorden\">
+                                   </div>
                                    </div>
                                  </div>
 
@@ -1475,7 +1479,6 @@ $postID = $_POST["postid"];
   if(isset($_SESSION["PrevPostID"])){
 
      if($_SESSION["PrevPostID"]!=$postID){
-
         $_SESSION["ForumLastAnswer"] = 0;
         $_SESSION["PrevPostID"]=$postID;
      }
@@ -1507,7 +1510,7 @@ $postID = $_POST["postid"];
          $outputString .= ("
 
                           <div id=\"DOM__forum__answer\" class=\"forum__answer\">
-                               <div class=\"forum__answer__head\"><p>By $answer->Nickname Answerd on:$answer->FPostAnswerTimestamp</p></div>
+                               <div class=\"forum__answer__head\"><p>By $answer->Nickname Answered on:$answer->FPostAnswerTimestamp</p></div>
                                <div class=\"forum__answer__message\">$answer->FPostAnswerMessage</div>
                           </div>
 
@@ -1525,4 +1528,70 @@ echo json_encode($data);
 exit;
 }
 
+
+//post in database zetten
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["newpost"])&& isset($_POST["postmessage"])&& isset($_POST["posttitle"])) {
+  session_start();
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+  $subcatid = $_SESSION["subcatid"];
+
+//Uitloggen indien niet geconnect
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+
+$postmessage = $con->reaL_escape_string($_POST["postmessage"]);
+$posttitle = $con->reaL_escape_string($_POST["posttitle"]);
+
+    $statement = mysqli_prepare($con,"INSERT INTO `forumposts`(`SubCategoryID`, `UserID`, `FPostTitle`, `FPostMessage`) VALUES (?,?,?,?);");
+    mysqli_stmt_bind_param($statement, "iiss" ,$subcatid,$userID,$posttitle,$postmessage);
+
+    if(!mysqli_stmt_execute($statement)) {
+      //$data->returnCode =;
+      echo json_encode($data);
+      exit;
+    }else{
+      $data->returnCode =0;
+      echo json_encode($data);
+      exit;
+    }
+
+}
+
+//answer in database zetten
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["newanswer"])&& isset($_POST["answermessage"])) {
+  session_start();
+  $userID = $_SESSION["UserID"];
+  $data = new jsonData(0, "");
+  $outputString = "";
+  $postid = $_SESSION["postid"];
+
+//Uitloggen indien niet geconnect
+  if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+    $data->returnCode = 402;
+    echo json_encode($data);
+    exit;
+  }
+
+$answermessage = $con->reaL_escape_string($_POST["answermessage"]);
+
+
+    $statement = mysqli_prepare($con,"INSERT INTO `forumpostsAnswers`(`FPostID`, `UserID`, `FPostAnswerMessage`) VALUES (?,?,?);");
+    mysqli_stmt_bind_param($statement, "iis" ,$postid,$userID,$answermessage);
+
+    if(!mysqli_stmt_execute($statement)) {
+      //$data->returnCode =;
+      echo json_encode($data);
+      exit;
+    }else{
+      $data->returnCode =0;
+      echo json_encode($data);
+      exit;
+    }
+
+}
 ?>

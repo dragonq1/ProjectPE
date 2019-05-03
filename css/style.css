@@ -890,7 +890,7 @@ margin-top: 2%;
 
 }
 .forum__answer__head{
-
+margin-bottom: 2%;
 }
 .forum__answer__message{
 margin-top: 1%;
@@ -928,3 +928,60 @@ color: white;
   bottom: 0;
   z-index: 1;
 }
+/*CSS nieuwe post*/
+.new__post__title{
+display: block;
+width:500px !important;
+margin-left: 20%;
+}
+.newpost__message{
+display: block;
+margin-top: 20px;
+margin-bottom: 20px;
+}
+.submit__post{
+
+}
+.annuleer__post{
+
+}
+.newpost__modal{
+
+}
+.newpost__title__label{
+  color: white;
+}
+.newpost__wrapper{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+/*Einde CSS nieuwe post*/
+/*Begin css nieuw answer*/
+.answer__controls__button{
+  border: 1px solid #2a69c9;
+    border-radius: 2px;
+    text-align: center;
+    background-color: transparent;
+    color: black;
+    transition: 0.3s;
+    min-height: 40px;
+    height: auto;
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 5px;
+    display: block;
+}
+.answer__controls__button:hover{
+  background-color: #2a69c9;
+  color: white;
+}
+.newanswer__wrapper{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.newanswer__message{
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+/*EINDE CSS nieuw answer*/

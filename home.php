@@ -3,7 +3,7 @@
   <head>
     <?php include_once("php/header.php") ?>
   </head>
-  <body>
+  <body onbeforeunload="logout()">
   <?php
   session_start();
   if (!isset($_SESSION["UserID"])) {
@@ -240,14 +240,36 @@
   </div>
 
 <!--modal nieuwe post aanmaken -->
-<div class="modal-box body__home--boxes animated slideDown faster" id="DOM__modal--newpost">
+<div class="modal-box body__home--boxes animated slideInDown faster" id="DOM__modal--newpost">
   <div class="item__group--coloum width-100">
       <div class="modal__title">
-        <h2>Geef een titel en daarna een omschrijving van het probleem.</h2>
+        <h2>Geef een titel en daarna een omschrijving van uw vraag.</h2>
      </div>
-     <div class="modal__controls">
-       <input type="text" max="25">
-       <textarea maxlength="256" rows="4" cols="50"></textarea>
+     <div class="modal__controls newpost__modal">
+       <div class="newpost__wrapper">
+       <label for="DOM__modal__newposttitle" class="newpost__title__label">Titel</label>
+       <input type="text" max="25" id="DOM__modal__newposttitle" class="new__post__title">
+       <textarea maxlength="1020" rows="5" cols="100" id="DOM__modal__newpostmessage" class="newpost__message"></textarea>
+       <input type="button" value="Post" id="DOM__modal__submitpost" class="submit__post">
+       <input type="button" name="" value="Annuleren" id="DOM__modal__annuleerpost" class="annuleer__post">
+     </div>
+     </div>
+  </div>
+</div>
+
+<!--modal nieuwe antwoord aanmaken -->
+<div class="modal-box body__home--boxes animated slideInDown faster" id="DOM__modal--newanswer">
+  <div class="item__group--coloum width-100">
+      <div class="modal__title">
+        <h2>Geef uw antwoord.</h2>
+     </div>
+     <div class="modal__controls newanswer__modal">
+       <div class="newanswer__wrapper">
+        <label for="DOM__modal__newanswermessage"></label>
+        <textarea maxlength="1020" rows="5" cols="100" id="DOM__modal__newanswermessage" class="newanswer__message"></textarea>
+        <input type="button" value="Post" id="DOM__modal__submitanswer" class="submit__answer">
+        <input type="button" name="" value="Annuleren" id="DOM__modal__annuleeranswer" class="annuleer__answer">
+     </div>
      </div>
   </div>
 </div>
