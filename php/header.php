@@ -4,4 +4,5 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap/mdb.min.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
-  <title>ProjectNaam</title>
+  <link rel="icon" href="../images/logo-p.png">
+  <title>PVTS</title>

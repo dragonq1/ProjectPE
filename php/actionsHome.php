@@ -1179,6 +1179,25 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])&& isset($
     exit;
   }
 
+    //Naam Catergorie ophalen
+    $statement = mysqli_prepare($con,"SELECT c.CategoryName FROM categories c WHERE c.CategoryID = ?;");
+    mysqli_stmt_bind_param($statement, "i" ,$catID);
+    if(!mysqli_stmt_execute($statement)) {
+      $data->returnCode = 401;
+      echo json_encode($data);
+      exit;
+    }
+    $result = $statement->get_result();
+    if(mysqli_num_rows($result) > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+        $categoryName = $row["CategoryName"];
+      }
+    }else{
+      // TODO: Foutcode ingeven
+    }
+
+
+    //Subcatergorieën ophalen
     $statement = mysqli_prepare($con,"SELECT SubCategoryName,SubCategoryID FROM `subCategories` left join categories on categories.CategoryID =subCategories.CategoryID WHERE categories.CategoryID = ? ;");
     mysqli_stmt_bind_param($statement, "i" ,$catID);
     if(!mysqli_stmt_execute($statement)) {
@@ -1191,7 +1210,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])&& isset($
      $outputString .= ("
          <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
              <div id=\"DOM_forum_head\" class=\"forum__head\" >
-               <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
+               <h2 id=\"DOM__forum_title\" class=\"forum__title\">$categoryName</h2>
                <hr class=\"forum__title__line\">
              </div>
              <div id=\"DOM_forum_container\" class=\"forum__container\" >");
@@ -1311,58 +1330,74 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
   $outputString = "";
   $subcatID = $_POST["subcatid"];
   $_SESSION["subcatid"]= $_POST["subcatid"];
-//Uitloggen indien niet geconnect
   if(!$con = mysqli_connect($host, $user, $pass, $db)) {
     $data->returnCode = 402;
     echo json_encode($data);
     exit;
   }
-
-    $statement = mysqli_prepare($con,"SELECT FPostID,FPostTitle FROM `forumposts` left join subCategories on subCategories.SubCategoryID =forumposts.SubCategoryID WHERE subCategories.SubCategoryID = ? ;");
-    mysqli_stmt_bind_param($statement, "i" ,$subcatID);
-    if(!mysqli_stmt_execute($statement)) {
-      $data->returnCode = 401;
-      echo json_encode($data);
-      exit;
+  //Subcatergory naam ophalen
+  $statement = mysqli_prepare($con,"SELECT SubCategoryName FROM subCategories WHERE SubCategoryID = ?;");
+  mysqli_stmt_bind_param($statement, "i" ,$subcatID);
+  if(!mysqli_stmt_execute($statement)) {
+    $data->returnCode = 401;
+    echo json_encode($data);
+    exit;
+  }
+  $posts = array();
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $subcategoryName = $row["SubCategoryName"];
     }
-     $result = $statement->get_result();
+  }else{
+    // TODO: Foutcode ingeven
+  }
 
-     $outputString .= ("
-         <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
-             <div id=\"DOM_forum_head\" class=\"forum__head\" >
-               <h2 id=\"DOM__forum_title\" class=\"forum__title\" >Forum</h2>
-               <hr class=\"forum__title__line\">
-             </div>
-             <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+  //posts ophalen
+  $statement = mysqli_prepare($con,"SELECT FPostID,FPostTitle FROM forumposts fp left join subCategories sc on sc.SubCategoryID = fp.SubCategoryID WHERE sc.SubCategoryID = ?;");
+  mysqli_stmt_bind_param($statement, "i" ,$subcatID);
+  if(!mysqli_stmt_execute($statement)) {
+    $data->returnCode = 401;
+    echo json_encode($data);
+    exit;
+  }
+  $posts = array();
+  $result = $statement->get_result();
+  if(mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $post = new forumPost($row["FPostTitle"], $row["FPostID"]);
+      array_push($posts, $post);
+    }
+  }
 
-     if(mysqli_num_rows($result) > 0) {
-       while($row = mysqli_fetch_assoc($result)) {
-         $postTitle = $row["FPostTitle"];
-         $postID = $row["FPostID"];
-         $outputString .= ("<a onclick=\"load_post($postID)\" class=\"DOM__forum_post group__link\">$postTitle</a>");
-       }
-
-      $outputString .= ("
-                  </div>
-                  <div id=\"DOM_forum_footer\" class=\"forum__footer\">
-                  </div><script src=\"js/modalPost.js\"></script>
-             </div>
-         <div id=\"\" class=\"forum__actions body__home--boxes\">
-            <div>
-              <h2>Acties</h2>
-             </div>
-           <div>
-           <div>
-           <input type=\"button\" id=\"DOM__new__post\" class=\"forum__controls__button\" value=\"Post aanmaken\">
-           </div>
-           </div>
+ $outputString .= ("
+     <div id=\"DOM_forum_body\" class=\"forum__body body__home--boxes\">
+         <div id=\"DOM_forum_head\" class=\"forum__head\" >
+           <h2 id=\"DOM__forum_title\" class=\"forum__title\">$subcategoryName</h2>
+           <hr class=\"forum__title__line\">
          </div>
+      <div id=\"DOM_forum_container\" class=\"forum__container\" >");
+
+  foreach ($posts as $post) {
+    $outputString .= ("<a onclick=\"load_post($post->FPostID)\" class=\"DOM__forum_post group__link\">$post->FPostTitle</a>");
+  }
+
+  $outputString .= ("
+              </div>
+              <div id=\"DOM_forum_footer\" class=\"forum__footer\">
+              </div><script src=\"js/modalPost.js\"></script>
+         </div>
+     <div id=\"\" class=\"forum__actions body__home--boxes\">
+        <div>
+          <h2>Acties</h2>
+         </div>
+       <div>
+       <div>
+       <input type=\"button\" id=\"DOM__new__post\" class=\"forum__controls__button\" value=\"Post aanmaken\">
+       </div>
+       </div>
+     </div>
   ");
-}else{
-    //  $data->returnCode = 905;
-    //  echo json_encode($data);
-    //  exit;
-}
 $data->output = $outputString;
 echo json_encode($data);
 exit;

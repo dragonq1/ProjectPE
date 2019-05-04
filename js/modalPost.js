@@ -6,9 +6,6 @@ annuleerpostbtn =  document.getElementById('DOM__modal__annuleerpost');
 
 newpostbtn = document.getElementById('DOM__new__post');
 
-
-
-
 //New post modal
 newpostbtn.onclick = function(){
 modalForumPost.classList.remove("slideOutUp");
@@ -29,7 +26,6 @@ var ptitle = postTitle.value
 var pmessage = postmessage.value
 
 if(ptitle != "" && pmessage != ""){
-
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
@@ -41,11 +37,10 @@ if(ptitle != "" && pmessage != ""){
             modalForumPost.classList.add("slideOutUp");
             postTitle.value = "";
             postmessage.value = "";
-
-            destroyModals();
-            home();
+            clear();
+            //Forum posts herladen in huidige sub category
+            forum_posts(0, true);
             //notify(); code voor message dat post is aangemaakt
-
           }else{
             notify(data.returnCode);
           }
@@ -53,10 +48,10 @@ if(ptitle != "" && pmessage != ""){
     })
 
  }else{
-   //notify();
+   notify(701);
  }
 }
 
-function destroyModals() {
+function destroyPostModal() {
   modalForumPost.display = "none"
 }

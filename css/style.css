@@ -886,7 +886,7 @@ margin-top: 2%;
   margin-bottom: 10%;
   padding-bottom: 1%;
   padding-left: 1%;
-  border-top: 1px #2a69c9
+  border-top: 1px solid #2a69c9
 }
 .forum__answer__head{
   margin-bottom: 2%;
@@ -930,21 +930,14 @@ color: white;
   z-index: 1;
 }
 /*CSS nieuwe post*/
-.new__post__title{
-  display: block;
-  width:500px !important;
-  margin-left: 20%;
+.newpost__title{
+  display: inline-block;
+  width: 70% !important;
+  margin-bottom: 15px;
 }
 .newpost__message{
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.submit__post{
-
-}
-.annuleer__post{
-
+  display: inline-block;
+  width: 70%;
 }
 .newpost__modal{
 
@@ -955,6 +948,10 @@ color: white;
 .newpost__wrapper{
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.newpost__wrapper p{
+  color: #fff;
 }
 /*Einde CSS nieuwe post*/
 /*Begin css nieuw answer*/

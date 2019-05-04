@@ -1,4 +1,4 @@
-var intervalForum, intervalChat;
+var intervalForum, intervalChat, currentSubCat;
 
 function home(){
   clear();
@@ -235,8 +235,11 @@ function logout() {
   })
 }
 //posts inladen
-function forum_posts(subcatid){
+function forum_posts(subcatid, reload){
   clear();
+  if(reload == true) {
+    subcatid = currentSubCat;
+  }
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -245,6 +248,7 @@ function forum_posts(subcatid){
     success: function(data){
       if(data.returnCode == 0) {
         $("#dom__interactive").html(data.output);
+        currentSubCat = subcatid;
       }else{
         notify(data.returnCode);
       }
@@ -261,6 +265,9 @@ function clear() {
   }
   if(typeof destroyCourseModals === "function"){
     destroyCourseModals();
+  }
+  if(typeof destroyPostModal === "function"){
+    destroyPostModal();
   }
 }
 

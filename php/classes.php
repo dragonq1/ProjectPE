@@ -103,4 +103,14 @@ class forumAnswer{
 
 }
 
+class forumPost{
+
+    function __construct($FPostTitle, $FPostID)
+    {
+      $this->FPostTitle = $FPostTitle;
+      $this->FPostID = $FPostID;
+    }
+
+}
+
  ?>
