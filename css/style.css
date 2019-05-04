@@ -931,14 +931,14 @@ color: white;
 }
 /*CSS nieuwe post*/
 .new__post__title{
-display: block;
-width:500px !important;
-margin-left: 20%;
+  display: block;
+  width:500px !important;
+  margin-left: 20%;
 }
 .newpost__message{
-display: block;
-margin-top: 20px;
-margin-bottom: 20px;
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .submit__post{
 

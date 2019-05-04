@@ -32,10 +32,7 @@ function home(){
 }
 
 function courses(groupID){
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear();
   $.ajax({
       url:"../php/actionsHome.php",
       type:"POST",
@@ -52,10 +49,6 @@ function courses(groupID){
 }
 
 function course(courseID){
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
   $.ajax({
       url:"../php/actionsHome.php",
       type:"POST",
@@ -74,9 +67,7 @@ function course(courseID){
 
 //file uploader voor vakken
 function uploadFileCourse() {
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear();
   var file = $("#fileInputCourses").prop("files")[0];
   $("#fileInputCourses").val("");
   if(typeof file == "object") {
@@ -109,10 +100,7 @@ function uploadFileCourse() {
 
 //Functie om account in te laden
 function account() {
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear();
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -164,7 +152,7 @@ function declineInvite(inviteID){
 }
 
 function leaveGroup(){
-  destroyCourseModals();
+  clear();
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -199,10 +187,7 @@ function getGroupMembers(){
 //forum inladen
 
 function forum() {
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear();
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -219,10 +204,7 @@ function forum() {
 }
 //subcategorien inladen
 function forum_subcat(catid){
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear();
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -254,10 +236,7 @@ function logout() {
 }
 //posts inladen
 function forum_posts(subcatid){
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear();
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -324,10 +303,7 @@ function load_chat() {
 
 //POSTS inladen
 function load_post(postID){
-  destroyModals();
-  if(typeof destroyCourseModals === "function"){
-    destroyCourseModals();
-  }
+  clear()
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -336,6 +312,20 @@ function load_post(postID){
     success: function(data){
       if(data.returnCode == 0) {
         $("#dom__interactive").html(data.output);
+        //Antwoorden al 1 keer inladen
+        $.ajax({
+          url:"../php/actionsHome.php",
+          type:"POST",
+          dataType:"json",
+          data: {initanswer:1,postid:postID},
+          success: function(data){
+            if(data.returnCode == 0) {
+              $("#DOM__forum__useranswers").append(data.output);
+            }else{
+              notify(data.returnCode);
+            }
+          }
+          });
       }else{
         notify(data.returnCode);
       }

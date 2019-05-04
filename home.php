@@ -245,13 +245,15 @@
       <div class="modal__title">
         <h2>Geef een titel en daarna een omschrijving van uw vraag.</h2>
      </div>
-     <div class="modal__controls newpost__modal">
+     <div class="newpost__modal">
        <div class="newpost__wrapper">
        <label for="DOM__modal__newposttitle" class="newpost__title__label">Titel</label>
-       <input type="text" max="25" id="DOM__modal__newposttitle" class="new__post__title">
+       <input type="text" max="25" id="DOM__modal__newposttitle" class="input__group">
        <textarea maxlength="1020" rows="5" cols="100" id="DOM__modal__newpostmessage" class="newpost__message"></textarea>
-       <input type="button" value="Post" id="DOM__modal__submitpost" class="submit__post">
-       <input type="button" name="" value="Annuleren" id="DOM__modal__annuleerpost" class="annuleer__post">
+      <div class="modal__controls">
+        <input type="button" value="Post" id="DOM__modal__submitpost" class="submit__post">
+        <input type="button" name="" value="Annuleren" id="DOM__modal__annuleerpost" class="annuleer__post">
+      </div>
      </div>
      </div>
   </div>
