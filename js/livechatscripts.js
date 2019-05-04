@@ -1,4 +1,6 @@
 var autoscroll = false, interval, btnAutscroll;
+
+//Chatbox openen
 function openchat(){
 var body = document.getElementById("DOM__livechat__body--main");
 var bodytitle = document.getElementById("DOM__livechat__title");
@@ -63,33 +65,14 @@ function toggleAutoscroll() {
 }
 
 
-function ophalen() {
-    $.ajax({
-        type:"POST",
-        url:"../php/actionsHome.php",
-        dataType:"json",
-        data:{pollchat:1},
-        success: function(data){
-          if(data.returnCode == 0) {
-            $("#DOM__livechatmessages").append(data.output);
-            if(autoscroll)
-              $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
-          }else{
-            notify(data.returnCode);
-          }
-        }
-    });
-}
-
 $(document).ready(function() {
-  ophalen();
-  interval = setInterval("ophalen()", 5000);
+  load_chat();
   btnAutscroll = $('#DOM__livechat__autoscroll');
   toggleAutoscroll();
   btnAutscroll.on('click', function() {
     toggleAutoscroll();
   });
-})
+});
 
 window.addEventListener("beforeunload", function(event) {
   if(typeof logout === 'function') {

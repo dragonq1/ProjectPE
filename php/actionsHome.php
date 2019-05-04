@@ -1416,7 +1416,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
                                      <div id=\"DOM_forum_container\" class=\"forum__container\" >
 
                                      <div id=\"DOM__forum_userpost\" class=\"forum__userpost\">
-                                             <div ><p class\"post__info\">By $postmaker  Post created at: $posttimestamp</p></div><div class=\"post__message\"><p>$postmessage</p></div>
+                                             <div ><p class\"post__info\">Door $postmaker aangemaakt op: $posttimestamp</p></div><div class=\"post__message\"><p>$postmessage</p></div>
                                       </div>
                                       <div id=\"DOM__forum__useranswers\" class=\"forum__useranswersdiv\"></div>
 
@@ -1510,14 +1510,11 @@ $postID = $_POST["postid"];
          $outputString .= ("
 
                           <div id=\"DOM__forum__answer\" class=\"forum__answer\">
-                               <div class=\"forum__answer__head\"><p>By $answer->Nickname Answered on:$answer->FPostAnswerTimestamp</p></div>
-                               <div class=\"forum__answer__message\">$answer->FPostAnswerMessage</div>
+                               <div class=\"forum__answer__head\"><p>Door $answer->Nickname beantwoord op:$answer->FPostAnswerTimestamp</p></div>
+                               <div class=\"forum__answer__message\"><p>$answer->FPostAnswerMessage</p></div>
                           </div>
-
                     ");
-
                   }
-
 }else{
     //  $data->returnCode = 905;
     //  echo json_encode($data);

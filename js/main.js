@@ -1,7 +1,7 @@
+var intervalForum, intervalChat;
+
 function home(){
-if(typeof destroyCourseModals === "function"){
-  destroyCourseModals();
-}
+  clear();
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -272,7 +272,57 @@ function forum_posts(subcatid){
     }
   })
 }
-//POST inladen
+
+//Alle modals + intervals clearen
+function clear() {
+  clearInterval(intervalForum);
+  clearInterval(intervalChat)
+  if(typeof destroyModals === "function") {
+    destroyModals();
+  }
+  if(typeof destroyCourseModals === "function"){
+    destroyCourseModals();
+  }
+}
+
+//Chat berichten inladen
+function load_chat() {
+    $.ajax({
+        type:"POST",
+        url:"../php/actionsHome.php",
+        dataType:"json",
+        data:{pollchat:1},
+        success: function(data){
+          if(data.returnCode == 0) {
+            $("#DOM__livechatmessages").append(data.output);
+            if(autoscroll)
+              $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
+          }else{
+            notify(data.returnCode);
+          }
+        }
+    });
+
+    intervalChat = setInterval(function() {
+      $.ajax({
+          type:"POST",
+          url:"../php/actionsHome.php",
+          dataType:"json",
+          data:{pollchat:1},
+          success: function(data){
+            if(data.returnCode == 0) {
+              $("#DOM__livechatmessages").append(data.output);
+              if(autoscroll)
+                $("#DOM__livechatmessages").animate({scrollTop:$('#DOM__livechatmessages').prop("scrollHeight")},500);
+            }else{
+              notify(data.returnCode);
+            }
+          }
+      });
+    }, 5000);
+}
+
+//POSTS inladen
 function load_post(postID){
   destroyModals();
   if(typeof destroyCourseModals === "function"){
@@ -293,8 +343,7 @@ function load_post(postID){
   })
 
 
-setInterval(function(){
-
+intervalForum = setInterval(function(){
   $.ajax({
     url:"../php/actionsHome.php",
     type:"POST",
@@ -310,6 +359,4 @@ setInterval(function(){
     })
 
   },5000); //tijd tussen ophalen nieuwe antwoorden
-
-
 }

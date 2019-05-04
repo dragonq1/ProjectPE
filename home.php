@@ -266,7 +266,7 @@
      <div class="modal__controls newanswer__modal">
        <div class="newanswer__wrapper">
         <label for="DOM__modal__newanswermessage"></label>
-        <textarea maxlength="1020" rows="5" cols="100" id="DOM__modal__newanswermessage" class="newanswer__message"></textarea>
+        <textarea maxlength="1020" id="DOM__modal__newanswermessage" class="newanswer__message"></textarea>
         <input type="button" value="Post" id="DOM__modal__submitanswer" class="submit__answer">
         <input type="button" name="" value="Annuleren" id="DOM__modal__annuleeranswer" class="annuleer__answer">
      </div>

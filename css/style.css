@@ -863,15 +863,14 @@ text-align: center;
   text-align: center;
 }
 .forum__userpost{
-width:80%;
-height:auto;
-/*border: 1px solid #2a69c9;
-*/margin-right: 2%;
-margin-left: 1%;
-margin-bottom: 10%;
-padding-bottom: 1%;
-padding-left: 1%;
-border-radius: 25px 25px 25px 25px;
+  width:80%;
+  height:auto;
+  margin-right: 2%;
+  margin-left: 1%;
+  margin-bottom: 10%;
+  padding-bottom: 1%;
+  padding-left: 1%;
+  word-wrap: break-word;
 }
 .post__info{
 font-size: 14px;
@@ -881,34 +880,36 @@ margin-top: 2%;
 }
 .forum__answer{
   width:80%;
-  height: 20%;
-  border-bottom: solid;
-  border-color: #2a69c9;
-  border-width: 1px;
-  margin-top: 10%;
-  margin-bottom: 1%;
-
+  height:auto;
+  margin-right: 2%;
+  margin-left: 1%;
+  margin-bottom: 10%;
+  padding-bottom: 1%;
+  padding-left: 1%;
+  border-top: 1px #2a69c9
 }
 .forum__answer__head{
-margin-bottom: 2%;
+  margin-bottom: 2%;
 }
 .forum__answer__message{
-margin-top: 1%;
-margin-bottom: 2%;
+  margin-top: 1%;
+  margin-bottom: 2%;
+  height: auto;
+  word-wrap: break-word;
 }
 .forum__controls__button{
   border: 1px solid #2a69c9;
-    border-radius: 2px;
-    text-align: center;
-    background-color: transparent;
-    color: black;
-    transition: 0.3s;
-    min-height: 40px;
-    height: auto;
-    width: 100%;
-    font-size: 20px;
-    margin-bottom: 5px;
-    display: block;
+  border-radius: 2px;
+  text-align: center;
+  background-color: transparent;
+  color: black;
+  transition: 0.3s;
+  min-height: 40px;
+  height: auto;
+  width: 100%;
+  font-size: 20px;
+  margin-bottom: 5px;
+  display: block;
 }
 .forum__controls__button:hover{
 background-color: #2a69c9;
@@ -983,5 +984,9 @@ margin-bottom: 20px;
   display: block;
   margin-top: 20px;
   margin-bottom: 20px;
+  width: 100%;
+  height: 100px;
+  resize: none;
 }
+
 /*EINDE CSS nieuw answer*/

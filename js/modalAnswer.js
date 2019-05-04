@@ -36,10 +36,8 @@ if(answermessage != ""){
             modalpostanswer.classList.remove("slideInDown");
             modalpostanswer.classList.add("slideOutUp");
             answermsg.value = "";
-
             destroyModals();
             //notify(); code voor message dat post is aangemaakt
-
           }else{
             notify(data.returnCode);
           }
