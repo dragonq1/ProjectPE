@@ -1556,9 +1556,9 @@ $postID = $_POST["postid"];
                     ");
                   }
 }else{
-      $data->returnCode = 756;
-      echo json_encode($data);
-      exit;
+    //  $data->returnCode = 756; 
+    //  echo json_encode($data);
+    //  exit;
 }
 $data->output = $outputString;
 echo json_encode($data);

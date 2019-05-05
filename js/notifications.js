@@ -315,8 +315,14 @@ function notify(returnCode) {
       clickToHide:true
     });
     break;
+    case 755:
+    $.notify("Er ging iets fout #755", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
     case 756:
-    $.notify("Er ging iets fout #756", {
+    $.notify("Er zijn geen nieuwe antwoorden #755", {
       style:"error",
       autoHide:true,
       clickToHide:true
