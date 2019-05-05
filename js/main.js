@@ -269,6 +269,21 @@ function clear() {
   if(typeof destroyPostModal === "function"){
     destroyPostModal();
   }
+  //Resetten van de session variabelen
+  $.ajax({
+      type:"POST",
+      url:"../php/actionsHome.php",
+      dataType:"json",
+      data:{resetcf:1},
+      success: function(data){
+        if(data.returnCode == 0) {
+
+        }else{
+          notify(data.returnCode);
+        }
+      }
+  });
+
 }
 
 //Chat berichten inladen

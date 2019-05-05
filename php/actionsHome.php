@@ -1556,7 +1556,7 @@ $postID = $_POST["postid"];
                     ");
                   }
 }else{
-    //  $data->returnCode = 756; 
+    //  $data->returnCode = 756;
     //  echo json_encode($data);
     //  exit;
 }
@@ -1629,6 +1629,21 @@ $answermessage = $con->reaL_escape_string($_POST["answermessage"]);
       echo json_encode($data);
       exit;
     }
+
+}
+
+if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["resetcf"])) {
+  session_start();
+
+  $data = new jsonData(0, "");
+//Verwijderen van de laatste message en antwoord tijden
+ unset($_SESSION['ForumLastAnswer']);
+ unset($_SESSION['LastMessageTime']);
+
+
+ $data->returnCode =0;
+ echo json_encode($data);
+ exit;
 
 }
 ?>
