@@ -1,65 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
-<head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <?php include_once("php/header.php") ?>
+    <title>ProjectNaam</title>
 
-<?php include_once("php/header.php") ?>
-
-</head>
-<body>
-    <div class="body_loginpage">
-        <div class="body__loginbox">
-          <p class="text__title--center">Inloggen</p>
-            <form class="" action="index.php" method="post">
-                <div class="form-group body__loginbox--groups">
-                  <!-- <label for="email">E-mail</label> -->
-                  <input type="email" name="email" class="input__login" placeholder="e-mail" required>
-                </div>
-                <div class="form-group body__loginbox--groups">
-                  <!-- <label for="password">Wachtwoord</label> -->
-                  <input type="password" name="password" class="input__login" placeholder="wachtwoord" required>
-                </div>
-                <input type="submit" name="btnLogin" value="Inloggen" class="btn__form--primary btn btn__login">
-            </form>
-            <button value="Registreren" class="btn__form--primary btn btn__register"><a href="register.php"></a>Registeren</button>
-        </div>
+  </head>
+  <body class="dots__body">
+    <div class="div__dots">
+      <canvas class='connecting-dots' id="dots-canvas"></canvas>
     </div>
-  </body>
-<?php include_once("php/footer.php") ?>
-</html>
+    <div class="body_loginpage">
+      <div class="body__loginbox" id="dom__loginBox">
+      </div>
+    </div>
 
-<?php
-
-  if((isset($_POST["password"])) && (isset($_POST["email"])) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
-
-      session_start();
+  <?php include_once("php/footer.php") ?>
+  <script src="js/login.js"></script>
+  <script src="js/dots.js"></script>
+  <?php
+    // Account activeren als token is gebruikt
+    if(isset($_GET['token'])) {
       require 'php/db.php';
-      $con = mysqli_connect($host, $user, $pass, $db);
+      if(!$con = mysqli_connect($host, $user, $pass, $db)) {
+        $returnCode = 402;
+      }
 
-      $email = $con->real_escape_string($_POST["email"]);
-
-      if(!$con) {
-        throw new Exception ('Could not connect: ' . mysqli_error());
-        exit;
+      $token = $con->real_escape_string($_GET['token']);
+      $statement = mysqli_prepare($con, "SELECT vk.UserID FROM verifyKeys vk INNER JOIN users u ON u.UserID = vk.UserID WHERE VerifyKeyToken = ? AND verified = 0;");
+      mysqli_stmt_bind_param($statement, "s", $token);
+      if(!mysqli_stmt_execute($statement)) {
+        $returnCode = 401;
+      }
+      $result = $statement->get_result();
+      if(mysqli_num_rows($result) == 1) {
+          while($row = mysqli_fetch_assoc($result)) {
+              $userID = ($row["UserID"]);
+          }
+          $statement = mysqli_prepare($con, "UPDATE users SET verified = 1 WHERE UserID = ?;");
+          mysqli_stmt_bind_param($statement, "i", $userID);
+          if(!mysqli_stmt_execute($statement)) {
+            $returnCode = 401;
+          }
+          if($statement->affected_rows == 1) {
+            $returnCode = 206;
+          }else{
+            $returnCode = 207;
+          }
       }else{
-          $statement = mysqli_prepare($con, "SELECT Password, UserID FROM users where Email = ?");
-          mysqli_stmt_bind_param($statement, "s", $email);
-          mysqli_stmt_execute($statement);
-          $result = $statement->get_result();
+        $returnCode = 205;
+      }
 
-
-        if(mysqli_num_rows($result) == 1) {
-            while($row = mysqli_fetch_assoc($result)) {
-                $checkHash = $row["Password"];
-                $userID = $row["UserID"];
-            }
-
-            if(password_verify($_POST["password"], $checkHash)){
-                $_SESSION["UserID"]=$userID;
-                header("Location: home.php");
-            }
-        }
-          echo '<p class="text__error">Foutieve inloggegevens</p>';
+    echo ("<script>$.notify($returnCode)</script>");
     }
-  }
+  ?>
 
- ?>
+
+  </body>
+</html>

@@ -17,6 +17,8 @@ btnDeleteGroup = document.getElementById("dom__btn--deleteGroup");
 btnSubmitDeleteGroup = document.getElementById("dom__submit--deleteGroup");
 btnDeleteGroupClose = document.getElementById("dom__btn--deleteGroupClose");
 
+modalDeleteFile = document.getElementById("dom__modal--deleteFile");
+
 modalMembers = document.getElementById("dom__modal--members");
 btnMembers = document.getElementById("dom__btn--members");
 btnMembersClose = document.getElementById("dom__btn--membersClose");
@@ -25,6 +27,41 @@ modalNewCourse = document.getElementById("dom__modal--newCourse");
 btnNewCourse = document.getElementById("dom__btn--newCourse");
 btnsubmitCr = document.getElementById("dom__submit--newCourse");
 btnNewCourseClose = document.getElementById("dom__btn--newCourseClose");
+
+//Bestand verwijderen modal
+function loadDeleteButtons() {
+  $(".dom__fileManager--deleteButton").on('click', function() {
+    var file = $(this).parent().find("a").text().trim();
+    modalDeleteFile.classList.remove("slideOutUp");
+    modalDeleteFile.classList.add("slideInDown");
+    modalDeleteFile.style.display = "flex"
+    $("#dom__btn--deleteFileClose").on('click', function() {
+      modalDeleteFile.classList.remove("slideInDown");
+      modalDeleteFile.classList.add("slideOutUp");
+      $("#dom__submit--deleteFile").unbind();
+    });
+    $("#dom__submit--deleteFile").on('click', function() {
+      modalDeleteFile.classList.remove("slideInDown");
+      modalDeleteFile.classList.add("slideOutUp");
+      $("#dom__submit--deleteFile").unbind();
+      $.ajax({
+          url:"../php/actionsHome.php",
+          type:"POST",
+          dataType:"json",
+          data: {deleteFile:1,file:file},
+          success: function(data){
+            if(data.returnCode == 0) {
+              course(data.output);
+              notify(806);
+            }else{
+              notify(data.returnCode);
+            }
+          }
+      })
+    });
+  });
+}
+
 
 //Invite user modal
 btnInviteUser.onclick = function() {
@@ -40,21 +77,31 @@ btnInviteUserClose.onclick = function() {
 
 btnSubmitInviteUser.onclick = function() {
 
-  var nickname = document.getElementById("dom__inviteUser--nickname").value;
+  var inputNickname = document.getElementById("dom__inviteUser--nickname");
+  var nickname = inputNickname.value;
 
   if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {nickname:nickname,inviteUser:1},
-        success: function(){
-          destroyCourseModals();
+        success: function(data){
+          if(data.returnCode == 0) {
+            notify(508)
+            destroyCourseModals();
+          }else{
+            notify(data.returnCode);
+          }
+
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
+
+  inputNickname.value = "";
+
 }
 
 //Delete user modal
@@ -71,21 +118,31 @@ btnkickUserClose.onclick = function() {
 
 btnSubmitkickUser.onclick = function() {
 
-  var nickname = document.getElementById("dom__kickUser--nickname").value;
+  var inputNickname = document.getElementById("dom__kickUser--nickname");
+  var nickname = inputNickname.value;
 
   if(nickname != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {nickname:nickname,deleteUser:1},
-        success: function(){
-          destroyCourseModals();
+        success: function(data){
+          if(data.returnCode == 0) {
+            destroyCourseModals();
+            notify(907);
+          }else{
+            destroyCourseModals();
+            notify(data.returnCode);
+          }
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
   }
+
+  inputNickname.value = "";
+
 }
 
 
@@ -120,11 +177,16 @@ btnSubmitDeleteGroup.onclick = function() {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {deleteGroup:1},
         success: function(data){
+          if(data.returnCode == 0) {
+            notify(908);
+            home();
+          }else{
+            notify(data.returnCode);
+          }
           destroyCourseModals();
-          home();
         }
     })
   }
@@ -161,23 +223,37 @@ btnNewCourseClose.onclick = function() {
 
 btnsubmitCr.onclick = function() {
 
-  var crName = document.getElementById("crName").value;
-  var crDescription = document.getElementById("crDescription").value;
+  var crNameField = document.getElementById("crName");
+  var crDescriptionField = document.getElementById("crDescription");
+
+  var crName = crNameField.value;
+  var crDescription = crDescriptionField.value;
+
 
   if(crName != "" && crDescription != "") {
     $.ajax({
         url:"../php/actionsHome.php",
         type:"POST",
-        datatype:"text",
+        dataType:"json",
         data: {crName:crName,crDescription:crDescription},
         success: function(data){
+          if(data.returnCode == 0) {
+            courses(data.output);
+            notify(909);
+          }else{
+            notify(data.returnCode);
+          }
           destroyCourseModals();
-          courses(data);
         }
     })
   }else{
-  alert("Voer alle velden in!")
+    notify(701);
+    // TODO: Van alert notificatie maken
   }
+
+  crNameField.value = "";
+  crDescription.value = "";
+
 }
 
 

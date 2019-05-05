@@ -3,9 +3,9 @@ html {
 }
 
 body{
-    font-family: 'Open Sans', sans-serif;
-    background-color: #f2f2f2;
-    height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f2f2f2;
+  height: 100%;
 }
 
 /* Algemene titels */
@@ -23,6 +23,8 @@ h3 {
 }
 
 
+/*Login box*/
+
 .body_loginpage{
   display: flex;
   position: absolute;
@@ -30,44 +32,92 @@ h3 {
   right: 0;
   top: 0;
   bottom: 0;
-  background-image: url("../images/background_login.jpeg");
-  background-size: cover;
+  z-index: 1;
 }
+
+
 .body__loginbox{
   margin: auto;
-  background-color: #f2f2f2;
-  padding-left: 7%;
-  padding-top: 3%;
-  padding-bottom: 3%;
-  padding-right: 7%;
   border-width: 1px;
-  box-shadow: 4px 4px 4px;
+  width: 300px;
+}
 
+.body__passwordReset{
+  margin: auto;
+  border-width: 1px;
+  width: 400px;
+}
+
+.body__loginbox--title {
+  color: white;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .body__loginbox > form {
   margin: auto;
   padding-top: 2%;
-
-
+  width: 100%;
 }
 
 .input__login {
   margin: auto;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   padding: 7px 5px 7px 5px;
-  border: none;
   font-size: 18px;
-  border-left: 0px;
-  border-right: 0px;
-  border-top: 0px;
   border-bottom: 1px;
+  border-color: white;
   border-style: solid;
+  width: 100%;
+  box-shadow: 0px 0px 10px #201049;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+
 }
 
 .input__login:focus {
   outline: none;
 }
+
+.text__error{
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  margin-top: 5px;
+}
+
+
+.btn__form--primary{
+  border: 1px solid #2a69c9;
+  border-radius: 2px;
+  text-align: center;
+  width: 100%;
+  background-color: transparent;
+  color: white;
+  transition: 0.3s;
+  height: 43px;
+  margin: 0px 0px 5px 0px;
+}
+
+.btn__form--primary:hover{
+  background-color: #2a69c9;
+  color: white;
+  cursor: pointer;
+}
+
+.link__form--primary {
+  color: #2a69c9 !important;
+  text-align: center;
+}
+
+.dots__body{
+  background-color: black;
+  transition: background-color 5000ms linear;
+}
+.dots__body:hover {
+  background-color: #000032;
+}
+
 
 /*Gele achtergrond van autofill weghalen*/
 input:-webkit-autofill,
@@ -92,26 +142,10 @@ input:-webkit-autofill:active  {
   border-radius: 0px;
   text-align: center;
   width: 100%;
-  background-color: #dddddd;
 }
-
-.btn__form--primary:hover{
-  background-color: #c1c1c1;
-  transition-delay: 0,5s;
-
-}
-
 
 .btn__register{
-
   margin-top: 5px;
-
-}
-
-.body__home{
-  display: flex;
-  justify-content: flex-start;
-  height: 100%;
 }
 
 .navbar__side{
@@ -119,9 +153,10 @@ input:-webkit-autofill:active  {
   color: white;
   box-shadow: 2.5px 2px 20px #808080;
   height: 100%;
-  min-width: 11%;
-  margin-right: 1%;
+  width: 11%;
   padding-left: 7px;
+  position: fixed;
+  left: 0;
 
 }
 
@@ -185,8 +220,9 @@ input:-webkit-autofill:active  {
 }
 
 .body__home--containers{
+  margin-left: 11%;
   padding-left: 1%;
-  width: 100%;
+  height: 100%;
 }
 
 .home__title h1 {
@@ -202,7 +238,6 @@ input:-webkit-autofill:active  {
 }
 
 .body__home--boxes {
-  /* border: 1px solid #2a69c9; */
   box-shadow: 1px 2px 10px #808080;
   color: black;
   background-color: #ffffff;
@@ -213,8 +248,9 @@ input:-webkit-autofill:active  {
 }
 
 .body__home--groups {
-  width: 800px;
-  min-width: 60px;
+  width: 60%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @media only screen and (max-width: 850px) {
@@ -227,9 +263,9 @@ input:-webkit-autofill:active  {
   }
 
   .body__home--courses {
-    width: auto;
-    min-width: 60px;
-    overflow: auto;
+    width: 60%;
+    overflow-y: auto;
+    overflow-x: hidden;
     margin-left: 0%;
     margin-right: 0%;
   }
@@ -252,9 +288,9 @@ input:-webkit-autofill:active  {
   margin-bottom: 1%;
   margin-left: 5%;
   margin-right: 2%;
-  overflow: auto;
-  min-width: 320px;
-  float: right;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 25%;
   height: 400px;
 }
 
@@ -291,6 +327,48 @@ input:-webkit-autofill:active  {
   border-radius: 3px;
   transition: 0.3s;
 }
+
+
+/*file manager*/
+
+.group__file {
+  display: block;
+  min-height: 30px;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  background-color: white;
+  border-radius: 3px;
+  transition: 0.3s;
+  color:black;
+}
+
+.group__file button {
+  color: black;
+  float: right;
+  font-size: 16px;
+  transition: 0.3s;
+  background-color: transparent;
+  height: 30px;
+  border: 1px solid #ba2c2c;
+  width: 120px;
+}
+
+.group__file button:hover {
+  color: white;
+  background-color: #ba2c2c;
+  cursor: pointer;
+}
+
+.group__file a {
+  text-decoration: none;
+  color: black;
+  transition: 0.3s;
+}
+
+.group__file a:hover {
+  color: #2a69c9;
+}
+
 
 .group__link:hover {
   text-decoration: none;
@@ -349,6 +427,18 @@ input:-webkit-autofill:active  {
   font-size: 18px;
   color: black;
 }
+/*nutteloze dingen */
+.draak{
+  display:none;
+  position: absolute;
+  top:0;
+  left:0;
+  width: 0%;
+  height: 0%;
+}
+.easterbtn{
+opacity: 0.035;
+}
 
 .invites__btn--response button:hover {
   background: ;
@@ -384,7 +474,7 @@ border-top: 1px solid black;
 
 .modal-box {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 20%;
   left: 30%;
   padding-left: 2px;
@@ -472,7 +562,8 @@ border-top: 1px solid black;
   background-color: transparent;
   color: black;
   transition: 0.3s;
-  height: 40px;
+  min-height: 40px;
+  height: auto;
   width: 100%;
   font-size: 20px;
   margin-bottom: 5px;
@@ -555,8 +646,7 @@ border-top: 1px solid black;
   border-color: white;
   border-style: solid;
   width: 100%;
-  box-shadow: 0px 0px 10px #201049;
-  border: 1px solid #d7d7d7;
+  border: 1px solid #2a69c9;
   border-radius: 3px;
   color: black;
 }
@@ -625,3 +715,275 @@ padding-bottom: 15px;
 }
 
 /*EINDE CSS ACCOUNT PAGINA */
+
+
+/*BEGIN CSS LIVECHAT*/
+.livechat__body--main{
+  padding-bottom: 1%;
+  position:fixed;
+  bottom:0;
+  right:0;
+  /*Hide gedeelte live chat */
+  height:50px;
+  width: 350px;
+  overflow: hidden;
+}
+.livechat__title{
+  height:15%;
+  display: block;
+}
+
+.livechat__title--anchor{
+  width:100%;
+}
+.livechat__body{
+  height: 85%;
+  /*Hide gedeelte live chat */
+  display: none;
+  visibility: hidden;
+}
+
+
+.livechat__body--messages {
+  border: 1px solid #2a69c9;
+  height:70%;
+  margin: 2%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.livechat__body--input{
+  height: 20%;
+  /*border: 1px solid #2a69c9;
+  */margin-top: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-bottom: 1%;
+
+}
+
+.livechat__textinput{
+  border: 1px solid #2a69c9;
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+
+.livechat__submitbtn{
+  margin-left: 1%;
+  border: 1px solid #2a69c9;
+  width:100px;
+  float: left;
+  background-color: transparent;
+  color: black;
+}
+.livechat__submitbtn:hover{
+  background-color: #2a69c9;
+  color: white;
+  cursor: pointer;
+}
+
+.livechat__submitbtn--active {
+  background-color: #2a69c9;
+  color: white;
+}
+
+.recvchat__message--body1{
+  width:80%;
+  color: #f2f2f2;
+  background-color: #2a69c9;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border-radius: 25px 25px 25px 25px;
+  float: left;
+}
+
+.recvchat__message--body2{
+  width:80%;
+  color: #f2f2f2;
+  background-color: #3d7c4e;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border-radius: 25px 25px 25px 25px;
+  float: right;
+}
+
+.recvchat__nickname{
+  font-size: 12px;
+  margin-left: 10px;
+  font-weight: 900;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+
+.recvchat__message{
+  font-size: 12px;
+  margin-left: 10px;
+  display: block;
+}
+
+/*EINDE CSS LIVECHAT*/
+
+/*BEGIN CSS FORUM */
+.forum__body{
+width: 65%;
+float: left;
+margin-right: 2%;
+}
+.forum__title{
+  padding-top: 1%;
+  text-align: center;
+}
+.forum__title__line{
+  border-color: #2a69c9;
+}
+.forum__head{
+padding-right: 1%;
+}
+.forum__actions{
+float: left;
+width:25%;
+text-align: center;
+padding-right: 1%;
+}
+.DOM__forum_category{
+width:100%;
+display: block;
+min-height:40px;
+max-height: 100px;
+min-width: 300px;
+text-align: center;
+}
+.DOM__forum_post{
+  width:100%;
+  display: block;
+  min-height:40px;
+  max-height: 100px;
+  min-width: 300px;
+  text-align: center;
+}
+.forum__userpost{
+  width:80%;
+  height:auto;
+  margin-right: 2%;
+  margin-left: 1%;
+  margin-bottom: 10%;
+  padding-bottom: 1%;
+  padding-left: 1%;
+  word-wrap: break-word;
+}
+.post__info{
+font-size: 14px;
+}
+.post__message{
+margin-top: 2%;
+}
+.forum__answer{
+  width:80%;
+  height:auto;
+  margin-right: 2%;
+  margin-left: 1%;
+  margin-bottom: 10%;
+  padding-bottom: 1%;
+  padding-left: 1%;
+  border-top: 1px solid #2a69c9
+}
+.forum__answer__head{
+  margin-bottom: 2%;
+}
+.forum__answer__message{
+  margin-top: 1%;
+  margin-bottom: 2%;
+  height: auto;
+  word-wrap: break-word;
+}
+.forum__controls__button{
+  border: 1px solid #2a69c9;
+  border-radius: 2px;
+  text-align: center;
+  background-color: transparent;
+  color: black;
+  transition: 0.3s;
+  min-height: 40px;
+  height: auto;
+  width: 100%;
+  font-size: 20px;
+  margin-bottom: 5px;
+  display: block;
+}
+.forum__controls__button:hover{
+background-color: #2a69c9;
+color: white;
+}
+/*EINDE CSS FORUM*/
+/*Wachtwoord reset*/
+.text__psReset p{
+  color: white;
+}
+
+.body__psReset {
+  position: absolute;
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0;
+  z-index: 1;
+}
+/*CSS nieuwe post*/
+.newpost__title{
+  display: inline-block;
+  width: 70% !important;
+  margin-bottom: 15px;
+}
+.newpost__message{
+  display: inline-block;
+  width: 70%;
+}
+.newpost__modal{
+
+}
+.newpost__title__label{
+  color: white;
+}
+.newpost__wrapper{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.newpost__wrapper p{
+  color: #fff;
+}
+/*Einde CSS nieuwe post*/
+/*Begin css nieuw answer*/
+.answer__controls__button{
+  border: 1px solid #2a69c9;
+    border-radius: 2px;
+    text-align: center;
+    background-color: transparent;
+    color: black;
+    transition: 0.3s;
+    min-height: 40px;
+    height: auto;
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 5px;
+    display: block;
+}
+.answer__controls__button:hover{
+  background-color: #2a69c9;
+  color: white;
+}
+.newanswer__wrapper{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.newanswer__message{
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 100px;
+  resize: none;
+}
+
+/*EINDE CSS nieuw answer*/

@@ -6,49 +6,72 @@ var strength = {
    4: "Sterk"
 }
 
-var password = document.getElementById('DOM__psw');
-var meter = document.getElementById('password_strength_meter');
-var text = document.getElementById('password_strength_text');
-var bt = document.getElementById('account__button');
-var text2 = document.getElementById('password_cracktime');
+$(document).ready(function() {
+  var passwordOld = $('#passwordOld');
+  var formPsReset = $('#DOM__form--psReset');
+  var password1 = $('#password1');
+  var password2 = $('#password2');
+  var meter = $('#password_strength_meter');
+  var textStrength = $('#password_strength_text');
+  var btnReset = $('#account__button');
+  var divSuggestions = $('#password_suggestions');
+  //Submit button
+  formPsReset.on('submit', function() {
+    //passwoorden Nakijken
+    event.preventDefault();
+    if(passwordOld.val() == '' || password1.val() == '' || password2.val() == '') {
+      notify(701);
+      return;
+    }
+    if(password1.val() != password2.val()) {
+      notify(703);
+      return;
+    }
 
-password.addEventListener('input',function()
-{
-var val = password.value;
-var result = zxcvbn(val);
+    $.ajax({
+      url:"../php/actionsHome.php",
+      type:"POST",
+      dataType:"json",
+      data: {psChange:1,psOld:passwordOld.val(),password1:password1.val(),password2:password2.val()},
+      success: function(data){
+        if(data.returnCode == 0) {
+          notify(453);
+          logout();
+        }else{
+          notify(data.returnCode);
+        }
+      }
+    })
+  });
 
-//update password meter
-meter.value = result.score;
-//update text indicator
+  //Password sterkte nakijken
+  password1.on('input',function() {
+    var val = password1.val();
+    var result = zxcvbn(val);
 
-if(val !== "")
-  {
-  text.innerHTML = "Sterkte:   " + strength[result.score];
-  text2.innerHTML = "Geschatte aantal gokken om paswoord te raden:  " + JSON.stringify(result.feedback.suggestions);
-if(result.score < 3)
-{
- bt.disabled = true;
-}else
-{
- bt.disabled = false;
-}
-
-
-
-  }else
-   {
-     text.innerHTML = "";
-   }
-});
-
-
-
-//myunhide(){
-//var divreset = document.getElementById("DOM_Accountreset");
-//if(divreset.style.display ==="none"  ) {
-//divreset.style.display = "block";
-//}else{
-//  divreset.style.display ="none";
-//}
-
-//}
+    //update password meter
+    meter.val(result.score);
+    //update text indicator
+    if(val !== ""){
+      //Meter
+      textStrength.html("Sterkte: " + strength[result.score]);
+      var suggestions = result.feedback.suggestions
+      //Er zijn suggesties, door loopen en in lijst zetten
+      if(suggestions.length > 0) {
+        divSuggestions.show();
+        //Veld resetten om oude suggesties weg te halen
+        divSuggestions.html('');
+        divSuggestions.append('<p>Suggesties voor een sterker wachtwoord:<p><ul>');
+        suggestions.forEach((item) => {
+          divSuggestions.append('<li>' + item + '</li>');
+        });
+        divSuggestions.append('</ul>');
+      //Geen suggesties, suggesties hiden
+      }else{
+        divSuggestions.hide();
+      }
+    }else{
+      divSuggestions.innerHTML = "";
+    }
+  });
+})
