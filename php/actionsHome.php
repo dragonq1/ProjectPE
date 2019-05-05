@@ -1154,9 +1154,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forum"])) {
       </div>
    ");
   }else{
-        //$data->returnCode = 905;
-        //echo json_encode($data);
-        //exit;
+        $data->returnCode = 751;
+        echo json_encode($data);
+        exit;
   }
     $data->output = $outputString;
     echo json_encode($data);
@@ -1193,7 +1193,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])&& isset($
         $categoryName = $row["CategoryName"];
       }
     }else{
-      // TODO: Foutcode ingeven
+      $data->returnCode = 752;
+      echo json_encode($data);
+      exit;
     }
 
 
@@ -1237,9 +1239,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumsub"])&& isset($
      </div>
  ");
 }else{
-      //$data->returnCode = 905;
-      //echo json_encode($data);
-      //exit;
+      $data->returnCode = 753;
+      echo json_encode($data);
+      exit;
 }
 $data->output = $outputString;
 echo json_encode($data);
@@ -1350,7 +1352,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["forumposts"])&& isset
       $subcategoryName = $row["SubCategoryName"];
     }
   }else{
-    // TODO: Foutcode ingeven
+      $data->returnCode = 754;
+      echo json_encode($data);
+      exit;
   }
 
   //posts ophalen
@@ -1437,6 +1441,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
          $postmessage =$row["FPostMessage"];
          $posttimestamp = $row["FPostTimestamp"];
          $postmaker = $row["Nickname"];
+         $correctmessage = str_replace('\n',"<br>",$postmessage);
          $outputString .= ("
 
 
@@ -1451,7 +1456,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
                                      <div id=\"DOM_forum_container\" class=\"forum__container\" >
 
                                      <div id=\"DOM__forum_userpost\" class=\"forum__userpost\">
-                                             <div ><p class\"post__info\">Door $postmaker aangemaakt op: $posttimestamp</p></div><div class=\"post__message\"><p>$postmessage</p></div>
+                                             <div ><p class\"post__info\">Door $postmaker aangemaakt op: $posttimestamp</p></div><div class=\"post__message\"><p>$correctmessage</p></div>
                                       </div>
                                       <div id=\"DOM__forum__useranswers\" class=\"forum__useranswersdiv\"></div>
 
@@ -1476,9 +1481,9 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["initpost"])&& isset($
                     ");
                }
 }else{
-    //  $data->returnCode = 905;
-    //  echo json_encode($data);
-    //  exit;
+    $data->returnCode = 755;
+    echo json_encode($data);
+    exit;
 }
 $data->output = $outputString;
 echo json_encode($data);
@@ -1541,19 +1546,19 @@ $postID = $_POST["postid"];
      $_SESSION["ForumLastAnswer"] = $answers[$Lastarrayelement]->FPostAnswerTimestamp;
 
         foreach($answers as $answer ){
-
+         $correctmessage = str_replace('\n',"<br>",$answer->FPostAnswerMessage);
          $outputString .= ("
 
                           <div id=\"DOM__forum__answer\" class=\"forum__answer\">
                                <div class=\"forum__answer__head\"><p>Door $answer->Nickname beantwoord op:$answer->FPostAnswerTimestamp</p></div>
-                               <div class=\"forum__answer__message\"><p>$answer->FPostAnswerMessage</p></div>
+                               <div class=\"forum__answer__message\"><p>$correctmessage</p></div>
                           </div>
                     ");
                   }
 }else{
-    //  $data->returnCode = 905;
-    //  echo json_encode($data);
-    //  exit;
+      $data->returnCode = 756;
+      echo json_encode($data);
+      exit;
 }
 $data->output = $outputString;
 echo json_encode($data);
@@ -1583,7 +1588,7 @@ $posttitle = $con->reaL_escape_string($_POST["posttitle"]);
     mysqli_stmt_bind_param($statement, "iiss" ,$subcatid,$userID,$posttitle,$postmessage);
 
     if(!mysqli_stmt_execute($statement)) {
-      //$data->returnCode =;
+      $data->returnCode =757;
       echo json_encode($data);
       exit;
     }else{
@@ -1616,7 +1621,7 @@ $answermessage = $con->reaL_escape_string($_POST["answermessage"]);
     mysqli_stmt_bind_param($statement, "iis" ,$postid,$userID,$answermessage);
 
     if(!mysqli_stmt_execute($statement)) {
-      //$data->returnCode =;
+      $data->returnCode =758;
       echo json_encode($data);
       exit;
     }else{

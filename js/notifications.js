@@ -287,6 +287,55 @@ function notify(returnCode) {
         clickToHide: true
       });
       break;
+    case 751:
+    $.notify("Er ging iets fout #751", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
+    case 752:
+    $.notify("Er ging iets fout #752", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
+    case 753:
+    $.notify("Er ging iets fout #753", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
+    case 754:
+    $.notify("Er ging iets fout #754", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
+    case 756:
+    $.notify("Er ging iets fout #756", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
+    case 757:
+    $.notify("Er ging iets fout #757", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
+    case 758:
+    $.notify("Er ging iets fout #758", {
+      style:"error",
+      autoHide:true,
+      clickToHide:true
+    });
+    break;
     case 801:
       $.notify("Er ging iets fout! #801", {
         style: "warning",
