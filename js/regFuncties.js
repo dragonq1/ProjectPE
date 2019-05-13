@@ -67,7 +67,7 @@
 
   password.on('input', function() {
     var val = password.val();
-    var result = zxcvbn(val, test);
+    var result = zxcvbn(val);
 
     //update password meter
     meter.val(result.score);

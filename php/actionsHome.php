@@ -371,7 +371,7 @@ if(($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST["grName"]) && isset($_
     mysqli_stmt_bind_param($statement, "ii", $newGroupId , $userID);
     if(mysqli_stmt_execute($statement)) {
       if (!file_exists("../files/$newGroupId")) {
-          mkdir("../bestanden/$newGroupId", 0755, true);
+          mkdir("../files/$newGroupId", 0755, true);
           $data->returnCode = 0;
           echo json_encode($data);
           exit;

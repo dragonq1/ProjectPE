@@ -52,7 +52,7 @@
         $returnCode = 205;
       }
 
-    echo ("<script>$.notify($returnCode)</script>");
+    echo ('<script>$(document).ready(function(){notify('.$returnCode.')});</script>');
     }
   ?>
 

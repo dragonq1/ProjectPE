@@ -287,6 +287,13 @@ function notify(returnCode) {
         clickToHide: true
       });
       break;
+    case 704:
+      $.notify("Account geactiveerd!", {
+        style: "success",
+        autoHide: true,
+        clickToHide: true
+      });
+      break;
     case 751:
     $.notify("Er ging iets fout #751", {
       style:"error",
